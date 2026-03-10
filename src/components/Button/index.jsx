@@ -5,9 +5,3 @@ export function Button({ children }) {
         <button className="button-register">{children}</button>
     )
 }
-
-Button.propTypes = {
-  children: PropTypes.node,
-  onClick: PropTypes.func,
-  type: PropTypes.string,
-};
