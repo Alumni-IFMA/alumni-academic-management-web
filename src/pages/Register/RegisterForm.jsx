@@ -1,9 +1,9 @@
-import { InputField } from "../../components/InputField";
-import { FormField } from "../../components/FormField";
-import { Label } from "../../components/Label";
-import { Dropdown } from "../../components/Dropdown";
-import { Button } from "../../components/Button";
-import { Typography } from "../../components/Typography";
+import { InputField } from "../../components/InputField/InputField";
+import { FormField } from "../../components/FormField/FormField";
+import { Label } from "../../components/Label/Label";
+import { Dropdown } from "../../components/Dropdown/Dropdown";
+import { Button } from "../../components/Button/Button";
+import { Typography } from "../../components/Typography/Typography";
 
 export function RegisterForm({ modalities, graduationYears, campus }) {
   return (

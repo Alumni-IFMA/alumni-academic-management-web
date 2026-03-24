@@ -1,6 +1,6 @@
-import { Button } from "../../components/Button";
+import { Button } from "../../components/Button/Button";
 import seta from "../../assets/back-button-register.png";
-import { Typography } from "../../components/Typography";
+import { Typography } from "../../components/Typography/Typography";
 import { RegisterForm } from "./RegisterForm";
 
 const graduationYears = Array.from(
