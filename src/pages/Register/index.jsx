@@ -3,16 +3,13 @@ import seta from "../../assets/back-button-register.png";
 import { Typography } from "../../components/Typography/Typography";
 import { RegisterForm } from "./RegisterForm";
 
-const graduationYears = Array.from(
-  { length: 2025 - 1987 + 1 },
-  (_, index) => {
-    const year = 1987 + index;
-    return {
-      id: year,
-      name: year,
-    };
-  },
-);
+const graduationYears = Array.from({ length: 2025 - 1987 + 1 }, (_, index) => {
+  const year = 1987 + index;
+  return {
+    id: year,
+    name: year,
+  };
+});
 
 export function Register() {
   const modalities = [
@@ -20,7 +17,6 @@ export function Register() {
     { id: 2, name: "Subsequente" },
     { id: 3, name: "Superior" },
   ];
-
 
   const campus = [
     { id: 1, name: "Imperatriz" },
@@ -32,12 +28,14 @@ export function Register() {
   ];
 
   return (
-    <div className="container">
-      <div className="register-card">
-        <Button>
-          <img src={seta} alt="Voltar para a página anterior" />
-        </Button>
-        <Typography variant="h1">Bem-vindo!</Typography>
+    <div className="bg-dark-green h-screen">
+      <div className="max-w-[1024px] bg-biege mx-auto flex flex-col rounded-4xl">
+        <div className="flex gap-60 mt-12 ml-9">
+          <Button>
+            <img src={seta} alt="Voltar para a página anterior" />
+          </Button>
+          <Typography variant="h1">Bem-vindo!</Typography>
+        </div>
         <RegisterForm
           modalities={modalities}
           graduationYears={graduationYears}
