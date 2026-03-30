@@ -7,73 +7,76 @@ import { Typography } from "../../components/Typography/Typography";
 
 export function RegisterForm({ modalities, graduationYears, campus }) {
   return (
-    <form action="">
-      <FormField>
-        <Label htmlFor="name">Nome completo</Label>
-        <InputField
-          type="text"
-          id="name"
-          placeholder="Digite o nome"
-          name="name"
-          required
-        />
-      </FormField>
-      <FormField>
-        <Label htmlFor="email">Email pessoal</Label>
-        <InputField
-          type="email"
-          id="email"
-          name="email"
-          placeholder="exemplo@email.com"
-          autoComplete="email"
-          maxLength={50}
-        />
-      </FormField>
-      <FormField>
-        <Label htmlFor="modality">Modalidade</Label>
-        <Dropdown itens={modalities} id="modality" name="modality" />
-      </FormField>
-      <FormField>
-        <Label htmlFor="graduationYear">Ano de finalização</Label>
-        <Dropdown
-          itens={graduationYears}
-          id="graduationYear"
-          name="graduationYear"
-          required
-        />
-      </FormField>
-      <FormField>
-        <Label htmlFor="cpf">CPF</Label>
-        <InputField
-          type="text"
-          id="cpf"
-          name="cpf"
-          placeholder="000.000.000-00"
-          inputMode="numeric"
-          maxLength={14}
-          autoComplete="off"
-          required
-        />
-      </FormField>
-      <FormField>
-        <Label htmlFor="campus">Campus</Label>
-        <Dropdown itens={campus} id="campus" name="campus" required />
-      </FormField>
-      <FormField>
-        <Label htmlFor="yearEntry">
-          Ano de ingresso (do último curso finalizado)
-        </Label>
-        <Dropdown
-          itens={graduationYears}
-          id="yearEntry"
-          name="yearEntry"
-          required
-        />
-      </FormField>
-      <div>
-        <Button type="submit">Cadastrar-se</Button>
+    <form action="" className="flex flex-col">
+      <div className="grid grid-cols-2 px-20 pb-10 gap-6 pt-6">
+        <FormField>
+          <Label htmlFor="name">Nome completo</Label>
+          <InputField
+            type="text"
+            id="name"
+            placeholder="Digite o nome"
+            name="name"
+            required
+          />
+        </FormField>
+        <FormField>
+          <Label htmlFor="email">Email pessoal</Label>
+          <InputField
+            type="email"
+            id="email"
+            name="email"
+            placeholder="exemplo@email.com"
+            autoComplete="email"
+            maxLength={50}
+          />
+        </FormField>
+        <FormField>
+          <Label htmlFor="modality">Modalidade</Label>
+          <Dropdown itens={modalities} id="modality" name="modality" />
+        </FormField>
+        <FormField>
+          <Label htmlFor="graduationYear">Ano de finalização</Label>
+          <Dropdown
+            itens={graduationYears}
+            id="graduationYear"
+            name="graduationYear"
+            required
+          />
+        </FormField>
+        <FormField>
+          <Label htmlFor="cpf">CPF</Label>
+          <InputField
+            type="text"
+            id="cpf"
+            name="cpf"
+            placeholder="000.000.000-00"
+            inputMode="numeric"
+            maxLength={14}
+            autoComplete="off"
+            required
+          />
+        </FormField>
+        <FormField>
+          <Label htmlFor="campus">Campus</Label>
+          <Dropdown itens={campus} id="campus" name="campus" required />
+        </FormField>
+        <FormField>
+          <Label htmlFor="yearEntry">
+            Ano de ingresso (do último curso finalizado)
+          </Label>
+          <Dropdown
+            itens={graduationYears}
+            id="yearEntry"
+            name="yearEntry"
+            required
+          />
+        </FormField>
+      </div>
+
+      <div className="flex flex-col gap-4 w-[200px] items-center mx-auto mb-12">
+        <Button variant='primary' type="submit">Cadastrar-se</Button>
         <Typography variant="p">
-          Já possui conta? <a href="#">Entrar</a>
+          Já possui conta? <a className="text-dark-green font-semibold" href="#">Entrar</a>
         </Typography>
       </div>
     </form>
