@@ -1,11 +1,14 @@
 const variants = {
-    primary: 'bg-carmine text-2xl text-white font-semibold px-6 py-3 w-full rounded-xl mt-10'
-}
+  primary: "bg-carmine text-2xl text-white font-semibold px-6 py-3 w-full rounded-xl mt-10",
+  icon: "w-[53px] h-[53px] flex items-center justify-center rounded-xl",
+};
 
-export function Button({ children, variant, ...props }) {
-    const style = variants[variant]
-
-    return (
-        <button className={`cursor-pointer w-[53px] h-[53] ${style}`} {...props}>{children}</button>
-    )
+export function Button({ children, variant, className = "", ...props }) {
+  return (
+    <button
+      className={`cursor-pointer ${variants[variant]} ${className}`} {...props}
+    >
+      {children}
+    </button>
+  );
 }
