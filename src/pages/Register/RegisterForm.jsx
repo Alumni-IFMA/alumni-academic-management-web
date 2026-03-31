@@ -28,11 +28,12 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
             placeholder="exemplo@email.com"
             autoComplete="email"
             maxLength={50}
+            required
           />
         </FormField>
         <FormField>
           <Label htmlFor="modality">Modalidade</Label>
-          <Dropdown itens={modalities} id="modality" name="modality" />
+          <Dropdown items={modalities} id="modality" name="modality" />
         </FormField>
         <FormField>
           <Label htmlFor="graduationYear">Ano de finalização</Label>
