@@ -6,10 +6,10 @@ const TAGS = {
 }
 
 const VARIANT_CLASS = {
-    h1: 'font-extrabold text-7xl leading-[150%] font-dark-green'
+    h1: 'font-extrabold text-5xl leading-[150%] text-dark-green '
 }
 
-export function Typography({ children, variant}) {
+export function Typography({ children, variant }) {
     const Component = TAGS[variant] || 'p'
     const className = VARIANT_CLASS[variant]
 

@@ -38,7 +38,7 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
         <FormField>
           <Label htmlFor="graduationYear">Ano de finalização</Label>
           <Dropdown
-            itens={graduationYears}
+            items={graduationYears}
             id="graduationYear"
             name="graduationYear"
             required
@@ -59,14 +59,14 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
         </FormField>
         <FormField>
           <Label htmlFor="campus">Campus</Label>
-          <Dropdown itens={campus} id="campus" name="campus" required />
+          <Dropdown items={campus} id="campus" name="campus" required />
         </FormField>
         <FormField>
           <Label htmlFor="yearEntry">
             Ano de ingresso (do último curso finalizado)
           </Label>
           <Dropdown
-            itens={graduationYears}
+            items={graduationYears}
             id="yearEntry"
             name="yearEntry"
             required
