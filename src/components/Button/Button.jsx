@@ -1,7 +1,11 @@
-import PropTypes from "prop-types";
+const variants = {
+    primary: 'bg-carmine text-2xl text-white font-semibold px-6 py-3 w-full rounded-xl mt-10'
+}
 
-export function Button({ children }) {
+export function Button({ children, variant, ...props }) {
+    const style = variants[variant]
+
     return (
-        <button className="button-register">{children}</button>
+        <button className={`cursor-pointer w-[53px] h-[53] ${style}`} {...props}>{children}</button>
     )
 }

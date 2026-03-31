@@ -1,3 +1,3 @@
 export function FormField({ children }) {
-  return <fieldset>{children}</fieldset>;
+  return <fieldset className="flex flex-col gap-2">{children}</fieldset>;
 }
