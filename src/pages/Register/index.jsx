@@ -10,7 +10,7 @@ const graduationYears = Array.from(
   (_, index) => {
     const year = 1987 + index;
     return { id: year, name: year };
-  }
+  },
 );
 
 const modalities = [
@@ -30,20 +30,18 @@ const campus = [
 
 export function Register() {
   return (
-    <div className="bg-dark-green min-h-screen py-24">
-      <div className="max-w-[1024px] w-[90%] bg-biege mx-auto flex flex-col rounded-4xl">
-        <div className="grid grid-cols-3 items-center mt-12 ml-9">
-          <Button>
-            <img src={seta} alt="Voltar para a página anterior" />
-          </Button>
-          <Typography variant="h1">Bem-vindo!</Typography>
-        </div>
-        <RegisterForm
-          modalities={modalities}
-          graduationYears={graduationYears}
-          campus={campus}
-        />
+    <div>
+      <div className="grid grid-cols-3 items-center mt-12 ml-9">
+        <Button>
+          <img src={seta} alt="Voltar para a página anterior" />
+        </Button>
+        <Typography variant="h1">Bem-vindo!</Typography>
       </div>
+      <RegisterForm
+        modalities={modalities}
+        graduationYears={graduationYears}
+        campus={campus}
+      />
     </div>
   );
 }
