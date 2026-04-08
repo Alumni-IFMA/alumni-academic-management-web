@@ -31,8 +31,8 @@ const campus = [
 export function Register() {
   return (
     <div>
-      <div className="grid grid-cols-3 items-center mt-12 ml-9">
-        <Button>
+      <div className="grid grid-cols-3 items-center">
+        <Button type="button">
           <img src={seta} alt="Voltar para a página anterior" />
         </Button>
         <Typography variant="h1">Bem-vindo!</Typography>

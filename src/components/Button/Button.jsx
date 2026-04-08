@@ -6,6 +6,6 @@ export function Button({ children, variant, ...props }) {
     const style = variants[variant]
 
     return (
-        <button className={`cursor-pointer w-[53px] h-[53] ${style}`} {...props}>{children}</button>
+        <button className={`cursor-pointer h-[53] ${style}`} {...props}>{children}</button>
     )
 }
