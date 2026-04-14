@@ -8,7 +8,7 @@ import { Typography } from "../../components/Typography/Typography";
 export function RegisterForm({ modalities, graduationYears, campus }) {
   return (
     <form action="" className="flex flex-col">
-      <div className="grid grid-cols-2 px-20 pb-10 gap-6 pt-6">
+      <div className="grid grid-cols-2 px-20 gap-6 mt-6">
         <FormField>
           <Label htmlFor="name">Nome completo</Label>
           <InputField
@@ -74,10 +74,10 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
         </FormField>
       </div>
 
-      <div className="flex flex-col gap-4 w-[200px] items-center mx-auto mb-12">
+      <div className="flex flex-col gap-4 w-[230px] items-center mx-auto font-semibold">
         <Button variant='primary' type="submit">Cadastrar-se</Button>
         <Typography variant="p">
-          Já possui conta? <a className="text-dark-green font-semibold" href="#">Entrar</a>
+          Já possui conta? <a className="text-dark-green" href="#">Entrar</a> 
         </Typography>
       </div>
     </form>
