@@ -1,21 +1,23 @@
 const TAGS = {
-    h1: 'h1',
-    h2: 'h2',
-    h3: 'h3',
-    p: 'p'
-}
+  h1: "h1",
+  h2: "h2",
+  h3: "h3",
+  p: "p",
+};
 
 const VARIANT_CLASS = {
-    h1: 'font-extrabold text-5xl leading-[150%] text-dark-green '
-}
+  h1: "font-extrabold text-5xl leading-[150%] text-dark-green",
+  h2: "font-bold text-4xl leading-[140%] text-dark-green",
+  h3: "font-semibold text-2xl leading-[130%] text-dark-green",
+  p: "text-lg text-dark-green",
+};
 
-export function Typography({ children, variant }) {
-    const Component = TAGS[variant] || 'p'
-    const className = VARIANT_CLASS[variant]
+export function Typography({ children, variant = "p", className = "" }) {
+  const Component = TAGS[variant] || "p";
 
-    return (
-        <Component className={className}>
-            {children}
-        </Component>
-    )
+  return (
+    <Component className={`${VARIANT_CLASS[variant]} ${className}`}>
+      {children}
+    </Component>
+  );
 }
