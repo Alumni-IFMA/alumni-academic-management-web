@@ -10,7 +10,7 @@ const graduationYears = Array.from(
   (_, index) => {
     const year = 1987 + index;
     return { id: year, name: year };
-  }
+  },
 );
 
 const modalities = [
@@ -44,6 +44,11 @@ export function Register() {
           campus={campus}
         />
       </div>
+      <RegisterForm
+        modalities={modalities}
+        graduationYears={graduationYears}
+        campus={campus}
+      />
     </div>
   );
 }
