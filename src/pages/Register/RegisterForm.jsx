@@ -108,7 +108,7 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
 
       </div>
 
-      <div className="flex flex-col gap-4 w-[230px] items-center mx-auto font-semibold">
+      <div className="flex flex-col gap-4 w-[260px] items-center mx-auto font-semibold">
         <Button variant="primary" type="submit">Cadastrar-se</Button>
         <Typography variant="p">
           Já possui conta? <a className="text-dark-green" href="#">Entrar</a>
