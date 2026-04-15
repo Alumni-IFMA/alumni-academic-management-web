@@ -17,7 +17,7 @@ export function Navbar() {
   const { pathname } = useLocation();
 
   return (
-    <header className="w-[90%] h-[97px] mx-auto mt-7 flex items-center justify-between px-6 py-3 border border-gray-200 bg-white rounded-3xl shadow-lg">
+    <header className="w-[95%] h-[97px] mx-auto mt-7 flex items-center justify-between px-6 py-3 border border-gray-200 bg-white rounded-3xl shadow-lg">
 
       {/* Logo */}
       <div className="flex items-center gap-2">
@@ -46,13 +46,13 @@ export function Navbar() {
       {/* Actions */}
       <div className="flex items-center gap-7">
         <div className="flex gap-2">
-        <button className="rounded-full hover:bg-gray-100">
-          <img src={lua} alt="Alternar tema" className="h-9 w-9" />
-        </button>
-        <button className="relative rounded-full hover:bg-gray-100">
-          <img src={sino} alt="Notificações" className="h-9 w-9" />
-          <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
-        </button>
+            <button className="rounded-full hover:bg-gray-100">
+                <img src={lua} alt="Alternar tema" className="h-9 w-9" />
+            </button>
+            <button className="relative rounded-full hover:bg-gray-100">
+                <img src={sino} alt="Notificações" className="h-9 w-9" />
+                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
+            </button>
         </div>
         <button className="rounded-full overflow-hidden h-12 w-12 border-2 border-green-700">
           <img src={kenia} alt="Foto de perfil" className="h-full w-full object-cover" />

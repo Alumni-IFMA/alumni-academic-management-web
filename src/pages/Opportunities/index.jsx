@@ -1,12 +1,14 @@
 import { Navbar } from "../../components/Navbar/Navbar.jsx";
+import { Typography } from "../../components/Typography/Typography.jsx";
 
 export function Opportunities() {
   return (
-    <div>
+    <div className="font-poppins">
       <Navbar />
-      <main className="p-6">
-        <h1 className="text-2xl font-bold text-gray-800">Encontre oportunidades</h1>
-      </main>
+      <div className="mt-11 ml-11">
+        <Typography variant="h1">Encontre oportunidades</Typography>
+        <Typography variant="p">Explore e encontre uma vaga perfeita para você.</Typography>
+      </div>
     </div>
   );
 }
