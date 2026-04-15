@@ -7,7 +7,7 @@ import { Button } from "../../components/Button/Button";
 import { Typography } from "../../components/Typography/Typography";
 
 const coursesByModality = {
-  1: [ // Integrado
+  1: [
     { id: 1, name: "Edificações" },
     { id: 2, name: "Eletromecânica" },
     { id: 3, name: "Meio Ambiente" },
@@ -15,7 +15,7 @@ const coursesByModality = {
     { id: 5, name: "Informática" },
     { id: 6, name: "Segurança do Trabalho" },
   ],
-  2: [ // Subsequente
+  2: [
     { id: 7, name: "Alimentos" },
     { id: 8, name: "Automação Industrial" },
     { id: 9, name: "Edificações" },
@@ -25,7 +25,7 @@ const coursesByModality = {
     { id: 13, name: "Química" },
     { id: 14, name: "Segurança do Trabalho" },
   ],
-  3: [ // Superior
+  3: [
     { id: 15, name: "Ciência da Computação" },
     { id: 16, name: "Engenharia Elétrica" },
     { id: 17, name: "Engenharia Civil" },
@@ -35,20 +35,36 @@ const coursesByModality = {
 
 export function RegisterForm({ modalities, graduationYears, campus }) {
   const [selectedModality, setSelectedModality] = useState("");
+  const [graduationYear, setGraduationYear] = useState("");
 
   const availableCourses = coursesByModality[selectedModality] ?? [];
+
+  const entryYears = graduationYear
+    ? graduationYears.filter((y) => y.id < +graduationYear)
+    : graduationYears;
 
   return (
     <form action="" className="flex flex-col">
       <div className="grid grid-cols-2 px-20 gap-6 mt-6">
+
         <FormField>
           <Label htmlFor="name">Nome completo</Label>
           <InputField type="text" id="name" placeholder="Digite o nome" name="name" required />
         </FormField>
         <FormField>
+          <Label htmlFor="cpf">CPF</Label>
+          <InputField type="text" id="cpf" name="cpf" placeholder="000.000.000-00" inputMode="numeric" maxLength={14} autoComplete="off" required />
+        </FormField>
+
+        <FormField>
           <Label htmlFor="email">Email pessoal</Label>
           <InputField type="email" id="email" name="email" placeholder="exemplo@email.com" autoComplete="email" maxLength={50} required />
         </FormField>
+        <FormField>
+          <Label htmlFor="campus">Campus</Label>
+          <Dropdown items={campus} id="campus" name="campus" required />
+        </FormField>
+
         <FormField>
           <Label htmlFor="modality">Modalidade</Label>
           <Dropdown
@@ -68,22 +84,28 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
             required
           />
         </FormField>
+
         <FormField>
           <Label htmlFor="graduationYear">Ano de finalização</Label>
-          <Dropdown items={graduationYears} id="graduationYear" name="graduationYear" required />
-        </FormField>
-        <FormField>
-          <Label htmlFor="cpf">CPF</Label>
-          <InputField type="text" id="cpf" name="cpf" placeholder="000.000.000-00" inputMode="numeric" maxLength={14} autoComplete="off" required />
-        </FormField>
-        <FormField>
-          <Label htmlFor="campus">Campus</Label>
-          <Dropdown items={campus} id="campus" name="campus" required />
+          <Dropdown
+            items={graduationYears}
+            id="graduationYear"
+            name="graduationYear"
+            onChange={(e) => setGraduationYear(e.target.value)}
+            required
+          />
         </FormField>
         <FormField>
           <Label htmlFor="yearEntry">Ano de ingresso (do último curso finalizado)</Label>
-          <Dropdown items={graduationYears} id="yearEntry" name="yearEntry" required />
+          <Dropdown
+            items={entryYears}
+            id="yearEntry"
+            name="yearEntry"
+            disabled={!graduationYear}
+            required
+          />
         </FormField>
+
       </div>
 
       <div className="flex flex-col gap-4 w-[230px] items-center mx-auto font-semibold">
