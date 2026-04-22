@@ -3,7 +3,11 @@ import { Navbar } from "../../components/Navbar/navbar.jsx";
 import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
 import { Typography } from "../../components/Typography/Typography.jsx";
 import { FilterCard } from "../../components/FilterCard/FilterCard.jsx";
+import { JobCard } from "../../components/JobCard/JobCard.jsx";
 import { useState } from "react";
+
+import microsoft from "../../assets/microsoft.png";
+import google from "../../assets/google.png";
 
 const categories = [
   { id: "all", name: "Todas" },
@@ -12,8 +16,42 @@ const categories = [
   { id: "salary", name: "Maior Salário" },
 ];
 
+const mockJobs = [
+  {
+    id: 1,
+    companyName: "Microsoft",
+    companyLogo: microsoft,
+    title: "Desenvolvedor Frontend Pleno",
+    location: "São Paulo",
+    postedAt: "Há 10 dias",
+    description: "Estamos em busca de uma pessoa Desenvolvedora Frontend para se juntar ao nosso time!",
+    tags: ["Remoto"],
+  },
+  {
+    id: 2,
+    companyName: "Alumni IFMA",
+    companyLogo: "",
+    title: "Engenheiro(a) de Software Pleno",
+    location: "Imperatriz - MA",
+    postedAt: "Há 2 dias",
+    description: "Estamos em busca de uma pessoa Desenvolvedora Java para se juntar ao nosso time!",
+    tags: ["Híbrido", "Pleno"],
+  },
+  {
+    id: 3,
+    companyName: "Google",
+    companyLogo: google,
+    title: "Engenheiro(a) de Software Pleno",
+    location: "Imperatriz - MA",
+    postedAt: "Há 2 dias",
+    description: "Estamos em busca de uma pessoa Desenvolvedora Java para se juntar ao nosso time!",
+    tags: ["Híbrido", "Pleno"],
+  },
+];
+
 export function Opportunities() {
   const [search, setSearch] = useState("");
+  const [selectedJob, setSelectedJob] = useState(mockJobs[0]);
 
   function handleSearch() {
     console.log("Pesquisar por:", search);
@@ -46,9 +84,25 @@ export function Opportunities() {
       </div>
 
       {/* Conteúdo principal */}
-      <div className="mt-6 px-11 flex gap-6 items-start">
+      <div className="mt-6 px-11 flex gap-6 items-start pb-11">
         <FilterCard />
-        {/* cards de vagas virão aqui */}
+
+        {/* Lista de vagas */}
+        <div className="flex flex-col gap-4 w-[580px] overflow-y-auto max-h-[70vh]">
+          {mockJobs.map((job) => (
+            <JobCard
+              key={job.id}
+              job={job}
+              isSelected={selectedJob?.id === job.id}
+              onClick={() => setSelectedJob(job)}
+            />
+          ))}
+        </div>
+
+        {/* Detalhe da vaga */}
+        <div className="flex-1 bg-white rounded-2xl shadow-md p-6 min-h-[300px]">
+          <p className="text-gray-400 text-sm">Selecione uma vaga para ver os detalhes.</p>
+        </div>
       </div>
     </div>
   );
