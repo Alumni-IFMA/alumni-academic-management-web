@@ -2,6 +2,7 @@ import { Dropdown } from "../../components/Dropdown/Dropdown.jsx";
 import { Navbar } from "../../components/Navbar/navbar.jsx";
 import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
 import { Typography } from "../../components/Typography/Typography.jsx";
+import { FilterCard } from "../../components/FilterCard/FilterCard.jsx";
 import { useState } from "react";
 
 const categories = [
@@ -37,7 +38,17 @@ export function Opportunities() {
           onChange={(e) => setSearch(e.target.value)}
           onSearch={handleSearch}
         />
-        <Dropdown className="w-[30%] rounded-4xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]" items={categories} defaultValue="all"/>
+        <Dropdown
+          className="w-[30%] rounded-4xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
+          items={categories}
+          defaultValue="all"
+        />
+      </div>
+
+      {/* Conteúdo principal */}
+      <div className="mt-6 px-11 flex gap-6 items-start">
+        <FilterCard />
+        {/* cards de vagas virão aqui */}
       </div>
     </div>
   );
