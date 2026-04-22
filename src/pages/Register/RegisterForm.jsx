@@ -62,7 +62,7 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
         </FormField>
         <FormField>
           <Label htmlFor="campus">Campus</Label>
-          <Dropdown items={campus} id="campus" name="campus" required />
+          <Dropdown items={campus} id="campus" name="campus" bordered required />
         </FormField>
 
         <FormField>
@@ -71,6 +71,7 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
             items={modalities}
             id="modality"
             name="modality"
+            bordered
             onChange={(e) => setSelectedModality(+e.target.value)}
           />
         </FormField>
@@ -81,6 +82,7 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
             id="lastCourse"
             name="lastCourse"
             disabled={!selectedModality}
+            bordered
             required
           />
         </FormField>
@@ -92,6 +94,7 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
             id="graduationYear"
             name="graduationYear"
             onChange={(e) => setGraduationYear(e.target.value)}
+            bordered
             required
           />
         </FormField>
@@ -102,6 +105,7 @@ export function RegisterForm({ modalities, graduationYears, campus }) {
             id="yearEntry"
             name="yearEntry"
             disabled={!graduationYear}
+            bordered
             required
           />
         </FormField>
