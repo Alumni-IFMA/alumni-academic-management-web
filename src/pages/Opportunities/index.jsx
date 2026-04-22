@@ -5,6 +5,7 @@ import { Typography } from "../../components/Typography/Typography.jsx";
 import { FilterCard } from "../../components/FilterCard/FilterCard.jsx";
 import { JobCard } from "../../components/JobCard/JobCard.jsx";
 import { useState } from "react";
+import { JobDetail } from "../../components/JobDetail/JobDetail.jsx";
 
 import microsoft from "../../assets/microsoft.png";
 import google from "../../assets/google.png";
@@ -21,11 +22,13 @@ const mockJobs = [
     id: 1,
     companyName: "Microsoft",
     companyLogo: microsoft,
-    title: "Desenvolvedor Frontend Pleno",
+    title: "Desenvolvedor(a) Frontend Sênior",
     location: "São Paulo",
     postedAt: "Há 10 dias",
-    description: "Estamos em busca de uma pessoa Desenvolvedora Frontend para se juntar ao nosso time!",
+    description: "A Microsoft está em busca de uma pessoa Desenvolvedora Frontend Sênior para atuar na criação e evolução de interfaces modernas, acessíveis e escaláveis. Você fará parte de um time multidisciplinar responsável por desenvolver soluções web utilizadas por milhares de usuários diariamente, com foco em performance, qualidade e experiência do usuário. Buscamos alguém com forte domínio de tecnologias frontend, boas práticas de arquitetura e experiência em ambientes ágeis, que goste de trabalhar em equipe e contribuir com decisões técnicas importantes.",
     tags: ["Remoto"],
+    requirements: ["React / TypeScript", "CSS / Tailwind", "Git / GitHub", "Inglês intermediário"],
+    benefits: ["Plano de Saúde", "VA / VR", "Home office", "Vale transporte"],
   },
   {
     id: 2,
@@ -34,18 +37,22 @@ const mockJobs = [
     title: "Engenheiro(a) de Software Pleno",
     location: "Imperatriz - MA",
     postedAt: "Há 2 dias",
-    description: "Estamos em busca de uma pessoa Desenvolvedora Java para se juntar ao nosso time!",
+    description: "Estamos em busca de uma pessoa Desenvolvedora Java para se juntar ao nosso time! Procuramos alguém com experiência sólida em Java e Spring Boot, capaz de atuar no desenvolvimento e manutenção de aplicações escaláveis e de alta performance. É fundamental ter vivência com arquitetura orientada a eventos, utilização de Kafka para mensageria e comunicação entre sistemas, além de testes automatizados, garantindo qualidade e confiabilidade no código.",
     tags: ["Híbrido", "Pleno"],
+    requirements: ["Java 17+ / Spring Boot", "Kafka / Mensageria", "JUnit, Mockito, Testcontainers", "AWS (S3, SQS)"],
+    benefits: ["Plano de Saúde", "VA / VR", "Home office", "Vale transporte", "Day off aniversário"],
   },
   {
     id: 3,
     companyName: "Google",
     companyLogo: google,
-    title: "Engenheiro(a) de Software Pleno",
+    title: "Engenheiro(a) de Software Sênior",
     location: "Imperatriz - MA",
     postedAt: "Há 2 dias",
-    description: "Estamos em busca de uma pessoa Desenvolvedora Java para se juntar ao nosso time!",
+    description: "A Google está buscando uma pessoa Engenheira de Software Backend com experiência em Golang (Go) para atuar no desenvolvimento de serviços distribuídos de alta escala. Você fará parte de um time responsável por criar soluções robustas e performáticas, garantindo disponibilidade, segurança e qualidade para milhões de usuários. Procuramos alguém com perfil colaborativo, domínio em sistemas backend e interesse em trabalhar com arquitetura moderna baseada em microsserviços e infraestrutura em nuvem.",
     tags: ["Híbrido", "Pleno"],
+    requirements: ["Go / Python", "Kubernetes / Docker", "GCP", "Inglês avançado"],
+    benefits: ["Plano de Saúde", "VA / VR", "Home office"],
   },
 ];
 
@@ -100,9 +107,7 @@ export function Opportunities() {
         </div>
 
         {/* Detalhe da vaga */}
-        <div className="flex-1 bg-white rounded-2xl shadow-md p-6 min-h-[300px]">
-          <p className="text-gray-400 text-sm">Selecione uma vaga para ver os detalhes.</p>
-        </div>
+        <JobDetail job={selectedJob} />
       </div>
     </div>
   );
