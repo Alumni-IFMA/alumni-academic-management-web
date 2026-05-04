@@ -5,6 +5,7 @@ import { Typography } from "../../components/Typography/Typography.jsx";
 import { FilterCard } from "../../components/FilterCard/FilterCard.jsx";
 import { JobCard } from "../../components/JobCard/JobCard.jsx";
 import { useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
 import { JobDetail } from "../../components/JobDetail/JobDetail.jsx";
 
 import microsoft from "../../assets/microsoft.png";
@@ -59,43 +60,80 @@ const mockJobs = [
 export function Opportunities() {
   const [search, setSearch] = useState("");
   const [selectedJob, setSelectedJob] = useState(mockJobs[0]);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   function handleSearch() {
     console.log("Pesquisar por:", search);
   }
 
   return (
-    <div className="font-poppins">
+     <div className="font-poppins">
       <Navbar />
 
-      <div className="mt-11 ml-11">
+      <div className="mt-8 px-6 lg:px-11">
         <Typography variant="h1">Encontre oportunidades</Typography>
         <Typography variant="p">
           Explore e encontre uma vaga perfeita para você.
         </Typography>
       </div>
 
-      <div className="mt-6 flex gap-4 items-center px-11">
+      <div className="mt-6 flex gap-4 items-center px-6 2xl:px-11">
+        {/* Botão de filtro — visível apenas quando FilterCard está oculto */}
+        <button
+          onClick={() => setFilterOpen(true)}
+          className="2xl:hidden flex items-center gap-2 border border-dark-green text-dark-green px-4 py-2 rounded-full text-sm font-medium shrink-0"
+        >
+          <SlidersHorizontal size={16} /> Filtros
+        </button>
+
         <SearchBar
-          className="w-[60%]"
+          className="w-[65%]"
           placeholder="Procure por oportunidades"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onSearch={handleSearch}
         />
         <Dropdown
-          className="w-[30%] rounded-4xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
+          className="w-[35%] rounded-4xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
           items={categories}
           defaultValue="all"
         />
       </div>
 
       {/* Conteúdo principal */}
-      <div className="mt-6 px-11 flex gap-6 items-start pb-11">
-        <FilterCard />
+      <div className="mt-6 px-6 xl:px-11 flex gap-4 items-start pb-11">
+
+        {/* FilterCard fixo em telas grandes */}
+        <div className="hidden 2xl:block w-[28%] shrink-0">
+          <FilterCard />
+        </div>
+
+        {/* Drawer de filtros para telas menores */}
+        {filterOpen && (
+          <div className="fixed inset-0 z-50 flex 2xl:hidden">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setFilterOpen(false)}
+            />
+            {/* Painel */}
+            <div className="relative z-10 bg-white h-full w-[400px] p-6 overflow-y-auto shadow-xl">
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-semibold text-lg">Filtros</span>
+                <button
+                  onClick={() => setFilterOpen(false)}
+                  className="text-gray-400 hover:text-gray-600 text-xl font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+              <FilterCard hideTitle />
+            </div>
+          </div>
+        )}
 
         {/* Lista de vagas */}
-        <div className="flex flex-col gap-4 w-[580px] overflow-y-auto max-h-[70vh]">
+        <div className="flex flex-col gap-4 w-[50%] 2xl:w-[30%] shrink-0 overflow-y-auto max-h-[70vh]">
           {mockJobs.map((job) => (
             <JobCard
               key={job.id}
@@ -107,7 +145,7 @@ export function Opportunities() {
         </div>
 
         {/* Detalhe da vaga */}
-        <JobDetail job={selectedJob} />
+          <JobDetail job={selectedJob} />
       </div>
     </div>
   );
