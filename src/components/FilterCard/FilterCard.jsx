@@ -30,7 +30,7 @@ export function FilterCard() {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 w-[350px] flex flex-col gap-5">
+    <div className="bg-white rounded-2xl shadow-md p-6 w-[100%] flex flex-col gap-5">
 
       {/* Título */}
       <div className="flex items-center gap-2">
