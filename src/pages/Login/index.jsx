@@ -11,7 +11,7 @@ export function Login() {
                 <img src={seta} alt="Voltar para a página anterior" />
             </Button>
             <div className='flex flex-col w-[500px] mx-auto items-center'>
-                <img src={alumni} alt="Logo do Alumni IFMA" className='mb-10' />
+                <img src={alumni} alt="Logo do Alumni IFMA" className='mb-10 w-[300px] h-[100px]' />
                 <Typography variant="h1">Bem-vindo!</Typography>
             </div>
             <div>

@@ -4,12 +4,13 @@
 @theme {
     --color-dark-green: #15351E;
     --color-cambrige-blue: #76BA9D;
-    --color-biege: #F0F2D5;
+    --color-biege: #F0F2D8;
     --color-red-pantone: #EF233C;
     --color-carmine: #97051D;
     --color-white: #FFFBFB;
     --color-green: #0AA525;
     --color-light-green: #E1FFD8;
+    --color-strong-green: #147D26;
 
     --font-inter: "Inter", sans-serif;
     --font-poppins: "Poppins", sans-serif;
