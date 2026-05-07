@@ -26,7 +26,7 @@ export function Sidebar() {
   const { pathname } = useLocation();
 
   return (
-    <aside className="w-64 min-h-screen bg-dark-green flex flex-col font-poppins shrink-0">
+    <aside className="w-64 min-h-screen bg-green flex flex-col font-poppins shrink-0">
       {/* Logo */}
       <div className="flex items-center justify-center py-8 px-6">
         <img src={alumni} alt="Alumni IFMA" className="h-14 w-auto brightness-0 invert" />
