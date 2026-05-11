@@ -29,24 +29,31 @@ export function Sidebar() {
     <aside className="w-64 min-h-screen bg-green flex flex-col font-poppins shrink-0">
       {/* Logo */}
       <div className="flex items-center justify-center py-8 px-6">
-        <img src={alumni} alt="Alumni IFMA" className="h-14 w-auto brightness-0 invert" />
+        <img
+          src={alumni}
+          alt="Alumni IFMA"
+          className="h-14 w-auto brightness-0 invert"
+        />
       </div>
 
       {/* Nav links */}
       <nav className="flex flex-col gap-1 px-4 flex-1">
         {navLinks.map(({ to, label, icon: Icon }) => {
-          const isActive = pathname === to || pathname.startsWith(to + "/");
+          const isActive =
+            to === "/admin"
+              ? pathname === to
+              : pathname === to || pathname.startsWith(to + "/");
           return (
             <Link
               key={to}
               to={to}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-lg font-medium transition-colors ${
                 isActive
                   ? "bg-white/20 text-white"
                   : "text-white/70 hover:bg-white/10 hover:text-white"
               }`}
             >
-              <Icon size={18} />
+              <Icon size={22} />
               <span>{label}</span>
             </Link>
           );
