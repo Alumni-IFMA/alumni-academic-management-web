@@ -6,6 +6,7 @@ import { Opportunities } from "../pages/Opportunities";
 import { News } from "../pages/News";
 import { AdminNews } from "../pages/AdminNews";
 import { AdminNewsForm } from "../pages/AdminNewsForm";
+import { AdminLayout } from "../layouts/AdminLayout";
 
 export function AppRoute() {
   return (
