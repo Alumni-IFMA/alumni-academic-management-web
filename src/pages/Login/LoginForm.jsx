@@ -33,7 +33,7 @@ export function LoginForm() {
       <div className="flex flex-col gap-4 w-[260px] items-center mx-auto font-semibold">
         <Button variant='primary' type="submit">Entrar</Button>
         <Typography variant="p">
-          Não possui conta? <a className="text-strong-green" href="#">Cadastrar-se</a> 
+          Não possui conta? <a className="text-green" href="#">Cadastrar-se</a> 
         </Typography>
       </div>
     </form>
