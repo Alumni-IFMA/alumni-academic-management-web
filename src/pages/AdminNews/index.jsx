@@ -7,71 +7,13 @@ import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
 import { Dropdown } from "../../components/Dropdown/Dropdown.jsx";
 import { Typography } from "../../components/Typography/Typography.jsx";
 
-import mockCover1 from "../../assets/microsoft.png";
-import mockCover2 from "../../assets/google.png";
+import { mockNews } from "../../mocks/mockNews.js";
 
 const statusFilters = [
   { id: "all", name: "Todas" },
   { id: "published", name: "Publicado" },
   { id: "scheduled", name: "Agendado" },
   { id: "draft", name: "Rascunho" },
-];
-
-const mockNews = [
-  {
-    id: 1,
-    title: "Seletivo Técnico – IFMA 2026",
-    description:
-      "Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do IFMA. Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do...",
-    coverImage: mockCover1,
-    status: "published",
-    publishedAt: "25/11/2025",
-  },
-  {
-    id: 2,
-    title: "Seletivo Técnico – IFMA 2026",
-    description:
-      "Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do IFMA. Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do...",
-    coverImage: mockCover2,
-    status: "scheduled",
-    publishedAt: "25/11/2025",
-  },
-  {
-    id: 3,
-    title: "Seletivo Técnico – IFMA 2026",
-    description:
-      "Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do IFMA. Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do...",
-    coverImage: mockCover1,
-    status: "draft",
-    publishedAt: "25/11/2025",
-  },
-  {
-    id: 4,
-    title: "Seletivo Técnico – IFMA 2026",
-    description:
-      "Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do IFMA. Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do...",
-    coverImage: mockCover2,
-    status: "published",
-    publishedAt: "25/11/2025",
-  },
-  {
-    id: 5,
-    title: "Seletivo Técnico – IFMA 2026",
-    description:
-      "Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do IFMA. Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do...",
-    coverImage: mockCover1,
-    status: "scheduled",
-    publishedAt: "25/11/2025",
-  },
-  {
-    id: 6,
-    title: "Seletivo Técnico – IFMA 2026",
-    description:
-      "Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do IFMA. Inscrições abertas para novos alunos. Participe do processo seletivo e venha fazer parte do...",
-    coverImage: mockCover2,
-    status: "draft",
-    publishedAt: "25/11/2025",
-  },
 ];
 
 export function AdminNews() {
@@ -107,7 +49,7 @@ export function AdminNews() {
           onSearch={() => {}}
         />
         <Dropdown
-          className="w-[25%] rounded-4xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
+          className="w-48 rounded-4xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
           items={statusFilters}
           defaultValue="all"
           onChange={(value) => setStatusFilter(value)}
