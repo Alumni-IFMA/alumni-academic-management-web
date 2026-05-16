@@ -1,7 +1,7 @@
 // pages/AdminNewsForm/AdminNewsForm.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ImageIcon, X, CalendarCheck } from "lucide-react";
+import { ImageIcon, X, CalendarCheck, Trash2 } from "lucide-react";
 import { DayPicker } from "@daypicker/react";
 import "@daypicker/react/style.css";
 import { toast, Toaster } from "sonner";
@@ -19,8 +19,12 @@ export function AdminNewsForm() {
   const [coverPreview, setCoverPreview] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [status, setStatus] = useState(null);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const isPublished = status === "published";
 
   useEffect(() => {
     if (isEditing) {
@@ -29,6 +33,7 @@ export function AdminNewsForm() {
         setCoverPreview(news.coverImage);
         setTitle(news.title);
         setContent(news.description);
+        setStatus(news.status);
       }
     }
   }, [id]);
@@ -60,9 +65,16 @@ export function AdminNewsForm() {
     });
   }
 
+  function handleConfirmDelete() {
+    toast.error("Notícia excluída com sucesso!");
+    setDeleteOpen(false);
+    navigate("/admin/news");
+  }
+
   return (
     <div className="font-poppins max-w-4xl mx-auto">
       <Toaster position="top-center" richColors />
+
       {/* Título */}
       <Typography variant="h1">
         {isEditing ? "Editar notícia" : "Nova notícia"}
@@ -120,50 +132,57 @@ export function AdminNewsForm() {
       </div>
 
       {/* Botões */}
-      <div className="mt-8 flex items-center justify-end gap-4">
-        <button
-          onClick={handleSaveDraft}
-          className="bg-yellow-400 text-white font-semibold px-6 py-3 rounded-xl hover:bg-yellow-500 transition-colors cursor-pointer"
-        >
-          Salvar Rascunho
-        </button>
-        <button
-          onClick={() => setScheduleOpen(true)}
-          className="bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-600 transition-colors cursor-pointer"
-        >
-          Agendar
-        </button>
-        <button
-          onClick={handlePublish}
-          className="bg-dark-green text-white font-semibold px-6 py-3 rounded-xl hover:bg-green-800 transition-colors cursor-pointer"
-        >
-          Publicar
-        </button>
+      <div className="mt-8 flex items-center justify-between gap-4">
+        {/* Excluir — só na edição */}
+        {isEditing ? (
+          <button
+            onClick={() => setDeleteOpen(true)}
+            className="flex items-center gap-2 text-red-500 border border-red-400 px-6 py-3 rounded-xl hover:bg-red-50 transition-colors cursor-pointer font-semibold"
+          >
+            <Trash2 size={18} />
+            Excluir
+          </button>
+        ) : (
+          <div />
+        )}
+
+        <div className="flex items-center gap-4">
+          {!isPublished && (
+            <>
+              <button
+                onClick={handleSaveDraft}
+                className="bg-yellow-400 text-white font-semibold px-6 py-3 rounded-xl hover:bg-yellow-500 transition-colors cursor-pointer"
+              >
+                Salvar Rascunho
+              </button>
+              <button
+                onClick={() => setScheduleOpen(true)}
+                className="bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-600 transition-colors cursor-pointer"
+              >
+                Agendar
+              </button>
+            </>
+          )}
+          <button
+            onClick={handlePublish}
+            className="bg-dark-green text-white font-semibold px-6 py-3 rounded-xl hover:bg-green-800 transition-colors cursor-pointer"
+          >
+            Publicar
+          </button>
+        </div>
       </div>
 
       {/* Modal de agendamento */}
       {scheduleOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setScheduleOpen(false)}
-          />
-
-          {/* Card do modal */}
+          <div className="absolute inset-0 bg-black/40" onClick={() => setScheduleOpen(false)} />
           <div className="relative z-10 bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center gap-4 min-w-[340px]">
-            {/* Header */}
             <div className="flex items-center justify-between w-full">
               <span className="font-semibold text-dark-green text-lg">Agendar publicação</span>
-              <button
-                onClick={() => setScheduleOpen(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-              >
+              <button onClick={() => setScheduleOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
                 <X size={20} />
               </button>
             </div>
-
-            {/* Calendário */}
             <DayPicker
               animate
               mode="single"
@@ -192,16 +211,12 @@ export function AdminNewsForm() {
                 day_outside: "text-gray-300",
               }}
             />
-
-            {/* Data selecionada */}
             {selectedDate && (
               <div className="flex items-center gap-2 text-sm text-dark-green font-medium bg-green-50 px-4 py-2 rounded-lg w-full justify-center">
                 <CalendarCheck size={16} />
                 <span>Publicar em {selectedDate.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}</span>
               </div>
             )}
-
-            {/* Botão confirmar */}
             <button
               onClick={handleConfirmSchedule}
               disabled={!selectedDate}
@@ -209,6 +224,38 @@ export function AdminNewsForm() {
             >
               Confirmar agendamento
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de exclusão */}
+      {deleteOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setDeleteOpen(false)} />
+          <div className="relative z-10 bg-white rounded-2xl shadow-xl p-6 flex flex-col gap-4 min-w-[340px]">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-gray-900 text-lg">Excluir notícia</span>
+              <button onClick={() => setDeleteOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+                <X size={20} />
+              </button>
+            </div>
+            <p className="text-gray-500 text-sm">
+              Tem certeza que deseja excluir esta notícia? Essa ação não pode ser desfeita.
+            </p>
+            <div className="flex gap-3 mt-2">
+              <button
+                onClick={() => setDeleteOpen(false)}
+                className="flex-1 border border-gray-300 text-gray-600 font-semibold py-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="flex-1 bg-red-500 text-white font-semibold py-3 rounded-xl hover:bg-red-600 transition-colors cursor-pointer"
+              >
+                Excluir
+              </button>
+            </div>
           </div>
         </div>
       )}
