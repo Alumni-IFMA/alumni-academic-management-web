@@ -1,11 +1,10 @@
 // pages/AdminNewsForm/AdminNewsForm.jsx
-import "react-day-picker/dist/style.css";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageIcon, X, CalendarCheck } from "lucide-react";
-import { DayPicker } from "react-day-picker";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { DayPicker } from "@daypicker/react";
+import "@daypicker/react/style.css";
+import { toast, Toaster } from "sonner";
 import { Typography } from "../../components/Typography/Typography.jsx";
 import { InputField } from "../../components/InputField/InputField.jsx";
 import { Textarea } from "../../components/Textarea/Textarea.jsx";
@@ -42,21 +41,28 @@ export function AdminNewsForm() {
   }
 
   function handleSaveDraft() {
-    console.log("Salvar rascunho", { cover, title, content });
+    toast.warning("Rascunho salvo com sucesso!");
   }
 
   function handleConfirmSchedule() {
     if (!selectedDate) return;
-    console.log("Agendar para:", format(selectedDate, "dd/MM/yyyy"), { cover, title, content });
+    const formattedDate = selectedDate.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
+    toast.success(`Notícia agendada para ${formattedDate}!`, {
+      style: { background: "#3b82f6", color: "white" },
+    });
     setScheduleOpen(false);
+    setSelectedDate(null);
   }
 
   function handlePublish() {
-    console.log("Publicar", { cover, title, content });
+    toast.success("Notícia publicada com sucesso!", {
+      style: { background: "#166534", color: "white" },
+    });
   }
 
   return (
     <div className="font-poppins max-w-4xl mx-auto">
+      <Toaster position="top-center" richColors />
       {/* Título */}
       <Typography variant="h1">
         {isEditing ? "Editar notícia" : "Nova notícia"}
@@ -159,10 +165,10 @@ export function AdminNewsForm() {
 
             {/* Calendário */}
             <DayPicker
+              animate
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
-              locale={ptBR}
               disabled={{ before: new Date() }}
               classNames={{
                 root: "font-poppins",
@@ -191,7 +197,7 @@ export function AdminNewsForm() {
             {selectedDate && (
               <div className="flex items-center gap-2 text-sm text-dark-green font-medium bg-green-50 px-4 py-2 rounded-lg w-full justify-center">
                 <CalendarCheck size={16} />
-                <span>Publicar em {format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}</span>
+                <span>Publicar em {selectedDate.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}</span>
               </div>
             )}
 
@@ -199,7 +205,7 @@ export function AdminNewsForm() {
             <button
               onClick={handleConfirmSchedule}
               disabled={!selectedDate}
-              className="w-full bg-green text-white font-semibold py-3 rounded-xl hover:bg-blue-600 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full bg-dark-green text-white font-semibold py-3 rounded-xl hover:bg-green-800 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Confirmar agendamento
             </button>
