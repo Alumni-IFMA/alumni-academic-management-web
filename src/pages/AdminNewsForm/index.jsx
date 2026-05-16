@@ -251,7 +251,7 @@ export function AdminNewsForm() {
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="flex-1 bg-red-500 text-white font-semibold py-3 rounded-xl hover:bg-red-600 transition-colors cursor-pointer"
+                className="flex-1 bg-green text-white font-semibold py-3 rounded-xl hover:bg-green-600 transition-colors cursor-pointer"
               >
                 Excluir
               </button>

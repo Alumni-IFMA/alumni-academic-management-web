@@ -47,7 +47,7 @@ export function NewsCard({ news, onEdit, onDelete }) {
             <span className="text-gray-400 text-xs">{news.publishedAt}</span>
             <button
               onClick={() => onEdit(news.id)}
-              className="bg-dark-green text-white text-sm font-medium px-4 py-1.5 rounded-lg hover:bg-green-800 transition-colors cursor-pointer"
+              className="bg-green text-white text-sm font-medium px-4 py-1.5 rounded-lg hover:bg-green-800 transition-colors cursor-pointer"
             >
               Editar
             </button>

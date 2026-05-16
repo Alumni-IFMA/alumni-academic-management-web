@@ -58,7 +58,7 @@ export function AdminNews() {
         />
         <button
           onClick={() => navigate("/admin/news/new")}
-          className="flex items-center gap-2 bg-dark-green text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-green-800 transition-colors shrink-0 cursor-pointer"
+          className="flex items-center gap-2 bg-green text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-green-800 transition-colors shrink-0 cursor-pointer"
         >
           <Plus size={18} />
           Nova Notícia
