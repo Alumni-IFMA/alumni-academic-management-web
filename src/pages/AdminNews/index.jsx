@@ -18,20 +18,22 @@ const statusFilters = [
 
 export function AdminNews() {
   const navigate = useNavigate();
+  const [news, setNews] = useState(mockNews);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const filteredNews = mockNews.filter((news) => {
-    const matchesSearch = news.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || news.status === statusFilter;
+  const filteredNews = news.filter((item) => {
+    const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase());
+    const matchesStatus = statusFilter === "all" || item.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   function handleEdit(id) {
     navigate(`/admin/news/edit/${id}`);
+  }
+
+  function handleDelete(id) {
+    setNews((prev) => prev.filter((item) => item.id !== id));
   }
 
   return (
@@ -56,7 +58,7 @@ export function AdminNews() {
         />
         <button
           onClick={() => navigate("/admin/news/new")}
-          className="flex items-center gap-2 bg-green text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-green-800 transition-colors shrink-0 cursor-pointer"
+          className="flex items-center gap-2 bg-dark-green text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-green-800 transition-colors shrink-0 cursor-pointer"
         >
           <Plus size={18} />
           Nova Notícia
@@ -66,7 +68,7 @@ export function AdminNews() {
       {/* Grid de notícias */}
       <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredNews.map((news) => (
-          <NewsCard key={news.id} news={news} onEdit={handleEdit} />
+          <NewsCard key={news.id} news={news} onEdit={handleEdit} onDelete={handleDelete} />
         ))}
       </div>
 
