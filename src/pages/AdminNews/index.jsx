@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
+import { toast, Toaster } from "sonner";
 import { NewsCard } from "../../components/NewsCard/NewsCard.jsx";
 import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
 import { Dropdown } from "../../components/Dropdown/Dropdown.jsx";
 import { Typography } from "../../components/Typography/Typography.jsx";
-
 import { mockNews } from "../../mocks/mockNews.js";
 
 const statusFilters = [
@@ -34,10 +34,12 @@ export function AdminNews() {
 
   function handleDelete(id) {
     setNews((prev) => prev.filter((item) => item.id !== id));
+    toast.error("Notícia excluída com sucesso!");
   }
 
   return (
     <div className="font-poppins">
+      <Toaster position="top-center" richColors />
       {/* Título */}
       <Typography variant="h1">Notícias</Typography>
 

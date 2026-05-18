@@ -1,6 +1,7 @@
 // components/NewsCard/NewsCard.jsx
 import { useState } from "react";
 import { Trash2, X } from "lucide-react";
+import { toast } from "sonner";
 import { StatusBadge } from "../StatusBadge/StatusBadge.jsx";
 
 export function NewsCard({ news, onEdit, onDelete }) {
@@ -27,7 +28,7 @@ export function NewsCard({ news, onEdit, onDelete }) {
           {/* Ícone lixeira */}
           <button
             onClick={() => setDeleteOpen(true)}
-            className="absolute top-2 right-2 bg-white/80 hover:bg-white text-black p-1.5 rounded-full transition-colors cursor-pointer shadow"
+            className="absolute top-2 right-2 bg-white/80 hover:bg-white text-dark-green p-1.5 rounded-full transition-colors cursor-pointer shadow"
           >
             <Trash2 size={15} />
           </button>
@@ -78,7 +79,7 @@ export function NewsCard({ news, onEdit, onDelete }) {
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="flex-1 bg-green text-white font-semibold py-3 rounded-xl hover:bg-green-600 transition-colors cursor-pointer"
+                className="flex-1 bg-dark-green text-white font-semibold py-3 rounded-xl hover:bg-green-600 transition-colors cursor-pointer"
               >
                 Excluir
               </button>
