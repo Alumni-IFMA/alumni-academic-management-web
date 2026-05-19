@@ -1,13 +1,15 @@
 // pages/AdminNewsForm/AdminNewsForm.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ImageIcon, X, CalendarCheck, Trash2 } from "lucide-react";
-import { DayPicker } from "@daypicker/react";
-import "@daypicker/react/style.css";
+import { ImageIcon, Trash2 } from "lucide-react";
 import { toast, Toaster } from "sonner";
+
 import { Typography } from "../../components/Typography/Typography.jsx";
 import { InputField } from "../../components/InputField/InputField.jsx";
 import { Textarea } from "../../components/Textarea/Textarea.jsx";
+import { DeleteModal } from "../../components/DeleteModal/DeleteModal.jsx";
+import { ScheduleModal } from "../../components/ScheduleModal/ScheduleModal.jsx";
+
 import { mockNews } from "../../mocks/mockNews.js";
 
 export function AdminNewsForm() {
@@ -51,7 +53,11 @@ export function AdminNewsForm() {
 
   function handleConfirmSchedule() {
     if (!selectedDate) return;
-    const formattedDate = selectedDate.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
+    const formattedDate = selectedDate.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
     toast.success(`Notícia agendada para ${formattedDate}!`, {
       style: { background: "#3b82f6", color: "white" },
     });
@@ -75,7 +81,6 @@ export function AdminNewsForm() {
     <div className="font-poppins max-w-4xl mx-auto">
       <Toaster position="top-center" richColors />
 
-      {/* Título */}
       <Typography variant="h1">
         {isEditing ? "Editar notícia" : "Nova notícia"}
       </Typography>
@@ -83,19 +88,10 @@ export function AdminNewsForm() {
       <div className="mt-8 bg-white rounded-2xl p-8 shadow-sm flex flex-col gap-5">
         {/* Upload de capa */}
         <label className="cursor-pointer">
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleCoverChange}
-          />
+          <input type="file" accept="image/*" className="hidden" onChange={handleCoverChange} />
           <div className="w-full h-72 rounded-2xl bg-gray-200 flex flex-col items-center justify-center gap-2 hover:bg-gray-300 transition-colors overflow-hidden">
             {coverPreview ? (
-              <img
-                src={coverPreview}
-                alt="Capa"
-                className="w-full h-full object-cover"
-              />
+              <img src={coverPreview} alt="Capa" className="w-full h-full object-cover" />
             ) : (
               <>
                 <ImageIcon size={52} className="text-dark-green" strokeWidth={1.5} />
@@ -120,7 +116,6 @@ export function AdminNewsForm() {
             onChange={(e) => setContent(e.target.value)}
             className="border-0 rounded-none min-h-56"
           />
-          {/* Toolbar inferior */}
           <div className="flex items-center gap-3 px-6 py-3 border-t border-dark-green bg-white">
             <label className="cursor-pointer text-dark-green hover:opacity-70 transition-opacity">
               <input type="file" accept="image/*" className="hidden" />
@@ -133,7 +128,6 @@ export function AdminNewsForm() {
 
       {/* Botões */}
       <div className="mt-8 flex items-center justify-between gap-4">
-        {/* Excluir — só na edição */}
         {isEditing ? (
           <button
             onClick={() => setDeleteOpen(true)}
@@ -172,93 +166,19 @@ export function AdminNewsForm() {
         </div>
       </div>
 
-      {/* Modal de agendamento */}
-      {scheduleOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setScheduleOpen(false)} />
-          <div className="relative z-10 bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center gap-4 min-w-[340px]">
-            <div className="flex items-center justify-between w-full">
-              <span className="font-semibold text-dark-green text-lg">Agendar publicação</span>
-              <button onClick={() => setScheduleOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
-                <X size={20} />
-              </button>
-            </div>
-            <DayPicker
-              animate
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              disabled={{ before: new Date() }}
-              classNames={{
-                root: "font-poppins",
-                months: "flex flex-col",
-                month: "space-y-3",
-                caption: "flex justify-center items-center relative",
-                caption_label: "text-dark-green font-semibold text-base capitalize",
-                nav: "flex items-center gap-2",
-                nav_button: "text-dark-green hover:opacity-70 transition-opacity cursor-pointer",
-                nav_button_previous: "absolute left-0",
-                nav_button_next: "absolute right-0",
-                table: "w-full border-collapse",
-                head_row: "flex",
-                head_cell: "text-gray-400 text-xs font-medium w-9 text-center",
-                row: "flex w-full mt-1",
-                cell: "w-9 h-9 text-center text-sm relative",
-                day: "w-9 h-9 rounded-full hover:bg-gray-100 transition-colors cursor-pointer font-medium",
-                day_selected: "bg-dark-green text-white hover:bg-dark-green rounded-full",
-                day_today: "text-blue-500 font-bold",
-                day_disabled: "text-gray-300 cursor-not-allowed hover:bg-transparent",
-                day_outside: "text-gray-300",
-              }}
-            />
-            {selectedDate && (
-              <div className="flex items-center gap-2 text-sm text-dark-green font-medium bg-green-50 px-4 py-2 rounded-lg w-full justify-center">
-                <CalendarCheck size={16} />
-                <span>Publicar em {selectedDate.toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}</span>
-              </div>
-            )}
-            <button
-              onClick={handleConfirmSchedule}
-              disabled={!selectedDate}
-              className="w-full bg-dark-green text-white font-semibold py-3 rounded-xl hover:bg-green-800 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              Confirmar agendamento
-            </button>
-          </div>
-        </div>
-      )}
+      <ScheduleModal
+        isOpen={scheduleOpen}
+        onClose={() => setScheduleOpen(false)}
+        onConfirm={handleConfirmSchedule}
+        selectedDate={selectedDate}
+        onSelectDate={setSelectedDate}
+      />
 
-      {/* Modal de exclusão */}
-      {deleteOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setDeleteOpen(false)} />
-          <div className="relative z-10 bg-white rounded-2xl shadow-xl p-6 flex flex-col gap-4 min-w-[340px]">
-            <div className="flex items-center justify-between">
-              <span className="font-semibold text-gray-900 text-lg">Excluir notícia</span>
-              <button onClick={() => setDeleteOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
-                <X size={20} />
-              </button>
-            </div>
-            <p className="text-gray-500 text-sm">
-              Tem certeza que deseja excluir esta notícia? Essa ação não pode ser desfeita.
-            </p>
-            <div className="flex gap-3 mt-2">
-              <button
-                onClick={() => setDeleteOpen(false)}
-                className="flex-1 border border-gray-300 text-gray-600 font-semibold py-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleConfirmDelete}
-                className="flex-1 bg-green text-white font-semibold py-3 rounded-xl hover:bg-green-600 transition-colors cursor-pointer"
-              >
-                Excluir
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DeleteModal
+        isOpen={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }
