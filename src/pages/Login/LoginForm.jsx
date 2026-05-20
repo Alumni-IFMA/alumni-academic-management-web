@@ -7,7 +7,7 @@ import { Typography } from "../../components/Typography/Typography";
 export function LoginForm() {
   return (
     <form action="" className="w-[500px] mx-auto">
-      <div className="grid gap-6 mt-2">
+      <div className="grid gap-2 mt-2">
         <FormField>
           <Label htmlFor="email">Email</Label>
           <InputField
@@ -33,7 +33,7 @@ export function LoginForm() {
       <div className="flex flex-col gap-4 w-[260px] items-center mx-auto font-semibold">
         <Button variant='primary' type="submit">Entrar</Button>
         <Typography variant="p">
-          Não possui conta? <a className="text-dark-green" href="#">Cadastrar-se</a> 
+          Não possui conta? <a className="text-green" href="#">Cadastrar-se</a> 
         </Typography>
       </div>
     </form>

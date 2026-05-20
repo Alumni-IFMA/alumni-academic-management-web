@@ -37,7 +37,7 @@ export function SearchBar({
 
       <button
         onClick={onSearch}
-        className="bg-dark-green text-white font-medium px-8 py-3 rounded-2xl mr-2 hover:opacity-90 transition"
+        className="bg-green text-white font-medium px-8 py-3 rounded-2xl mr-2 hover:opacity-90 transition"
       >
         {buttonText}
       </button>
