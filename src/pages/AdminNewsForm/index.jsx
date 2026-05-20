@@ -1,7 +1,7 @@
 // pages/AdminNewsForm/AdminNewsForm.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ImageIcon, Trash2 } from "lucide-react";
+import { ImageIcon, Trash2, ArrowLeft } from "lucide-react";
 import { toast, Toaster } from "sonner";
 
 import { Typography } from "../../components/Typography/Typography.jsx";
@@ -78,7 +78,16 @@ export function AdminNewsForm() {
   }
 
   return (
-    <div className="font-poppins max-w-4xl mx-auto">
+    <>
+       <button
+        onClick={() => navigate("/admin/news")}
+        className="flex items-center gap-2 text-dark-green hover:opacity-70 transition-opacity cursor-pointer mb-4"
+      >
+        <ArrowLeft size={20} />
+        <span className="font-medium text-xl">Voltar</span>
+      </button>
+
+      <div className="font-poppins max-w-4xl mx-auto">
       <Toaster position="top-center" richColors />
 
       <Typography variant="h1">
@@ -180,5 +189,6 @@ export function AdminNewsForm() {
         onConfirm={handleConfirmDelete}
       />
     </div>
+    </>
   );
 }
