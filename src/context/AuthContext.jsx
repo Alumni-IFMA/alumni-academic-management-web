@@ -7,7 +7,10 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
   async function login(email, password) {
-    const { data } = await api.post("/auth/login", { email, password });
+    const { data } = await api.post("/auth/login", {
+      email: email.trim(),
+      password: password.trim(),
+    });
     localStorage.setItem("token", data.token);
     setToken(data.token);
   }
@@ -26,6 +29,7 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth deve ser usado dentro de AuthProvider");
+  if (!context)
+    throw new Error("useAuth deve ser usado dentro de AuthProvider");
   return context;
 }

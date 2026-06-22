@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import { useAuth } from "../../context/AuthContext";
 
 const schema = yup.object({
@@ -39,9 +39,12 @@ export function LoginForm() {
       toast.error("Email ou senha inválidos.");
     }
   }
-
-
+  
+  
   return (
+    <>
+    <Toaster position="top-center" richColors />
+    
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-[500px] mx-auto">
       <div className="grid gap-2 mt-2">
         <FormField>
@@ -88,5 +91,6 @@ export function LoginForm() {
         </Typography>
       </div>
     </form>
+    </>
   );
 }
