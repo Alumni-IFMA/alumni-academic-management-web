@@ -14,8 +14,11 @@ const schema = yup.object({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
   password: yup
     .string()
+    .required("Senha é obrigatória")  // ← Verifica vazio PRIMEIRO
     .min(6, "Senha deve ter pelo menos 6 caracteres")
-    .required("Senha é obrigatória"),
+    .test('no-spaces', 'Senha não pode conter apenas espaços', (value) => {
+      return value && value.trim().length > 0;  // ← Rejeita 6 espaços
+    }),
 });
 
 export function LoginForm() {
@@ -31,7 +34,8 @@ export function LoginForm() {
     try {
       await login(email, password);
       navigate("/");
-    } catch {
+    } catch(error) {
+      console.error("Erro no login:", error);
       toast.error("Email ou senha inválidos.");
     }
   }
