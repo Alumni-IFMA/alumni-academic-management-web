@@ -1,17 +1,28 @@
 import arrowDown from "../../assets/arrow-down.png";
 
-export function Dropdown({ items, defaultValue = "", className = "", bordered = false, size = "lg", ...rest }) {
+export function Dropdown({
+  items,
+  defaultValue,
+  value,
+  className = "",
+  bordered = false,
+  size = "lg",
+  ...rest
+}) {
   const sizeStyles = {
     lg: "px-6 py-4 text-lg",
     sm: "px-4 py-2 text-sm",
   };
+
+  const valueProps =
+    value !== undefined ? { value } : { defaultValue: defaultValue ?? "" };
 
   return (
     <div className={`relative ${className}`}>
       <select
         className={`w-full bg-white rounded-lg appearance-none ${sizeStyles[size]} ${bordered ? "border border-dark-green" : "border-0"}`}
         {...rest}
-        defaultValue={defaultValue}
+        {...valueProps}
       >
         <option className="font-dark-green font-semibold" value="" disabled>
           Selecione uma opção
