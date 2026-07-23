@@ -37,7 +37,7 @@ export const registerFormSchema = yup.object({
       "entry-before-graduation",
       "Ano de ingresso deve ser anterior ou igual ao ano de finalização",
       function (value) {
-        const graduationYear = this.parent;
+        const graduationYear = this.parent.graduationYear;
         if (!value || !graduationYear) return true; // Se algum dos anos não estiver definido, não faz a validação
         return value <= graduationYear;
       },
