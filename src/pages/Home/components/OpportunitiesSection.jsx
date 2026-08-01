@@ -10,13 +10,13 @@ export function OpportunitiesSection() {
 
   useEffect(() => {
     getLatestJobs()
-      .then(setJobs)
+      .then((data) => setJobs(Array.isArray(data) ? data : (data?.jobs ?? data?.content ?? data?.data ?? [])))
       .catch(() => setError("Não foi possível carregar as oportunidades."))
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <section>
+    <section className="h-full bg-white rounded-3xl shadow-sm p-6">
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-2xl font-bold text-dark-green">Oportunidades</h2>
         <Link to="/opportunities" className="text-sm font-semibold text-green hover:underline">
@@ -26,7 +26,7 @@ export function OpportunitiesSection() {
 
       {loading && (
         <div className="flex flex-col gap-3">
-          {[1, 2, 3].map((i) => (
+          {[1, 2].map((i) => (
             <div key={i} className="bg-gray-100 rounded-2xl h-24 animate-pulse" />
           ))}
         </div>
@@ -37,7 +37,7 @@ export function OpportunitiesSection() {
       )}
 
       {!loading && !error && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-6">
           {jobs.map((job) => (
             <HomeJobCard key={job.id} job={job} />
           ))}

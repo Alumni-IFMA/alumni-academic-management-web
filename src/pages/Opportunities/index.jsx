@@ -70,7 +70,7 @@ export function Opportunities() {
      <div className="font-poppins">
       <Navbar />
 
-      <div className="mt-8 px-6 lg:px-11">
+      <div className="pt-24 px-6 lg:px-11">
         <Typography variant="h1">Encontre oportunidades</Typography>
         <Typography variant="p">
           Explore e encontre uma vaga perfeita para você.

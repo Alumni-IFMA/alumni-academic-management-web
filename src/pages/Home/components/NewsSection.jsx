@@ -10,13 +10,13 @@ export function NewsSection() {
 
   useEffect(() => {
     getLatestNews()
-      .then(setNews)
+      .then((data) => setNews(Array.isArray(data) ? data : (data?.news ?? data?.content ?? data?.data ?? [])))
       .catch(() => setError("Não foi possível carregar as notícias."))
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <section>
+    <section className="h-full bg-white rounded-3xl shadow-sm p-6">
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-2xl font-bold text-dark-green">Notícias</h2>
         <Link to="/news" className="text-sm font-semibold text-green hover:underline">

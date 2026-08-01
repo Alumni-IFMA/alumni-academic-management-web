@@ -10,18 +10,11 @@ export function HeroSection({ userName, onSearch }) {
   }
 
   return (
-    <section className="relative px-6 md:px-12 pt-10 pb-8 overflow-hidden">
-      {/* Decorative leaf shape — top right */}
-      <div
-        className="pointer-events-none absolute -top-16 -right-20 w-80 h-96 bg-dark-green opacity-90 rounded-full"
-        style={{ clipPath: "ellipse(55% 80% at 80% 30%)" }}
-        aria-hidden="true"
-      />
-
+    <section className="relative px-6 md:px-12 pt-10 pb-8">
       <h1 className="text-4xl md:text-5xl font-bold text-dark-green mb-3 relative z-10">
-        Bem-vinda, {userName}!
+        Bem-vindo(a), {userName}!
       </h1>
-      <p className="text-gray-700 text-base md:text-lg mb-6 relative z-10">
+      <p className="text-gray-700 text-base md:text-lg mb-6 relative z-10 whitespace-nowrap">
         Acompanhe oportunidades, notícias e eventos da sua rede{" "}
         <span className="font-bold text-green">Alumni IFMA</span>.
       </p>

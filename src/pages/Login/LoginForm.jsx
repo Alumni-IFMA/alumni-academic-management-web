@@ -33,7 +33,7 @@ export function LoginForm() {
   async function onSubmit({ email, password }) {
     try {
       await login(email, password);
-      navigate("/");
+      navigate("/home");
     } catch(error) {
       console.error("Erro no login:", error);
       toast.error("Email ou senha inválidos.");

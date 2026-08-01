@@ -13,8 +13,11 @@ function decodeJwtPayload(token) {
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
-
-  const userName = token ? (decodeJwtPayload(token)?.name ?? "Usuário") : null;
+  const [userName, setUserName] = useState(() => {
+    const cachedToken = localStorage.getItem("token");
+    const nameFromToken = cachedToken ? decodeJwtPayload(cachedToken)?.name : null;
+    return nameFromToken ?? localStorage.getItem("userName");
+  });
 
   async function login(email, password) {
     const { data } = await api.post("/auth/login", {
@@ -23,15 +26,42 @@ export function AuthProvider({ children }) {
     });
     localStorage.setItem("token", data.token);
     setToken(data.token);
+
+    const name = decodeJwtPayload(data.token)?.name ?? data.name ?? (await fetchUserName(data));
+    if (name) {
+      localStorage.setItem("userName", name);
+      setUserName(name);
+    }
+  }
+
+  async function fetchUserName(loginResponse) {
+    const userId = loginResponse.id ?? loginResponse.userId ?? loginResponse.user?.id;
+    if (userId == null) return null;
+
+    try {
+      const { data: user } = await api.get(`/auth/users/${userId}`);
+      return user?.name ?? null;
+    } catch {
+      return null;
+    }
   }
 
   function logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("userName");
     setToken(null);
+    setUserName(null);
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!token, userName, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated: !!token,
+        userName: token ? (userName ?? "Usuário") : null,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

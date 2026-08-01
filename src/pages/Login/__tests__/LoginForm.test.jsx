@@ -58,7 +58,7 @@ describe("LoginForm", () => {
     ).toBeInTheDocument();
   });
 
-  it("chama login e navega para / em caso de sucesso", async () => {
+  it("chama login e navega para /home em caso de sucesso", async () => {
     api.post.mockResolvedValue({ data: { token: "jwt-123" } });
 
     render(<LoginForm />, { wrapper: Wrapper });
@@ -67,7 +67,7 @@ describe("LoginForm", () => {
     await userEvent.type(screen.getByPlaceholderText("Digite sua senha"), "senha123");
     await userEvent.click(screen.getByRole("button", { name: /entrar/i }));
 
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/"));
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/home"));
   });
 
   it("exibe toast de erro quando as credenciais são inválidas", async () => {

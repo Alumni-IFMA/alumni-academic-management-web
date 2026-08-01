@@ -11,15 +11,15 @@ vi.mock("../../../services/newsService");
 vi.mock("../../../services/jobsService");
 
 const mockNews = [
-  { id: 1, title: "Seletivo Técnico IFMA", description: "Inscrições abertas.", coverImage: "/img1.jpg" },
-  { id: 2, title: "Copa de Robótica", description: "Competição de robótica.", coverImage: "/img2.jpg" },
-  { id: 3, title: "Desafio Mermãs", description: "Mulheres na tecnologia.", coverImage: "/img3.jpg" },
+  { id: 1, title: "Seletivo Técnico IFMA", summary: "Inscrições abertas.", coverImageUrl: "/img1.jpg" },
+  { id: 2, title: "Copa de Robótica", summary: "Competição de robótica.", coverImageUrl: "/img2.jpg" },
+  { id: 3, title: "Desafio Mermãs", summary: "Mulheres na tecnologia.", coverImageUrl: "/img3.jpg" },
 ];
 
 const mockJobs = [
-  { id: 1, title: "Desenvolvedor Backend", companyName: "Mermãs Digitais", companyLogo: "", location: "Imperatriz - MA", type: "Voluntário" },
-  { id: 2, title: "Designer UX", companyName: "Tech Co", companyLogo: "", location: "São Luís - MA", type: "CLT" },
-  { id: 3, title: "Analista de Dados", companyName: "DataLab", companyLogo: "", location: "Remoto", type: "Freelance" },
+  { id: 1, title: "Desenvolvedor Backend", company: "Mermãs Digitais", companyLogoUrl: "", location: "Imperatriz - MA", workplaceType: "HYBRID" },
+  { id: 2, title: "Designer UX", company: "Tech Co", companyLogoUrl: "", location: "São Luís - MA", workplaceType: "ONSITE" },
+  { id: 3, title: "Analista de Dados", company: "DataLab", companyLogoUrl: "", location: "Remoto", workplaceType: "REMOTE" },
 ];
 
 const fakeAuth = { isAuthenticated: true, userName: "Kenia", login: vi.fn(), logout: vi.fn() };
@@ -46,7 +46,7 @@ describe("Home page", () => {
 
   it("shows welcome message with user name", () => {
     renderHome();
-    expect(screen.getByText(/Bem-vinda, Kenia!/i)).toBeInTheDocument();
+    expect(screen.getByText(/Bem-vindo\(a\), Kenia!/i)).toBeInTheDocument();
   });
 
   it("renders 4 shortcut cards", () => {

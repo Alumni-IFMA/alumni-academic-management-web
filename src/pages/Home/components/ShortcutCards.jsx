@@ -18,7 +18,7 @@ const CARDS = [
     icon: BookOpen,
     title: "Biblioteca A+",
     subtitle: "Encontre colegas e mentores",
-    action: { type: "external", href: "https://biblioteca.ifma.edu.br" },
+    action: { type: "external", href: "https://suap.ifma.edu.br/" },
   },
   {
     icon: Download,
@@ -48,11 +48,11 @@ export function ShortcutCards() {
             onClick={() => handleClick(action)}
             className="flex items-center gap-4 bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-green transition-all text-left"
           >
-            <div className="shrink-0 text-gray-600">
-              <Icon size={32} strokeWidth={1.5} />
+            <div className="shrink-0 h-12 w-12 rounded-full bg-light-green flex items-center justify-center text-dark-green">
+              <Icon size={24} strokeWidth={1.5} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-800">{title}</p>
+              <p className="text-sm font-bold text-dark-green">{title}</p>
               <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
             </div>
           </button>

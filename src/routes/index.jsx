@@ -33,8 +33,22 @@ function AppRoutes() {
       >
         <Route path="/home" element={<Home />} />
       </Route>
-      <Route path="/opportunities" element={<Opportunities />} />
-      <Route path="/news" element={<News />} />
+      <Route
+        path="/opportunities"
+        element={
+          <PrivateRoute>
+            <Opportunities />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/news"
+        element={
+          <PrivateRoute>
+            <News />
+          </PrivateRoute>
+        }
+      />
       <Route path="*" element={<Navigate to="/home" replace />} />
       <Route
         path="/admin"
