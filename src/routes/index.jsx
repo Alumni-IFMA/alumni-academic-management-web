@@ -35,6 +35,7 @@ function AppRoutes() {
       </Route>
       <Route path="/opportunities" element={<Opportunities />} />
       <Route path="/news" element={<News />} />
+      <Route path="*" element={<Navigate to="/home" replace />} />
       <Route
         path="/admin"
         element={
