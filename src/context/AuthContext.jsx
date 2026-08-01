@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import api from "../services/api";
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 function decodeJwtPayload(token) {
   try {
