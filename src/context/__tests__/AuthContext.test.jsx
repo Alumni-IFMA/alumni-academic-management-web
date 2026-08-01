@@ -98,4 +98,26 @@ describe("AuthContext", () => {
     expect(localStorage.getItem("token")).toBeNull();
     expect(screen.getByTestId("status").textContent).toBe("visitante");
   });
+
+  it("exposes userName decoded from JWT token", () => {
+    // JWT with payload { name: "Kenia" } — encode manually:
+    // header.payload.signature where payload = btoa(JSON.stringify({ name: "Kenia" }))
+    const payload = btoa(JSON.stringify({ name: "Kenia" }));
+    const fakeToken = `header.${payload}.signature`;
+    localStorage.setItem("token", fakeToken);
+
+    function Probe() {
+      const { userName } = useAuth();
+      return <span data-testid="name">{userName}</span>;
+    }
+
+    render(
+      <AuthProvider>
+        <Probe />
+      </AuthProvider>
+    );
+
+    expect(screen.getByTestId("name")).toHaveTextContent("Kenia");
+    localStorage.clear();
+  });
 });

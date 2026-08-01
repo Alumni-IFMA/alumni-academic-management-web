@@ -3,8 +3,18 @@ import api from "../services/api";
 
 const AuthContext = createContext(null);
 
+function decodeJwtPayload(token) {
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch {
+    return null;
+  }
+}
+
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
+
+  const userName = token ? (decodeJwtPayload(token)?.name ?? "Usuário") : null;
 
   async function login(email, password) {
     const { data } = await api.post("/auth/login", {
@@ -21,7 +31,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!token, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!token, userName, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
