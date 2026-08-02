@@ -69,10 +69,10 @@ export function Diploma() {
 
         {loading && <div className="h-14 rounded-lg bg-gray-100 animate-pulse" />}
 
-        {!loading && loadError && <p className="text-red-500 text-sm">{loadError}</p>}
+        {!loading && loadError && <p className="text-red-500 text-sm text-center">{loadError}</p>}
 
         {!loading && !loadError && degrees.length === 0 && (
-          <p className="text-red-500 text-sm">Você ainda não possui diploma disponível.</p>
+          <p className="text-red-500 text-sm text-center">Você ainda não possui diploma disponível.</p>
         )}
 
         {!loading && !loadError && degrees.length > 0 && (
@@ -101,7 +101,7 @@ export function Diploma() {
               {downloading ? "Baixando..." : "Baixar"}
             </button>
 
-            {downloadError && <p className="text-red-500 text-sm mt-3">{downloadError}</p>}
+            {downloadError && <p className="text-red-500 text-sm text-center mt-3">{downloadError}</p>}
           </>
         )}
       </div>
