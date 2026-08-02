@@ -73,7 +73,7 @@ export function JobDetail({ job, loading = false, error = null }) {
             {tag}
           </span>
         ))}
-        <button className="bg-dark-green text-white text-sm font-semibold px-10 py-2 rounded-full hover:opacity-90 transition-opacity">
+        <button className="whitespace-nowrap bg-dark-green text-white text-sm font-semibold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
           Candidatar-se
         </button>
         <button className="flex items-center gap-2 border border-dark-green text-dark-green text-sm font-semibold px-5 py-2 rounded-full hover:bg-gray-50 transition-colors">
