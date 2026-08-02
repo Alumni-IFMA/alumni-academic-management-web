@@ -60,7 +60,7 @@ export function SetPassword() {
       <Toaster position="top-center" richColors />
 
       <div className="flex flex-col w-full max-w-[380px] mx-auto items-center px-4">
-        <Typography variant="h1" className="!text-4xl mb-6">Definir senha</Typography>
+        <Typography variant="h1" className="!text-4xl mb-4">Definir senha</Typography>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-full max-w-[380px] mx-auto px-4">
@@ -114,7 +114,7 @@ export function SetPassword() {
           </FormField>
         </div>
 
-        <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold mt-10">
+        <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold mt-7">
           <button
             type="submit"
             disabled={isSubmitting}
