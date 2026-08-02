@@ -7,6 +7,7 @@ import { JobCard } from "../../components/JobCard/JobCard.jsx";
 import { useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import { JobDetail } from "../../components/JobDetail/JobDetail.jsx";
+import { OpportunitiesRibbon } from "./components/OpportunitiesRibbon";
 
 import microsoft from "../../assets/microsoft.png";
 import google from "../../assets/google.png";
@@ -67,10 +68,11 @@ export function Opportunities() {
   }
 
   return (
-     <div className="font-poppins">
+     <div className="relative overflow-hidden font-poppins">
+      <OpportunitiesRibbon />
       <Navbar />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="relative z-10 max-w-7xl mx-auto">
       <div className="pt-24 px-6 md:px-12">
         <Typography variant="h1">Encontre oportunidades</Typography>
         <Typography variant="p">
@@ -150,7 +152,7 @@ export function Opportunities() {
       </div>
       </div>
 
-      <footer className="py-6 px-8 text-center text-sm text-gray-500">
+      <footer className="relative z-10 py-6 px-8 text-center text-sm text-gray-500">
         © 2026 Equipe alumni IFMA • Feito com carinho para a comunidade
       </footer>
     </div>
