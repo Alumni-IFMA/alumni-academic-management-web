@@ -1,12 +1,14 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast, Toaster } from "sonner";
-import alumni from "../../assets/alumni-ifma.png";
+import { Eye, EyeOff } from "lucide-react";
 import { FormField } from "../../components/FormField/FormField";
 import { InputField } from "../../components/InputField/InputField";
 import { Label } from "../../components/Label/Label";
+import { Typography } from "../../components/Typography/Typography";
 import { setPassword } from "../../services/authService";
 
 const schema = yup.object({
@@ -25,6 +27,8 @@ export function SetPassword() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -55,25 +59,31 @@ export function SetPassword() {
     <div>
       <Toaster position="top-center" richColors />
 
-      <div className="flex flex-col w-full max-w-[500px] mx-auto items-center px-4">
-        <img
-          src={alumni}
-          alt="Logo do Alumni IFMA"
-          className="mb-6 w-[200px] h-auto sm:w-[300px] sm:h-[100px]"
-        />
+      <div className="flex flex-col w-full max-w-[380px] mx-auto items-center px-4">
+        <Typography variant="h1" className="!text-4xl mb-6">Definir senha</Typography>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-full max-w-[500px] mx-auto px-4">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-full max-w-[380px] mx-auto px-4">
         <div className="grid gap-2">
           <FormField>
             <Label htmlFor="password">Senha</Label>
-            <InputField
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Digite sua senha"
-              {...register("password")}
-            />
+            <div className="relative">
+              <InputField
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                placeholder="Digite sua senha"
+                {...register("password")}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-green"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
             {errors.password && (
               <span className="text-red-500 text-sm">{errors.password.message}</span>
             )}
@@ -81,20 +91,30 @@ export function SetPassword() {
 
           <FormField>
             <Label htmlFor="confirmPassword">Confirmar senha</Label>
-            <InputField
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Digite a senha novamente"
-              {...register("confirmPassword")}
-            />
+            <div className="relative">
+              <InputField
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Digite a senha novamente"
+                {...register("confirmPassword")}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword((v) => !v)}
+                aria-label={showConfirmPassword ? "Ocultar senha" : "Mostrar senha"}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-green"
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
             {errors.confirmPassword && (
               <span className="text-red-500 text-sm">{errors.confirmPassword.message}</span>
             )}
           </FormField>
         </div>
 
-        <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold mt-4">
+        <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold mt-10">
           <button
             type="submit"
             disabled={isSubmitting}
