@@ -9,9 +9,14 @@ export function Login() {
     const navigate = useNavigate();
 
     return (
-        <div>
-            <Button type="button" onClick={() => navigate(-1)}>
-                <img src={seta} alt="Voltar para a página anterior" />
+        <div className="relative">
+            <Button
+                type="button"
+                variant="icon"
+                onClick={() => navigate(-1)}
+                className="absolute top-0 left-0 !w-8 !h-8"
+            >
+                <img src={seta} alt="Voltar para a página anterior" className="w-4 h-4" />
             </Button>
             <div className='flex flex-col w-[500px] mx-auto items-center'>
                 <img src={alumni} alt="Logo do Alumni IFMA" className='mb-4 w-[300px] h-[100px]' />

@@ -37,11 +37,16 @@ export function Register() {
   const campuses = uniqueCampusNames.map((name) => ({ id: name, name }));
 
   return (
-    <div>
-      <div className="grid grid-cols-3 items-center mt-4 ml-9">
-        <Button variant="icon" onClick={() => navigate(-1)}>
-          <img src={seta} alt="Voltar para a página anterior" />
-        </Button>
+    <div className="relative">
+      <Button
+        variant="icon"
+        onClick={() => navigate(-1)}
+        className="absolute top-0 left-0 !w-8 !h-8"
+      >
+        <img src={seta} alt="Voltar para a página anterior" className="w-4 h-4" />
+      </Button>
+
+      <div className="text-center mt-4">
         <Typography variant="h1" className="!text-3xl">Bem-vindo!</Typography>
       </div>
 
