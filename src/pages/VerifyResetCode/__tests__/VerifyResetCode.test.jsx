@@ -6,6 +6,7 @@ import { VerifyResetCode } from "../index";
 
 vi.mock("../../../services/authService", () => ({
   verifyResetCode: vi.fn(),
+  forgotPassword: vi.fn(),
 }));
 
 vi.mock("sonner", () => ({
@@ -19,7 +20,7 @@ vi.mock("react-router-dom", async () => {
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
-import { verifyResetCode } from "../../../services/authService";
+import { verifyResetCode, forgotPassword } from "../../../services/authService";
 import { toast } from "sonner";
 
 function renderWithState(state) {
@@ -103,5 +104,31 @@ describe("VerifyResetCode", () => {
     await userEvent.click(botao);
 
     expect(botao).toBeDisabled();
+  });
+
+  it("exibe o email mascarado", () => {
+    renderWithState({ email: "abcdefgh1@gmail.com" });
+
+    expect(screen.getByText(/a\*+1@gmail\.com/)).toBeInTheDocument();
+  });
+
+  it("botão Alterar navega para /auth/forgot-password", async () => {
+    renderWithState({ email: "user@test.com" });
+
+    await userEvent.click(screen.getByRole("button", { name: /alterar/i }));
+
+    expect(mockNavigate).toHaveBeenCalledWith("/auth/forgot-password");
+  });
+
+  it("botão Reenviar o código chama forgotPassword com o email do state", async () => {
+    forgotPassword.mockResolvedValue({ message: "ok" });
+    renderWithState({ email: "user@test.com" });
+
+    await userEvent.click(screen.getByRole("button", { name: /reenviar o código/i }));
+
+    await waitFor(() => {
+      expect(forgotPassword).toHaveBeenCalledWith({ email: "user@test.com" });
+      expect(toast.success).toHaveBeenCalledWith("Código reenviado!");
+    });
   });
 });
