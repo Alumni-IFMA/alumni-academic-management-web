@@ -102,7 +102,7 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
       <Toaster position="top-center" richColors />
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col">
-        <div className="grid grid-cols-2 px-20 gap-4 mt-3">
+        <div className="grid grid-cols-3 px-14 gap-x-6 gap-y-2 mt-2">
           <FormField>
             <Label htmlFor="name">Nome completo</Label>
             <InputField
