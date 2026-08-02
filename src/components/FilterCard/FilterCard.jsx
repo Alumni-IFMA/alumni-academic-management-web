@@ -20,7 +20,6 @@ const experienceLevels = [
 export function FilterCard() {
   const [location, setLocation] = useState("");
   const [experience, setExperience] = useState([]);
-  const [salary, setSalary] = useState(6000);
   const [remoteOnly, setRemoteOnly] = useState(false);
 
   function toggleExperience(id) {
@@ -72,21 +71,6 @@ export function FilterCard() {
             {label}
           </label>
         ))}
-      </div>
-
-      {/* Salário */}
-      <div className="flex flex-col gap-2">
-        <label className="text-sm text-gray-600">Salário (mínimo, em R$)</label>
-        <input
-          type="range"
-          min={0}
-          max={20000}
-          step={500}
-          value={salary}
-          onChange={(e) => setSalary(Number(e.target.value))}
-          className="accent-dark-green w-full"
-        />
-        <span className="text-sm text-gray-500">R$ {salary.toLocaleString("pt-BR")}+</span>
       </div>
 
       {/* Apenas remoto */}

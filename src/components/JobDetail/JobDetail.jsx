@@ -10,7 +10,7 @@ export function JobDetail({ job }) {
   }
 
   return (
-    <div className="flex-1 bg-white rounded-2xl shadow-md p-6 flex flex-col gap-5 overflow-y-auto max-h-[50vh]">
+    <div className="flex-1 bg-white rounded-2xl shadow-md p-6 flex flex-col gap-5 overflow-y-auto max-h-[70vh]">
 
       {/* Topo */}
       <div className="flex items-start justify-between">

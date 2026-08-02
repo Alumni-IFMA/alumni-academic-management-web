@@ -136,7 +136,7 @@ export function Opportunities() {
         )}
 
         {/* Lista de vagas */}
-        <div className="flex flex-col gap-4 w-[50%] 2xl:w-[30%] shrink-0 overflow-y-auto max-h-[50vh]">
+        <div className="flex flex-col gap-4 w-[50%] 2xl:w-[30%] shrink-0 overflow-y-auto max-h-[70vh]">
           {mockJobs.map((job) => (
             <JobCard
               key={job.id}
