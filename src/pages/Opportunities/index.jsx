@@ -70,14 +70,15 @@ export function Opportunities() {
      <div className="font-poppins">
       <Navbar />
 
-      <div className="pt-24 px-6 lg:px-11">
+      <div className="max-w-7xl mx-auto">
+      <div className="pt-24 px-6 md:px-12">
         <Typography variant="h1">Encontre oportunidades</Typography>
         <Typography variant="p">
           Explore e encontre uma vaga perfeita para você.
         </Typography>
       </div>
 
-      <div className="mt-6 flex gap-4 items-center px-6 2xl:px-11">
+      <div className="mt-6 flex gap-4 items-center px-6 md:px-12">
         {/* Botão de filtro — visível apenas quando FilterCard está oculto */}
         <button
           onClick={() => setFilterOpen(true)}
@@ -101,7 +102,7 @@ export function Opportunities() {
       </div>
 
       {/* Conteúdo principal */}
-      <div className="mt-6 px-6 xl:px-11 flex gap-4 items-start pb-11">
+      <div className="mt-6 px-6 md:px-12 flex gap-4 items-start pb-11">
 
         {/* FilterCard fixo em telas grandes */}
         <div className="hidden 2xl:block w-[28%] shrink-0">
@@ -147,6 +148,11 @@ export function Opportunities() {
         {/* Detalhe da vaga */}
           <JobDetail job={selectedJob} />
       </div>
+      </div>
+
+      <footer className="py-6 px-8 text-center text-sm text-gray-500">
+        © 2026 Equipe alumni IFMA • Feito com carinho para a comunidade
+      </footer>
     </div>
   );
 }
