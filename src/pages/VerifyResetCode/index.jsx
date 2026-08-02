@@ -89,7 +89,7 @@ export function VerifyResetCode() {
           <button
             type="button"
             onClick={() => navigate("/auth/forgot-password")}
-            className="text-green underline font-semibold"
+            className="text-green underline font-semibold cursor-pointer"
           >
             Alterar
           </button>
@@ -114,7 +114,7 @@ export function VerifyResetCode() {
           type="button"
           onClick={handleResend}
           disabled={isResending}
-          className="text-green text-sm font-semibold mt-2 disabled:opacity-50"
+          className="text-green text-sm font-semibold mt-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Reenviar o código
         </button>
@@ -123,7 +123,7 @@ export function VerifyResetCode() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-green text-biege font-semibold px-6 py-3 w-full rounded-xl shadow-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-green text-biege font-semibold px-6 py-3 w-full rounded-xl shadow-md hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Verificando..." : "Verificar"}
           </button>
@@ -132,7 +132,7 @@ export function VerifyResetCode() {
             não estiver lá, o endereço de e-mail pode não ter sido confirmado ou não corresponder
             a uma conta existente no Alumni.
           </p>
-          <button type="button" onClick={() => navigate("/auth/forgot-password")} className="text-green">
+          <button type="button" onClick={() => navigate("/auth/forgot-password")} className="text-green cursor-pointer">
             Voltar
           </button>
         </div>

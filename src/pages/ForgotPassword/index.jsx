@@ -40,7 +40,7 @@ export function ForgotPassword() {
       <Toaster position="top-center" richColors />
 
       <div className="flex flex-col w-full max-w-[380px] mx-auto items-center px-4">
-        <Typography variant="h1" className="!text-3xl sm:!text-4xl text-center mb-4">
+        <Typography variant="h1" className="!text-3xl sm:!text-4xl text-center whitespace-nowrap mb-4">
           Esqueceu sua senha?
         </Typography>
       </div>
@@ -69,11 +69,11 @@ export function ForgotPassword() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-green text-biege font-semibold px-6 py-3 w-full rounded-xl shadow-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-green text-biege font-semibold px-6 py-3 w-full rounded-xl shadow-md hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Enviando..." : "Enviar"}
           </button>
-          <button type="button" onClick={() => navigate("/auth/login")} className="text-green">
+          <button type="button" onClick={() => navigate("/auth/login")} className="text-green cursor-pointer">
             Voltar
           </button>
         </div>

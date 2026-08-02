@@ -79,7 +79,7 @@ export function SetPassword() {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-dark-green"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-dark-green cursor-pointer"
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -103,7 +103,7 @@ export function SetPassword() {
                 type="button"
                 onClick={() => setShowConfirmPassword((v) => !v)}
                 aria-label={showConfirmPassword ? "Ocultar senha" : "Mostrar senha"}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-dark-green"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-dark-green cursor-pointer"
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -118,11 +118,11 @@ export function SetPassword() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-green text-biege font-semibold px-6 py-3 w-full rounded-xl shadow-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-green text-biege font-semibold px-6 py-3 w-full rounded-xl shadow-md hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Salvando..." : "Salvar"}
           </button>
-          <button type="button" onClick={() => navigate("/auth/login")} className="text-green">
+          <button type="button" onClick={() => navigate("/auth/login")} className="text-green cursor-pointer">
             Voltar
           </button>
         </div>
