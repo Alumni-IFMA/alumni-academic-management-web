@@ -58,12 +58,15 @@ export function Diploma() {
           variant="icon"
           onClick={() => navigate(-1)}
           aria-label="Voltar"
-          className="absolute top-2 left-2 sm:top-3 sm:left-3"
+          className="absolute top-2 left-2 sm:top-3 sm:left-3 !w-10 !h-10 sm:!w-[53px] sm:!h-[53px]"
         >
-          <ArrowLeft className="text-dark-green" size={24} />
+          <ArrowLeft className="text-dark-green" size={20} />
         </Button>
 
-        <Typography variant="h1" className="text-center mb-8">
+        <Typography
+          variant="h1"
+          className="!text-2xl sm:!text-4xl md:!text-5xl text-center px-10 sm:px-14 mb-8"
+        >
           Baixe seu diploma
         </Typography>
 
