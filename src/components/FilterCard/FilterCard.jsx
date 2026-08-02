@@ -1,41 +1,44 @@
-import { useState } from "react";
 import { SlidersHorizontal, MapPin } from "lucide-react";
 import { Dropdown } from "../Dropdown/Dropdown.jsx";
 import computer from "../../assets/computer-icon.png";
 
-const areas = [
-  { id: "software", name: "Engenharia de software" },
-  { id: "design", name: "Design" },
-  { id: "marketing", name: "Marketing" },
-  { id: "data", name: "Dados" },
+const AREAS = [
+  { id: "Tecnologia", name: "Tecnologia" },
+  { id: "Design", name: "Design" },
+  { id: "Marketing", name: "Marketing" },
+  { id: "Dados", name: "Dados" },
+  { id: "Produto", name: "Produto" },
+  { id: "Vendas", name: "Vendas" },
 ];
 
-const experienceLevels = [
-  { id: "internship", label: "Estágio / Trainee" },
-  { id: "junior", label: "Júnior" },
-  { id: "mid", label: "Pleno" },
-  { id: "senior", label: "Sênior" },
+const EXPERIENCE_LEVELS = [
+  { id: "INTERNSHIP", label: "Estágio / Trainee" },
+  { id: "JUNIOR", label: "Júnior" },
+  { id: "MID", label: "Pleno" },
+  { id: "SENIOR", label: "Sênior" },
 ];
 
-export function FilterCard() {
-  const [location, setLocation] = useState("");
-  const [experience, setExperience] = useState([]);
-  const [remoteOnly, setRemoteOnly] = useState(false);
-
-  function toggleExperience(id) {
-    setExperience((prev) =>
-      prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]
-    );
-  }
-
+export function FilterCard({
+  hideTitle = false,
+  location,
+  onLocationChange,
+  area,
+  onAreaChange,
+  experience,
+  onExperienceToggle,
+  remoteOnly,
+  onRemoteOnlyChange,
+}) {
   return (
     <div className="bg-white rounded-2xl shadow-md p-6 w-[100%] flex flex-col gap-5">
 
       {/* Título */}
-      <div className="flex items-center gap-2">
-        <SlidersHorizontal size={18} className="text-dark-green" />
-        <span className="font-semibold text-lg">Filtros</span>
-      </div>
+      {!hideTitle && (
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal size={18} className="text-dark-green" />
+          <span className="font-semibold text-lg">Filtros</span>
+        </div>
+      )}
 
       {/* Localização */}
       <div className="flex flex-col gap-1">
@@ -46,7 +49,7 @@ export function FilterCard() {
           type="text"
           placeholder="Cidade, estado ou remoto"
           value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          onChange={(e) => onLocationChange(e.target.value)}
           className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full"
         />
       </div>
@@ -54,18 +57,24 @@ export function FilterCard() {
       {/* Área */}
       <div className="flex flex-col gap-1">
         <label className="text-sm text-gray-600">Área</label>
-        <Dropdown items={areas} defaultValue="software" className="w-full h-10 border border-gray-300 rounded-lg text-base" size="sm" />
+        <Dropdown
+          items={AREAS}
+          value={area}
+          onChange={(e) => onAreaChange(e.target.value)}
+          className="w-full h-10 border border-gray-300 rounded-lg text-base"
+          size="sm"
+        />
       </div>
 
       {/* Experiência */}
       <div className="flex flex-col gap-2">
         <label className="text-sm text-gray-600">Experiência</label>
-        {experienceLevels.map(({ id, label }) => (
+        {EXPERIENCE_LEVELS.map(({ id, label }) => (
           <label key={id} className="flex items-center gap-2 text-sm cursor-pointer">
             <input
               type="checkbox"
               checked={experience.includes(id)}
-              onChange={() => toggleExperience(id)}
+              onChange={() => onExperienceToggle(id)}
               className="accent-dark-green w-4 h-4"
             />
             {label}
@@ -79,7 +88,8 @@ export function FilterCard() {
           <span><img src={computer} alt="Computador" className="w-6 h-6" /></span> Apenas remoto
         </label>
         <button
-          onClick={() => setRemoteOnly((prev) => !prev)}
+          onClick={() => onRemoteOnlyChange(!remoteOnly)}
+          aria-label="Apenas remoto"
           className={`w-11 h-6 rounded-full transition-colors duration-300 ${
             remoteOnly ? "bg-dark-green" : "bg-gray-300"
           }`}
