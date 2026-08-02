@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Register } from "../pages/Register";
 import { Login } from "../pages/Login";
 import { Home } from "../pages/Home";
+import { Diploma } from "../pages/Diploma";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { AppLayout } from "../layouts/AppLayout";
 import { Opportunities } from "../pages/Opportunities";
@@ -32,6 +33,7 @@ function AppRoutes() {
         }
       >
         <Route path="/home" element={<Home />} />
+        <Route path="/diploma" element={<Diploma />} />
       </Route>
       <Route
         path="/opportunities"
