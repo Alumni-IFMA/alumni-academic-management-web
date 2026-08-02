@@ -53,13 +53,19 @@ export function Diploma() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-4">
-      <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-sm p-6 sm:p-8">
-        <div className="flex items-center gap-4 mb-8">
-          <Button variant="icon" onClick={() => navigate(-1)} aria-label="Voltar">
-            <ArrowLeft className="text-dark-green" size={24} />
-          </Button>
-          <Typography variant="h1">Baixe seu diploma</Typography>
-        </div>
+      <div className="relative bg-white/70 backdrop-blur-md rounded-3xl shadow-sm p-6 sm:p-8">
+        <Button
+          variant="icon"
+          onClick={() => navigate(-1)}
+          aria-label="Voltar"
+          className="absolute top-4 left-4 sm:top-6 sm:left-6"
+        >
+          <ArrowLeft className="text-dark-green" size={24} />
+        </Button>
+
+        <Typography variant="h1" className="text-center mb-8">
+          Baixe seu diploma
+        </Typography>
 
         {loading && <div className="h-14 rounded-lg bg-gray-100 animate-pulse" />}
 
