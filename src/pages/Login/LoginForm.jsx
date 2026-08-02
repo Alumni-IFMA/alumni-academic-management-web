@@ -6,7 +6,7 @@ import { Typography } from "../../components/Typography/Typography";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { useAuth } from "../../context/AuthContext";
 
@@ -87,7 +87,7 @@ export function LoginForm() {
         </Button>
         <Typography variant="p">
           Não possui conta? {" "}
-          <a className="text-green" href="#">Cadastrar-se</a> 
+          <Link className="text-green" to="/auth/register">Cadastrar-se</Link>
         </Typography>
       </div>
     </form>

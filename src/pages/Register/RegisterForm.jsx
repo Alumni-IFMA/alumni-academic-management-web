@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast, Toaster } from "sonner";
@@ -101,7 +102,7 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
       <Toaster position="top-center" richColors />
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col">
-        <div className="grid grid-cols-2 px-20 gap-6 mt-6">
+        <div className="grid grid-cols-2 px-20 gap-4 mt-3">
           <FormField>
             <Label htmlFor="name">Nome completo</Label>
             <InputField
@@ -249,7 +250,7 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
             {isSubmitting ? "Cadastrando..." : "Cadastrar-se"}
           </Button>
           <Typography variant="p">
-            Já possui conta? <a className="text-green" href="#">Entrar</a>
+            Já possui conta? <Link className="text-green" to="/auth/login">Entrar</Link>
           </Typography>
         </div>
       </form>
