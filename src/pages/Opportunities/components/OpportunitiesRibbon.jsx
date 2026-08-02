@@ -1,9 +1,9 @@
 export function OpportunitiesRibbon() {
   return (
     <svg
-      className="pointer-events-none absolute inset-0 w-full h-full"
+      className="pointer-events-none absolute top-0 right-0 h-full w-auto max-w-none"
       viewBox="0 0 483 1357"
-      preserveAspectRatio="none"
+      preserveAspectRatio="xMaxYMin meet"
       aria-hidden="true"
     >
       <defs>
