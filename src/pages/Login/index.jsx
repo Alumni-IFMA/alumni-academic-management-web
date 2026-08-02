@@ -14,9 +14,9 @@ export function Login() {
                 type="button"
                 variant="icon"
                 onClick={() => navigate(-1)}
-                className="absolute top-0 left-0 !w-8 !h-8"
+                className="absolute -top-2 -left-2 !w-10 !h-10"
             >
-                <img src={seta} alt="Voltar para a página anterior" className="w-4 h-4" />
+                <img src={seta} alt="Voltar para a página anterior" className="w-5 h-5" />
             </Button>
             <div className='flex flex-col w-[500px] mx-auto items-center'>
                 <img src={alumni} alt="Logo do Alumni IFMA" className='mb-4 w-[300px] h-[100px]' />
