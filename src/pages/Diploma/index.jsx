@@ -32,11 +32,19 @@ export function Diploma() {
       return;
     }
 
+    const downloadWindow = window.open("", "_blank");
+    if (!downloadWindow) {
+      setDownloadError("Não foi possível abrir a aba de download. Verifique o bloqueador de pop-ups.");
+      return;
+    }
+    downloadWindow.opener = null;
+
     setDownloading(true);
     try {
       const downloadUrl = await getDownloadUrl(selectedDegree.id);
-      window.open(downloadUrl, "_blank", "noopener,noreferrer");
+      downloadWindow.location.href = downloadUrl;
     } catch {
+      downloadWindow.close();
       setDownloadError("Não foi possível baixar o diploma. Tente novamente.");
     } finally {
       setDownloading(false);
@@ -45,14 +53,14 @@ export function Diploma() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-4">
-      <div className="flex items-center gap-4 mb-8">
-        <Button variant="icon" onClick={() => navigate(-1)} aria-label="Voltar">
-          <ArrowLeft className="text-dark-green" size={24} />
-        </Button>
-        <Typography variant="h1">Baixe seu diploma</Typography>
-      </div>
+      <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-sm p-6 sm:p-8">
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="icon" onClick={() => navigate(-1)} aria-label="Voltar">
+            <ArrowLeft className="text-dark-green" size={24} />
+          </Button>
+          <Typography variant="h1">Baixe seu diploma</Typography>
+        </div>
 
-      <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8">
         {loading && <div className="h-14 rounded-lg bg-gray-100 animate-pulse" />}
 
         {!loading && loadError && <p className="text-red-500 text-sm">{loadError}</p>}

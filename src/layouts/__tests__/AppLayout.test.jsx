@@ -34,4 +34,10 @@ describe("AppLayout ribbon", () => {
     expect(screen.getByText("News content")).toBeInTheDocument();
     expect(container.querySelector('svg[viewBox="0 0 1583 927"]')).not.toBeInTheDocument();
   });
+
+  it("renders the home ribbon svg on /home", () => {
+    const { container } = renderAt("/home");
+    expect(screen.getByText("Home content")).toBeInTheDocument();
+    expect(container.querySelector("svg[viewBox='0 0 1728 1337']")).toBeInTheDocument();
+  });
 });

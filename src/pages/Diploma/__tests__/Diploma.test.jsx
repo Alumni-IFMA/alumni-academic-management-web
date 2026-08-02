@@ -68,7 +68,8 @@ describe("Diploma page", () => {
   it("downloads the diploma when the selected course has a fileUrl", async () => {
     degreeService.getMyDegrees.mockResolvedValue(mockDegrees);
     degreeService.getDownloadUrl.mockResolvedValue("http://minio/diplomas/1.pdf?X-Amz-Signature=xyz");
-    const openSpy = vi.spyOn(window, "open").mockImplementation(() => {});
+    const fakeWindow = { location: { href: "" }, opener: "not-null", close: vi.fn() };
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(fakeWindow);
 
     renderDiploma();
     await waitFor(() => screen.getByText("Bacharelado em Ciência da Computação"));
@@ -77,13 +78,29 @@ describe("Diploma page", () => {
     await userEvent.click(screen.getByRole("button", { name: /^baixar$/i }));
 
     await waitFor(() => {
+      expect(openSpy).toHaveBeenCalledWith("", "_blank");
       expect(degreeService.getDownloadUrl).toHaveBeenCalledWith(1);
-      expect(openSpy).toHaveBeenCalledWith(
-        "http://minio/diplomas/1.pdf?X-Amz-Signature=xyz",
-        "_blank",
-        "noopener,noreferrer"
-      );
+      expect(fakeWindow.location.href).toBe("http://minio/diplomas/1.pdf?X-Amz-Signature=xyz");
+      expect(fakeWindow.opener).toBeNull();
     });
+
+    openSpy.mockRestore();
+  });
+
+  it("shows an error and skips the download call when the popup is blocked", async () => {
+    degreeService.getMyDegrees.mockResolvedValue(mockDegrees);
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(null);
+
+    renderDiploma();
+    await waitFor(() => screen.getByText("Bacharelado em Ciência da Computação"));
+
+    await userEvent.selectOptions(screen.getByLabelText("Curso:"), "1");
+    await userEvent.click(screen.getByRole("button", { name: /^baixar$/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Não foi possível abrir a aba de download. Verifique o bloqueador de pop-ups.")).toBeInTheDocument();
+    });
+    expect(degreeService.getDownloadUrl).not.toHaveBeenCalled();
 
     openSpy.mockRestore();
   });
@@ -106,6 +123,8 @@ describe("Diploma page", () => {
   it("shows an error message when the download endpoint fails", async () => {
     degreeService.getMyDegrees.mockResolvedValue(mockDegrees);
     degreeService.getDownloadUrl.mockRejectedValue(new Error("network error"));
+    const fakeWindow = { location: { href: "" }, opener: "not-null", close: vi.fn() };
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(fakeWindow);
 
     renderDiploma();
     await waitFor(() => screen.getByText("Bacharelado em Ciência da Computação"));
@@ -115,6 +134,9 @@ describe("Diploma page", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Não foi possível baixar o diploma. Tente novamente.")).toBeInTheDocument();
+      expect(fakeWindow.close).toHaveBeenCalled();
     });
+
+    openSpy.mockRestore();
   });
 });
