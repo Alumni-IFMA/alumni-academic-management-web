@@ -52,7 +52,10 @@ export function Opportunities() {
   );
 
   const [jobs, setJobs] = useState([]);
+  const [page, setPage] = useState(0);
+  const [isLastPage, setIsLastPage] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [loadError, setLoadError] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
 
@@ -66,6 +69,8 @@ export function Opportunities() {
         if (cancelled) return;
         const mapped = data.content.map(mapJob);
         setJobs(mapped);
+        setPage(0);
+        setIsLastPage(data.last);
         setSelectedJob(mapped[0] ?? null);
       })
       .catch(() => {
@@ -79,6 +84,29 @@ export function Opportunities() {
       cancelled = true;
     };
   }, [filters]);
+
+  function handleLoadMore() {
+    if (loadingMore || isLastPage) return;
+
+    const nextPage = page + 1;
+    setLoadingMore(true);
+
+    getJobs({ ...filters, page: nextPage, size: PAGE_SIZE })
+      .then((data) => {
+        setJobs((prev) => [...prev, ...data.content.map(mapJob)]);
+        setPage(nextPage);
+        setIsLastPage(data.last);
+      })
+      .catch(() => setLoadError("Não foi possível carregar mais vagas."))
+      .finally(() => setLoadingMore(false));
+  }
+
+  function handleListScroll(e) {
+    const el = e.currentTarget;
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < 100) {
+      handleLoadMore();
+    }
+  }
 
   function toggleExperience(id) {
     setExperience((prev) => (prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]));
@@ -167,7 +195,11 @@ export function Opportunities() {
         )}
 
         {/* Lista de vagas */}
-        <div className="flex flex-col gap-4 w-[50%] 2xl:w-[30%] shrink-0 overflow-y-auto max-h-[70vh]">
+        <div
+          data-testid="job-list"
+          onScroll={handleListScroll}
+          className="flex flex-col gap-4 w-[50%] 2xl:w-[30%] shrink-0 overflow-y-auto max-h-[70vh]"
+        >
           {loading && (
             <div className="flex flex-col gap-4">
               {[1, 2, 3].map((i) => (
@@ -190,6 +222,10 @@ export function Opportunities() {
               onClick={() => setSelectedJob(job)}
             />
           ))}
+
+          {!loading && !loadError && loadingMore && (
+            <p className="text-center text-sm text-gray-400 py-2">Carregando mais vagas...</p>
+          )}
         </div>
 
         {/* Detalhe da vaga */}

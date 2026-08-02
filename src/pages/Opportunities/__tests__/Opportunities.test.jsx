@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -129,6 +129,67 @@ describe("Opportunities page", () => {
 
     await waitFor(() => {
       expect(jobsService.getJobs).toHaveBeenLastCalledWith(expect.objectContaining({ remote: true }));
+    });
+  });
+
+  it("loads the next page when the job list is scrolled near the bottom", async () => {
+    jobsService.getJobs
+      .mockResolvedValueOnce(makePage([job1Dto], { totalPages: 2, number: 0, last: false }))
+      .mockResolvedValueOnce(makePage([job2Dto], { totalPages: 2, number: 1, last: true }));
+
+    renderPage();
+    await waitFor(() => expect(screen.getByText("Desenvolvedor Java")).toBeInTheDocument());
+
+    const list = screen.getByTestId("job-list");
+    Object.defineProperty(list, "scrollHeight", { value: 1000, configurable: true });
+    Object.defineProperty(list, "clientHeight", { value: 500, configurable: true });
+    Object.defineProperty(list, "scrollTop", { value: 950, configurable: true });
+
+    fireEvent.scroll(list);
+
+    await waitFor(() => {
+      expect(jobsService.getJobs).toHaveBeenLastCalledWith(expect.objectContaining({ page: 1 }));
+      expect(screen.getByText("Designer UX")).toBeInTheDocument();
+    });
+  });
+
+  it("does not request another page once the last page has been reached", async () => {
+    jobsService.getJobs.mockResolvedValue(makePage([job1Dto], { totalPages: 1, number: 0, last: true }));
+    renderPage();
+    await waitFor(() => expect(screen.getByText("Desenvolvedor Java")).toBeInTheDocument());
+
+    const list = screen.getByTestId("job-list");
+    Object.defineProperty(list, "scrollHeight", { value: 1000, configurable: true });
+    Object.defineProperty(list, "clientHeight", { value: 500, configurable: true });
+    Object.defineProperty(list, "scrollTop", { value: 950, configurable: true });
+
+    fireEvent.scroll(list);
+
+    await waitFor(() => expect(jobsService.getJobs).toHaveBeenCalledTimes(1));
+  });
+
+  it("resets accumulated pages when a filter changes", async () => {
+    jobsService.getJobs
+      .mockResolvedValueOnce(makePage([job1Dto], { totalPages: 2, number: 0, last: false }))
+      .mockResolvedValueOnce(makePage([job2Dto], { totalPages: 2, number: 1, last: true }))
+      .mockResolvedValueOnce(makePage([job2Dto], { totalPages: 1, number: 0, last: true }));
+
+    renderPage();
+    await waitFor(() => expect(screen.getByText("Desenvolvedor Java")).toBeInTheDocument());
+
+    const list = screen.getByTestId("job-list");
+    Object.defineProperty(list, "scrollHeight", { value: 1000, configurable: true });
+    Object.defineProperty(list, "clientHeight", { value: 500, configurable: true });
+    Object.defineProperty(list, "scrollTop", { value: 950, configurable: true });
+    fireEvent.scroll(list);
+    await waitFor(() => expect(jobsService.getJobs).toHaveBeenCalledTimes(2));
+
+    await userEvent.selectOptions(screen.getByDisplayValue("Todas"), "salary");
+
+    await waitFor(() => {
+      expect(jobsService.getJobs).toHaveBeenLastCalledWith(
+        expect.objectContaining({ page: 0, sort: "salary,desc" })
+      );
     });
   });
 });
