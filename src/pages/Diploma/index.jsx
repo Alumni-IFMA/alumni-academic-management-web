@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "../../components/Button/Button";
 import { Typography } from "../../components/Typography/Typography";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
-import { getMyDegrees } from "../../services/degreeService";
+import { getMyDegrees, getDownloadUrl } from "../../services/degreeService";
 
 export function Diploma() {
   const navigate = useNavigate();
@@ -12,6 +12,8 @@ export function Diploma() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
   const [selectedDegreeId, setSelectedDegreeId] = useState("");
+  const [downloadError, setDownloadError] = useState(null);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     getMyDegrees()
@@ -19,6 +21,27 @@ export function Diploma() {
       .catch(() => setLoadError("Não foi possível carregar seus cursos."))
       .finally(() => setLoading(false));
   }, []);
+
+  const selectedDegree = degrees.find((d) => String(d.id) === String(selectedDegreeId));
+
+  async function handleDownload() {
+    setDownloadError(null);
+
+    if (!selectedDegree?.fileUrl) {
+      setDownloadError("Diploma não disponível para este curso.");
+      return;
+    }
+
+    setDownloading(true);
+    try {
+      const downloadUrl = await getDownloadUrl(selectedDegree.id);
+      window.open(downloadUrl, "_blank", "noopener,noreferrer");
+    } catch {
+      setDownloadError("Não foi possível baixar o diploma. Tente novamente.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-4">
@@ -47,10 +70,24 @@ export function Diploma() {
               id="degree-select"
               items={degrees.map((d) => ({ id: d.id, name: d.title }))}
               value={selectedDegreeId}
-              onChange={(e) => setSelectedDegreeId(e.target.value)}
+              onChange={(e) => {
+                setSelectedDegreeId(e.target.value);
+                setDownloadError(null);
+              }}
               bordered
               className="mb-6"
             />
+
+            <button
+              type="button"
+              onClick={handleDownload}
+              disabled={!selectedDegreeId || downloading}
+              className="bg-dark-green text-white font-semibold px-6 py-3 rounded-xl w-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green transition-colors"
+            >
+              {downloading ? "Baixando..." : "Baixar"}
+            </button>
+
+            {downloadError && <p className="text-red-500 text-sm mt-3">{downloadError}</p>}
           </>
         )}
       </div>

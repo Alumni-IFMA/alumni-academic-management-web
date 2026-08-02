@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Diploma } from "../index";
@@ -54,6 +55,66 @@ describe("Diploma page", () => {
     renderDiploma();
     await waitFor(() => {
       expect(screen.getByText("Você ainda não possui diploma disponível.")).toBeInTheDocument();
+    });
+  });
+
+  it("disables the download button until a course is selected", async () => {
+    degreeService.getMyDegrees.mockResolvedValue(mockDegrees);
+    renderDiploma();
+    await waitFor(() => screen.getByText("Bacharelado em Ciência da Computação"));
+    expect(screen.getByRole("button", { name: /^baixar$/i })).toBeDisabled();
+  });
+
+  it("downloads the diploma when the selected course has a fileUrl", async () => {
+    degreeService.getMyDegrees.mockResolvedValue(mockDegrees);
+    degreeService.getDownloadUrl.mockResolvedValue("http://minio/diplomas/1.pdf?X-Amz-Signature=xyz");
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => {});
+
+    renderDiploma();
+    await waitFor(() => screen.getByText("Bacharelado em Ciência da Computação"));
+
+    await userEvent.selectOptions(screen.getByLabelText("Curso:"), "1");
+    await userEvent.click(screen.getByRole("button", { name: /^baixar$/i }));
+
+    await waitFor(() => {
+      expect(degreeService.getDownloadUrl).toHaveBeenCalledWith(1);
+      expect(openSpy).toHaveBeenCalledWith(
+        "http://minio/diplomas/1.pdf?X-Amz-Signature=xyz",
+        "_blank",
+        "noopener,noreferrer"
+      );
+    });
+
+    openSpy.mockRestore();
+  });
+
+  it("shows an error and skips the download call when the selected course has no fileUrl", async () => {
+    degreeService.getMyDegrees.mockResolvedValue(mockDegrees);
+
+    renderDiploma();
+    await waitFor(() => screen.getByText("Técnico em Informática"));
+
+    await userEvent.selectOptions(screen.getByLabelText("Curso:"), "2");
+    await userEvent.click(screen.getByRole("button", { name: /^baixar$/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Diploma não disponível para este curso.")).toBeInTheDocument();
+    });
+    expect(degreeService.getDownloadUrl).not.toHaveBeenCalled();
+  });
+
+  it("shows an error message when the download endpoint fails", async () => {
+    degreeService.getMyDegrees.mockResolvedValue(mockDegrees);
+    degreeService.getDownloadUrl.mockRejectedValue(new Error("network error"));
+
+    renderDiploma();
+    await waitFor(() => screen.getByText("Bacharelado em Ciência da Computação"));
+
+    await userEvent.selectOptions(screen.getByLabelText("Curso:"), "1");
+    await userEvent.click(screen.getByRole("button", { name: /^baixar$/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText("Não foi possível baixar o diploma. Tente novamente.")).toBeInTheDocument();
     });
   });
 });
