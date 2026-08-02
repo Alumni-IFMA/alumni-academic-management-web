@@ -102,7 +102,7 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
       <Toaster position="top-center" richColors />
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col">
-        <div className="grid grid-cols-2 px-20 gap-x-6 gap-y-2 mt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 px-4 sm:px-20 gap-x-6 gap-y-2 mt-2">
           <FormField>
             <Label htmlFor="name">Nome completo</Label>
             <InputField
@@ -245,7 +245,7 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
           </Typography>
         )}
 
-        <div className="flex flex-col gap-4 w-[260px] items-center mx-auto font-semibold">
+        <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold px-4">
           <Button variant="primary" type="submit" disabled={disabled || isSubmitting}>
             {isSubmitting ? "Cadastrando..." : "Cadastrar-se"}
           </Button>

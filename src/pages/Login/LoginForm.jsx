@@ -45,7 +45,7 @@ export function LoginForm() {
     <>
     <Toaster position="top-center" richColors />
     
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-[500px] mx-auto">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-full max-w-[500px] mx-auto px-4">
       <div className="grid gap-2 mt-2">
         <FormField>
           <Label htmlFor="email">Email</Label>
@@ -81,7 +81,7 @@ export function LoginForm() {
         <a href="#">Esqueci minha senha</a>
       </div>
 
-      <div className="flex flex-col gap-4 w-[260px] items-center mx-auto font-semibold">
+      <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold">
         <Button variant='primary' type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Entrando..." : "Entrar"}
         </Button>
