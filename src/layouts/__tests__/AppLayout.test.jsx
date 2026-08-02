@@ -26,12 +26,12 @@ describe("AppLayout ribbon", () => {
   it("renders the diploma ribbon svg on /diploma", () => {
     const { container } = renderAt("/diploma");
     expect(screen.getByText("Diploma content")).toBeInTheDocument();
-    expect(container.querySelector("svg[aria-hidden='true']")).toBeInTheDocument();
+    expect(container.querySelector('svg[viewBox="0 0 1583 927"]')).toBeInTheDocument();
   });
 
   it("does not render a ribbon svg on routes without one", () => {
     const { container } = renderAt("/news");
     expect(screen.getByText("News content")).toBeInTheDocument();
-    expect(container.querySelector("svg[aria-hidden='true']")).not.toBeInTheDocument();
+    expect(container.querySelector('svg[viewBox="0 0 1583 927"]')).not.toBeInTheDocument();
   });
 });

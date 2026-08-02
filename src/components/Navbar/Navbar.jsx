@@ -123,7 +123,7 @@ export function Navbar() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Abrir menu"
           >
-            {menuOpen ? <X size={22} aria-hidden="false" /> : <Menu size={22} aria-hidden="false" />}
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
