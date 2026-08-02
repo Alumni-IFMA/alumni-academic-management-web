@@ -1,7 +1,12 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { AuthRibbon } from "./components/AuthRibbon";
 
-const COMPACT_CARD_PATHS = ["/auth/set-password"];
+const COMPACT_CARD_PATHS = [
+    "/auth/set-password",
+    "/auth/forgot-password",
+    "/auth/reset-password/code",
+    "/auth/reset-password",
+];
 
 export function AuthLayout() {
     const { pathname } = useLocation();

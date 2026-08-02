@@ -78,7 +78,7 @@ export function LoginForm() {
       </div>
 
       <div className="flex justify-end font-semibold">
-        <a href="#">Esqueci minha senha</a>
+        <Link to="/auth/forgot-password">Esqueci minha senha</Link>
       </div>
 
       <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold">
