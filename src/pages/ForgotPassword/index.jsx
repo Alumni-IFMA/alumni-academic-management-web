@@ -41,7 +41,7 @@ export function ForgotPassword() {
 
       <div className="flex flex-col w-full max-w-[380px] mx-auto items-center px-4">
         <Typography variant="h1" className="!text-3xl sm:!text-4xl text-center mb-4">
-          Esqueci minha senha
+          Esqueceu sua senha?
         </Typography>
       </div>
 
@@ -59,6 +59,10 @@ export function ForgotPassword() {
           {errors.email && (
             <span className="text-red-500 text-sm">{errors.email.message}</span>
           )}
+          <span className="text-xs text-gray-500">
+            Enviaremos um código de verificação para este e-mail se ele corresponder a uma conta
+            do Alumni existente.
+          </span>
         </FormField>
 
         <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold mt-7">
