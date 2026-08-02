@@ -60,7 +60,7 @@ export function SetPassword() {
       <Toaster position="top-center" richColors />
 
       <div className="flex flex-col w-full max-w-[380px] mx-auto items-center px-4">
-        <Typography variant="h1" className="!text-4xl mb-4">Definir senha</Typography>
+        <Typography variant="h1" className="!text-3xl sm:!text-4xl text-center mb-4">Definir senha</Typography>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-full max-w-[380px] mx-auto px-4">
@@ -79,7 +79,7 @@ export function SetPassword() {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-green"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-dark-green"
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
@@ -103,7 +103,7 @@ export function SetPassword() {
                 type="button"
                 onClick={() => setShowConfirmPassword((v) => !v)}
                 aria-label={showConfirmPassword ? "Ocultar senha" : "Mostrar senha"}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-green"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-dark-green"
               >
                 {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
