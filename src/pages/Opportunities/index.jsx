@@ -8,7 +8,7 @@ import { JobCard } from "../../components/JobCard/JobCard.jsx";
 import { JobDetail } from "../../components/JobDetail/JobDetail.jsx";
 import { OpportunitiesRibbon } from "./components/OpportunitiesRibbon";
 import { SlidersHorizontal } from "lucide-react";
-import { getJobs } from "../../services/jobsService";
+import { getJobs, getJobById } from "../../services/jobsService";
 import { mapJob } from "./mapJob";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 
@@ -58,6 +58,8 @@ export function Opportunities() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [loadError, setLoadError] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedJobLoading, setSelectedJobLoading] = useState(false);
+  const [selectedJobError, setSelectedJobError] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -106,6 +108,17 @@ export function Opportunities() {
     if (el.scrollHeight - el.scrollTop - el.clientHeight < 100) {
       handleLoadMore();
     }
+  }
+
+  function handleSelectJob(job) {
+    setSelectedJob(job);
+    setSelectedJobError(null);
+    setSelectedJobLoading(true);
+
+    getJobById(job.id)
+      .then((dto) => setSelectedJob(mapJob(dto)))
+      .catch(() => setSelectedJobError("Não foi possível carregar os detalhes da vaga."))
+      .finally(() => setSelectedJobLoading(false));
   }
 
   function toggleExperience(id) {
@@ -219,7 +232,7 @@ export function Opportunities() {
               key={job.id}
               job={job}
               isSelected={selectedJob?.id === job.id}
-              onClick={() => setSelectedJob(job)}
+              onClick={() => handleSelectJob(job)}
             />
           ))}
 
@@ -229,7 +242,7 @@ export function Opportunities() {
         </div>
 
         {/* Detalhe da vaga */}
-        <JobDetail job={selectedJob} />
+        <JobDetail job={selectedJob} loading={selectedJobLoading} error={selectedJobError} />
       </div>
       </div>
 

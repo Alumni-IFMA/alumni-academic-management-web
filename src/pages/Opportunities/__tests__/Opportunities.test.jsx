@@ -192,4 +192,33 @@ describe("Opportunities page", () => {
       );
     });
   });
+
+  it("fetches job details on click and shows them in the detail panel", async () => {
+    jobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
+    jobsService.getJobById.mockResolvedValue({ ...job2Dto, description: "Descrição completa B" });
+
+    renderPage();
+    await waitFor(() => expect(screen.getByText("Designer UX")).toBeInTheDocument());
+
+    await userEvent.click(screen.getByText("Designer UX"));
+
+    await waitFor(() => {
+      expect(jobsService.getJobById).toHaveBeenCalledWith(2);
+      expect(screen.getByText("Descrição completa B")).toBeInTheDocument();
+    });
+  });
+
+  it("shows an error in the detail panel when fetching details fails", async () => {
+    jobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
+    jobsService.getJobById.mockRejectedValue(new Error("network error"));
+
+    renderPage();
+    await waitFor(() => expect(screen.getByText("Designer UX")).toBeInTheDocument());
+
+    await userEvent.click(screen.getByText("Designer UX"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Não foi possível carregar os detalhes da vaga.")).toBeInTheDocument();
+    });
+  });
 });
