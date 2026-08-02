@@ -58,7 +58,7 @@ export function Diploma() {
           variant="icon"
           onClick={() => navigate(-1)}
           aria-label="Voltar"
-          className="absolute top-4 left-4 sm:top-6 sm:left-6"
+          className="absolute top-2 left-2 sm:top-3 sm:left-3"
         >
           <ArrowLeft className="text-dark-green" size={24} />
         </Button>
