@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 import { FormField } from "../../components/FormField/FormField";
 import { InputField } from "../../components/InputField/InputField";
 import { Label } from "../../components/Label/Label";
 import { Typography } from "../../components/Typography/Typography";
-import { setPassword } from "../../services/authService";
+import { resetPassword } from "../../services/authService";
 
 const schema = yup.object({
   password: yup
@@ -23,10 +23,11 @@ const schema = yup.object({
     .oneOf([yup.ref("password")], "As senhas não coincidem"),
 });
 
-export function SetPassword() {
+export function ResetPassword() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const location = useLocation();
+  const email = location.state?.email;
+  const code = location.state?.code;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -36,23 +37,29 @@ export function SetPassword() {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(schema) });
 
-  async function onSubmit({ password }) {
-    if (!token) {
-      toast.error("Link inválido ou expirado. Solicite um novo e-mail.");
-      return;
+  useEffect(() => {
+    if (!email || !code) {
+      toast.error("Solicite um novo código antes de continuar.");
+      navigate("/auth/forgot-password", { replace: true });
     }
+  }, [email, code, navigate]);
 
+  async function onSubmit({ password }) {
     try {
-      await setPassword({ token, newPassword: password });
-      toast.success("Senha definida com sucesso!");
+      await resetPassword({ token: code, newPassword: password });
+      toast.success("Senha redefinida com sucesso!");
       navigate("/auth/login");
     } catch (error) {
-      console.error("Erro ao definir senha:", error);
+      console.error("Erro ao redefinir senha:", error);
       toast.error(
         error.response?.data?.message ??
-          "Não foi possível definir a senha. O link pode ter expirado."
+          "Não foi possível redefinir a senha. O código pode ter expirado."
       );
     }
+  }
+
+  if (!email || !code) {
+    return null;
   }
 
   return (
@@ -60,19 +67,21 @@ export function SetPassword() {
       <Toaster position="top-center" richColors />
 
       <div className="flex flex-col w-full max-w-[380px] mx-auto items-center px-4">
-        <Typography variant="h1" className="!text-3xl sm:!text-4xl text-center mb-4">Definir senha</Typography>
+        <Typography variant="h1" className="!text-3xl sm:!text-4xl text-center mb-4">
+          Redefinir senha
+        </Typography>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-full max-w-[380px] mx-auto px-4">
         <div className="grid gap-2">
           <FormField>
-            <Label htmlFor="password">Senha</Label>
+            <Label htmlFor="password">Nova senha</Label>
             <div className="relative">
               <InputField
                 type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
-                placeholder="Digite sua senha"
+                placeholder="Digite sua nova senha"
                 {...register("password")}
               />
               <button
@@ -122,7 +131,11 @@ export function SetPassword() {
           >
             {isSubmitting ? "Salvando..." : "Salvar"}
           </button>
-          <button type="button" onClick={() => navigate("/auth/login")} className="text-green cursor-pointer">
+          <button
+            type="button"
+            onClick={() => navigate("/auth/reset-password/code", { state: { email } })}
+            className="text-green cursor-pointer"
+          >
             Voltar
           </button>
         </div>
