@@ -1,11 +1,13 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Register } from "../pages/Register";
 import { Login } from "../pages/Login";
+import { Home } from "../pages/Home";
 import { SetPassword } from "../pages/SetPassword";
 import { ForgotPassword } from "../pages/ForgotPassword";
 import { VerifyResetCode } from "../pages/VerifyResetCode";
 import { ResetPassword } from "../pages/ResetPassword";
 import { AuthLayout } from "../layouts/AuthLayout";
+import { AppLayout } from "../layouts/AppLayout";
 import { Opportunities } from "../pages/Opportunities";
 import { News } from "../pages/News";
 import { AdminNews } from "../pages/AdminNews";
@@ -21,7 +23,7 @@ function PrivateRoute({ children }) {
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/opportunities" replace />} />
+      <Route path="/" element={<Navigate to="/home" replace />} />
       <Route path="/auth" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
@@ -30,8 +32,32 @@ function AppRoutes() {
         <Route path="reset-password/code" element={<VerifyResetCode />} />
         <Route path="reset-password" element={<ResetPassword />} />
       </Route>
-      <Route path="/opportunities" element={<Opportunities />} />
-      <Route path="/news" element={<News />} />
+      <Route
+        element={
+          <PrivateRoute>
+            <AppLayout />
+          </PrivateRoute>
+        }
+      >
+        <Route path="/home" element={<Home />} />
+      </Route>
+      <Route
+        path="/opportunities"
+        element={
+          <PrivateRoute>
+            <Opportunities />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/news"
+        element={
+          <PrivateRoute>
+            <News />
+          </PrivateRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/home" replace />} />
       <Route
         path="/admin"
         element={

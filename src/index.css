@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+button:not(:disabled), [role="button"], summary, label[for], select {
+  cursor: pointer;
+}
+
 @theme {
     --color-dark-green: #15351E;
     --color-cambrige-blue: #76BA9D;
@@ -14,6 +18,8 @@
     --color-white: #FFFBFB;
     --color-light-green: #E1FFD8;
     --color-green: #147D26;
+    --color-ribbon: #29713D;
+    --color-page-bg: #F8F9F5;
 
     --font-inter: "Inter", sans-serif;
     --font-poppins: "Poppins", sans-serif;
