@@ -2,6 +2,10 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Register } from "../pages/Register";
 import { Login } from "../pages/Login";
 import { Home } from "../pages/Home";
+import { SetPassword } from "../pages/SetPassword";
+import { ForgotPassword } from "../pages/ForgotPassword";
+import { VerifyResetCode } from "../pages/VerifyResetCode";
+import { ResetPassword } from "../pages/ResetPassword";
 import { AuthLayout } from "../layouts/AuthLayout";
 import { AppLayout } from "../layouts/AppLayout";
 import { Opportunities } from "../pages/Opportunities";
@@ -23,6 +27,10 @@ function AppRoutes() {
       <Route path="/auth" element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="set-password" element={<SetPassword />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password/code" element={<VerifyResetCode />} />
+        <Route path="reset-password" element={<ResetPassword />} />
       </Route>
       <Route
         element={

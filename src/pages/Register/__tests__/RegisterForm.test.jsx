@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import { RegisterForm } from "../RegisterForm";
 
 vi.mock("../../../services/userService", () => ({
@@ -27,11 +28,13 @@ const graduationYears = [
 
 function renderForm() {
   return render(
-    <RegisterForm
-      campusCourses={campusCourses}
-      campuses={campuses}
-      graduationYears={graduationYears}
-    />
+    <MemoryRouter>
+      <RegisterForm
+        campusCourses={campusCourses}
+        campuses={campuses}
+        graduationYears={graduationYears}
+      />
+    </MemoryRouter>
   );
 }
 
