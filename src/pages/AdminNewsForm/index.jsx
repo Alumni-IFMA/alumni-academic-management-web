@@ -128,17 +128,16 @@ export function AdminNewsForm() {
   }
 
   return (
-    <>
-       <button
+    <div className="font-poppins max-w-4xl mx-auto">
+      <Toaster position="top-center" richColors />
+
+      <button
         onClick={() => navigate("/admin/news")}
         className="flex items-center gap-2 text-dark-green hover:opacity-70 transition-opacity cursor-pointer mb-4"
       >
         <ArrowLeft size={20} />
         <span className="font-medium text-xl">Voltar</span>
       </button>
-
-      <div className="font-poppins max-w-4xl mx-auto">
-      <Toaster position="top-center" richColors />
 
       <Typography variant="h1">
         {isEditing ? "Editar notícia" : "Nova notícia"}
@@ -186,21 +185,19 @@ export function AdminNewsForm() {
       </div>
 
       {/* Botões */}
-      <div className="mt-8 flex items-center justify-between gap-4">
-        {isEditing ? (
+      <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        {isEditing && (
           <button
             onClick={() => setDeleteOpen(true)}
             disabled={submitting}
-            className="flex items-center gap-2 text-red-500 border border-red-400 px-6 py-3 rounded-xl hover:bg-red-50 transition-colors cursor-pointer font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center justify-center gap-2 text-red-500 border border-red-400 px-6 py-3 rounded-xl hover:bg-red-50 transition-colors cursor-pointer font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Trash2 size={18} />
             Excluir
           </button>
-        ) : (
-          <div />
         )}
 
-        <div className="flex items-center gap-4">
+        <div className={`flex flex-wrap items-center gap-4 ${isEditing ? "sm:justify-end" : "sm:ml-auto"}`}>
           {!isPublished && (
             <>
               <button
@@ -243,6 +240,5 @@ export function AdminNewsForm() {
         onConfirm={handleConfirmDelete}
       />
     </div>
-    </>
   );
 }
