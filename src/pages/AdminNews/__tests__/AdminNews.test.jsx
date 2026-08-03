@@ -44,6 +44,14 @@ describe("AdminNews page", () => {
     });
   });
 
+  it("shows a message when the backend returns zero news", async () => {
+    newsService.getAdminNews.mockResolvedValue([]);
+    renderAdminNews();
+    await waitFor(() => {
+      expect(screen.getByText("Nenhuma notícia cadastrada ainda.")).toBeInTheDocument();
+    });
+  });
+
   it("shows an error message when the fetch fails", async () => {
     newsService.getAdminNews.mockRejectedValue(new Error("network error"));
     renderAdminNews();

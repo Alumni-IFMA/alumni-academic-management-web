@@ -101,7 +101,14 @@ export function AdminNews() {
         </div>
       )}
 
-      {!loading && !error && (
+      {!loading && !error && news.length === 0 && (
+        <div className="mt-16 flex flex-col items-center text-gray-400">
+          <Newspaper size={48} className="mb-3 opacity-40" />
+          <p className="text-base">Nenhuma notícia cadastrada ainda.</p>
+        </div>
+      )}
+
+      {!loading && !error && news.length > 0 && (
         <>
           {/* Grid de notícias */}
           <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
