@@ -6,7 +6,7 @@ import { Typography } from "../../components/Typography/Typography";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { useAuth } from "../../context/AuthContext";
 
@@ -45,7 +45,7 @@ export function LoginForm() {
     <>
     <Toaster position="top-center" richColors />
     
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-[500px] mx-auto">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="w-full max-w-[500px] mx-auto px-4">
       <div className="grid gap-2 mt-2">
         <FormField>
           <Label htmlFor="email">Email</Label>
@@ -78,16 +78,16 @@ export function LoginForm() {
       </div>
 
       <div className="flex justify-end font-semibold">
-        <a href="#">Esqueci minha senha</a>
+        <Link to="/auth/forgot-password">Esqueci minha senha</Link>
       </div>
 
-      <div className="flex flex-col gap-4 w-[260px] items-center mx-auto font-semibold">
+      <div className="flex flex-col gap-4 w-full max-w-[260px] items-center mx-auto font-semibold">
         <Button variant='primary' type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Entrando..." : "Entrar"}
         </Button>
         <Typography variant="p">
           Não possui conta? {" "}
-          <a className="text-green" href="#">Cadastrar-se</a> 
+          <Link className="text-green" to="/auth/register">Cadastrar-se</Link>
         </Typography>
       </div>
     </form>

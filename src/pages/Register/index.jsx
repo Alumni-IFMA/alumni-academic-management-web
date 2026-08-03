@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button/Button";
 import seta from "../../assets/back-button-register.png";
 import { Typography } from "../../components/Typography/Typography";
@@ -16,6 +17,7 @@ const graduationYears = Array.from(
 );
 
 export function Register() {
+  const navigate = useNavigate();
   const [campusCourses, setCampusCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
@@ -35,12 +37,17 @@ export function Register() {
   const campuses = uniqueCampusNames.map((name) => ({ id: name, name }));
 
   return (
-    <div>
-      <div className="grid grid-cols-3 items-center mt-12 ml-9">
-        <Button variant="icon">
-          <img src={seta} alt="Voltar para a página anterior" />
-        </Button>
-        <Typography variant="h1">Bem-vindo!</Typography>
+    <div className="relative">
+      <Button
+        variant="icon"
+        onClick={() => navigate(-1)}
+        className="absolute -top-2 -left-2 !w-10 !h-10"
+      >
+        <img src={seta} alt="Voltar para a página anterior" className="w-5 h-5" />
+      </Button>
+
+      <div className="text-center mt-4">
+        <Typography variant="h1" className="!text-3xl">Bem-vindo!</Typography>
       </div>
 
       {loadError && (
