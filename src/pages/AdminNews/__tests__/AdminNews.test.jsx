@@ -27,7 +27,8 @@ function renderAdminNews() {
 describe("AdminNews page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    newsService.getAdminNews.mockResolvedValue(mockDtos);
+    // Real GET /news returns a Spring Page wrapper, not a bare array.
+    newsService.getAdminNews.mockResolvedValue({ content: mockDtos });
   });
 
   it("shows a loading state while fetching", () => {
@@ -45,10 +46,18 @@ describe("AdminNews page", () => {
   });
 
   it("shows a message when the backend returns zero news", async () => {
-    newsService.getAdminNews.mockResolvedValue([]);
+    newsService.getAdminNews.mockResolvedValue({ content: [] });
     renderAdminNews();
     await waitFor(() => {
       expect(screen.getByText("Nenhuma notícia cadastrada ainda.")).toBeInTheDocument();
+    });
+  });
+
+  it("also renders correctly if the backend ever returns a bare array", async () => {
+    newsService.getAdminNews.mockResolvedValue(mockDtos);
+    renderAdminNews();
+    await waitFor(() => {
+      expect(screen.getByText("Seletivo IFMA")).toBeInTheDocument();
     });
   });
 

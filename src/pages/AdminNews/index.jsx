@@ -33,7 +33,10 @@ export function AdminNews() {
     setError(false);
 
     getAdminNews()
-      .then((data) => setNews(data.map(mapAdminNews)))
+      .then((data) => {
+        const items = Array.isArray(data) ? data : (data?.content ?? []);
+        setNews(items.map(mapAdminNews));
+      })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
