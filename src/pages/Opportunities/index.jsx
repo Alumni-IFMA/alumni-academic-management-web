@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Dropdown } from "../../components/Dropdown/Dropdown.jsx";
-import { Navbar } from "../../components/Navbar/navbar.jsx";
+import { Navbar } from "../../components/Navbar/Navbar.jsx";
 import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
 import { Typography } from "../../components/Typography/Typography.jsx";
 import { FilterCard } from "../../components/FilterCard/FilterCard.jsx";
