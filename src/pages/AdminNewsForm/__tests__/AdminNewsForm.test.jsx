@@ -48,6 +48,20 @@ describe("AdminNewsForm - create mode", () => {
     expect(screen.getByText("List page")).toBeInTheDocument();
   });
 
+  it("includes the Resumo field in the submitted FormData", async () => {
+    newsService.createNews.mockResolvedValue({ id: 1 });
+    renderCreate();
+
+    await userEvent.type(screen.getByPlaceholderText("Titulo"), "New title");
+    await userEvent.type(screen.getByPlaceholderText("Resumo (opcional)"), "Short summary");
+    await userEvent.type(screen.getByPlaceholderText("Matéria"), "Body");
+    await userEvent.click(screen.getByRole("button", { name: "Publicar" }));
+
+    await waitFor(() => expect(newsService.createNews).toHaveBeenCalledTimes(1));
+    const formData = newsService.createNews.mock.calls[0][0];
+    expect(formData.get("summary")).toBe("Short summary");
+  });
+
   it("saves as draft: calls createNews with draft=true", async () => {
     newsService.createNews.mockResolvedValue({ id: 1 });
     renderCreate();
@@ -86,6 +100,7 @@ describe("AdminNewsForm - edit mode", () => {
     newsService.getNewsById.mockResolvedValue({
       id: 7,
       title: "Existing",
+      summary: "Existing summary",
       content: "Existing body",
       coverImageUrl: "/cover.jpg",
       draft: false,
@@ -95,6 +110,7 @@ describe("AdminNewsForm - edit mode", () => {
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText("Titulo")).toHaveValue("Existing");
+      expect(screen.getByPlaceholderText("Resumo (opcional)")).toHaveValue("Existing summary");
       expect(screen.getByPlaceholderText("Matéria")).toHaveValue("Existing body");
     });
   });

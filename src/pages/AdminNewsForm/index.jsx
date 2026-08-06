@@ -24,6 +24,7 @@ export function AdminNewsForm() {
   const [cover, setCover] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
   const [title, setTitle] = useState("");
+  const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState(null);
   const [scheduleOpen, setScheduleOpen] = useState(false);
@@ -39,6 +40,7 @@ export function AdminNewsForm() {
       .then((news) => {
         setCoverPreview(news.coverImageUrl);
         setTitle(news.title);
+        setSummary(news.summary ?? "");
         setContent(news.content);
         setStatus(deriveNewsStatus({ draft: news.draft, publishedAt: news.publishedAt }));
       })
@@ -59,7 +61,7 @@ export function AdminNewsForm() {
   async function submitNews({ draft, publishedAt, successMessage, successStyle }) {
     setSubmitting(true);
     try {
-      const formData = buildNewsFormData({ title, content, draft, publishedAt, coverFile: cover });
+      const formData = buildNewsFormData({ title, summary, content, draft, publishedAt, coverFile: cover });
       if (isEditing) {
         await updateNews(id, formData);
       } else {
@@ -164,6 +166,13 @@ export function AdminNewsForm() {
           placeholder="Titulo"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+        />
+
+        {/* Resumo */}
+        <InputField
+          placeholder="Resumo (opcional)"
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
         />
 
         {/* Matéria */}
