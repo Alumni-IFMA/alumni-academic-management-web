@@ -21,7 +21,7 @@ export function deriveNewsStatus({ draft, publishedAt }) {
   return "published";
 }
 
-export function formatPublishedAt(publishedAt) {
-  const parsedDate = parseBackendDate(publishedAt);
+export function formatPublishedAt(publishedAt, fallbackDate) {
+  const parsedDate = parseBackendDate(publishedAt) ?? parseBackendDate(fallbackDate);
   return parsedDate ? format(parsedDate, "dd/MM/yyyy") : "Não publicado";
 }

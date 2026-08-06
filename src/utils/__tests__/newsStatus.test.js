@@ -57,4 +57,12 @@ describe("formatPublishedAt", () => {
   it("returns 'Não publicado' when publishedAt is null", () => {
     expect(formatPublishedAt(null)).toBe("Não publicado");
   });
+
+  it("falls back to the given fallback date when publishedAt is null", () => {
+    expect(formatPublishedAt(null, [2026, 8, 6, 1, 19])).toBe("06/08/2026");
+  });
+
+  it("returns 'Não publicado' when both publishedAt and the fallback are null", () => {
+    expect(formatPublishedAt(null, null)).toBe("Não publicado");
+  });
 });

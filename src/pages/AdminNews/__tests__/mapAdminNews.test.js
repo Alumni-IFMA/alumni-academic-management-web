@@ -29,4 +29,48 @@ describe("mapAdminNews", () => {
     expect(result.status).toBe("draft");
     expect(result.publishedAt).toBe("Não publicado");
   });
+
+  it("falls back publishedAt to createdAt for a published item with no publishedAt (publish-now)", () => {
+    const dto = {
+      id: 4,
+      title: "SEXTOU!?",
+      summary: "",
+      content: "Jovens esperam ansiosamente...",
+      coverImageUrl: "https://cdn/img.jpg",
+      draft: false,
+      publishedAt: null,
+      createdAt: [2026, 8, 6, 1, 19, 20],
+    };
+
+    const result = mapAdminNews(dto);
+    expect(result.status).toBe("published");
+    expect(result.publishedAt).toBe("06/08/2026");
+  });
+
+  it("does not fall back to createdAt for a draft with no publishedAt", () => {
+    const dto = {
+      id: 5,
+      title: "T",
+      summary: "S",
+      draft: true,
+      publishedAt: null,
+      createdAt: [2026, 8, 6, 1, 19, 20],
+    };
+
+    expect(mapAdminNews(dto).publishedAt).toBe("Não publicado");
+  });
+
+  it("falls back description to a truncated content when summary is empty", () => {
+    const longContent = "A".repeat(200);
+    const dto = { id: 6, title: "T", summary: "", content: longContent, draft: false, publishedAt: null };
+
+    const result = mapAdminNews(dto);
+    expect(result.description).toBe(`${"A".repeat(150)}...`);
+  });
+
+  it("does not truncate content used as description fallback when it is short", () => {
+    const dto = { id: 7, title: "T", summary: "", content: "Short content.", draft: false, publishedAt: null };
+
+    expect(mapAdminNews(dto).description).toBe("Short content.");
+  });
 });
