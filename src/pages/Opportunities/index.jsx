@@ -172,6 +172,7 @@ export function Opportunities() {
           items={SORT_OPTIONS}
           value={sort}
           onChange={(e) => setSort(e.target.value)}
+          size="lg"
         />
       </div>
 

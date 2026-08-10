@@ -10,7 +10,7 @@ export function Dropdown({
   ...rest
 }) {
   const sizeStyles = {
-    lg: "px-6 py-4 text-lg",
+    lg: "px-6 py-2 text-base",
     sm: "px-4 py-2 text-sm",
   };
 
