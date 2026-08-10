@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Search } from "lucide-react";
+/* import { Search } from "lucide-react"; */
+import { SearchBar } from "../../../components/SearchBar/SearchBar";
 
 export function HeroSection({ userName, onSearch }) {
   const [term, setTerm] = useState("");
 
-  function handleSearch(e) {
-    e.preventDefault();
+  function handleSearch() {
     if (term.trim()) onSearch(term.trim());
   }
 
@@ -19,25 +19,15 @@ export function HeroSection({ userName, onSearch }) {
         <span className="font-bold text-green">Alumni IFMA</span>.
       </p>
 
-      <form
-        onSubmit={handleSearch}
-        className="flex items-center w-full max-w-lg bg-white border border-gray-300 rounded-full overflow-hidden shadow-sm relative z-10"
-      >
-        <Search size={18} className="ml-4 text-gray-400 shrink-0" />
-        <input
-          type="text"
-          value={term}
-          onChange={(e) => setTerm(e.target.value)}
+      <div className="max-w-lg">
+        <SearchBar 
           placeholder="Mentores, egressos e professores"
-          className="flex-1 px-3 py-3 text-sm outline-none bg-transparent text-gray-700 placeholder:text-gray-400"
+          value={term} 
+          onChange={(e) => setTerm(e.target.value)}
+          onSearch={handleSearch}
         />
-        <button
-          type="submit"
-          className="bg-dark-green text-white text-sm font-semibold px-6 py-3 hover:bg-green transition-colors"
-        >
-          Buscar
-        </button>
-      </form>
+      </div>
+
     </section>
   );
 }
