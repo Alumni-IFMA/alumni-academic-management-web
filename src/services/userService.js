@@ -5,4 +5,16 @@ async function register(payload) {
   return data;
 }
 
-export default { register };
+/** GET /users?highlight=true */
+async function getHighlights() {
+  const { data } = await api.get("/users", { params: { highlight: true } });
+  return data;
+}
+
+/** GET /users/search?query= */
+async function search(query) {
+  const { data } = await api.get("/users/search", { params: { query } });
+  return data;
+}
+
+export default { register, getHighlights, search };
