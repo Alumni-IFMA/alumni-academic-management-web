@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ConnectButton } from "../../../components/ConnectButton";
+import { ConnectButton } from "../../../components/ConnectButton/ConnectButton.jsx";
 
 import avatar1 from "../../../assets/images/avatar1.svg";
 import avatar2 from "../../../assets/images/avatar2.svg";
@@ -14,7 +14,7 @@ function getAvatar(userId) {
   return AVATARS[index];
 }
 
-export function SuggestionCard({ user, status, onConnect }) {
+export function SuggestionCard({ user, status, onConnect, showConnect = true }) {
   const avatar = user.avatarUrl || getAvatar(user.id);
 
   return (
@@ -32,7 +32,9 @@ export function SuggestionCard({ user, status, onConnect }) {
           {[user.company, user.location].filter(Boolean).join(" · ")}
         </p>
         <div className="mt-2 flex items-center gap-2">
-          <ConnectButton status={status} onClick={() => onConnect(user.id)} />
+          {showConnect && (
+            <ConnectButton status={status} onClick={() => onConnect(user.id)} />
+          )}
           <Link
             to={`/perfil/${user.id}`}
             className="rounded-full bg-white border border-dark-green px-4 py-1.5 text-sm font-medium text-dark-green hover:bg-gray-50"
