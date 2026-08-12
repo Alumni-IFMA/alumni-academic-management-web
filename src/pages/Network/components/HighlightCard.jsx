@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ConnectButton } from "../../../components/ConnectButton";
+import { ConnectButton } from "../../../components/ConnectButton/ConnectButton.jsx";
 
 export function HighlightCard({ user, status, onConnect }) {
   return (

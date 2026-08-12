@@ -1,4 +1,4 @@
-import { Button } from "../components/Button";
+import { Button } from "../Button/Button.jsx";
 
 const LABELS = {
   idle: "Conectar",
