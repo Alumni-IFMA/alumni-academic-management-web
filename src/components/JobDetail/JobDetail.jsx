@@ -1,6 +1,22 @@
 import { MapPin, Clock, Bookmark, Share2 } from "lucide-react";
 
-export function JobDetail({ job }) {
+export function JobDetail({ job, loading = false, error = null }) {
+  if (loading) {
+    return (
+      <div className="flex-1 bg-white rounded-2xl shadow-md p-6 flex items-center justify-center">
+        <p className="text-gray-400 text-sm">Carregando detalhes...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex-1 bg-white rounded-2xl shadow-md p-6 flex items-center justify-center">
+        <p className="text-red-500 text-sm">{error}</p>
+      </div>
+    );
+  }
+
   if (!job) {
     return (
       <div className="flex-1 bg-white rounded-2xl shadow-md p-6 flex items-center justify-center">
@@ -57,7 +73,7 @@ export function JobDetail({ job }) {
             {tag}
           </span>
         ))}
-        <button className="bg-dark-green text-white text-sm font-semibold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
+        <button className="whitespace-nowrap bg-dark-green text-white text-sm font-semibold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
           Candidatar-se
         </button>
         <button className="flex items-center gap-2 border border-dark-green text-dark-green text-sm font-semibold px-5 py-2 rounded-full hover:bg-gray-50 transition-colors">

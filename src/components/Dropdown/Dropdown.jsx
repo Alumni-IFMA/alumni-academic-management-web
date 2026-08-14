@@ -24,7 +24,7 @@ export function Dropdown({
         {...rest}
         {...valueProps}
       >
-        <option className="font-dark-green font-semibold" value="" disabled>
+        <option className="font-dark-green font-semibold" value="">
           Selecione uma opção
         </option>
 
