@@ -1,13 +1,15 @@
 // pages/AdminNews/AdminNews.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Loader2, Newspaper, Plus } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import { NewsCard } from "../../components/NewsCard/NewsCard.jsx";
 import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
 import { Dropdown } from "../../components/Dropdown/Dropdown.jsx";
 import { Typography } from "../../components/Typography/Typography.jsx";
-import { mockNews } from "../../mocks/mockNews.js";
+import { getAdminNews, deleteNews } from "../../services/newsService.js";
+import { mapAdminNews } from "./mapAdminNews.js";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue.js";
 
 const statusFilters = [
   { id: "all", name: "Todas" },
@@ -18,12 +20,29 @@ const statusFilters = [
 
 export function AdminNews() {
   const navigate = useNavigate();
-  const [news, setNews] = useState(mockNews);
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
+  const debouncedSearch = useDebouncedValue(search, 400);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(false);
+
+    getAdminNews()
+      .then((data) => {
+        const items = Array.isArray(data) ? data : (data?.content ?? []);
+        setNews(items.map(mapAdminNews));
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+  }, []);
+
   const filteredNews = news.filter((item) => {
-    const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = item.title.toLowerCase().includes(debouncedSearch.toLowerCase());
     const matchesStatus = statusFilter === "all" || item.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -32,9 +51,14 @@ export function AdminNews() {
     navigate(`/admin/news/edit/${id}`);
   }
 
-  function handleDelete(id) {
-    setNews((prev) => prev.filter((item) => item.id !== id));
-    toast.error("Notícia excluída com sucesso!");
+  async function handleDelete(id) {
+    try {
+      await deleteNews(id);
+      setNews((prev) => prev.filter((item) => item.id !== id));
+      toast.error("Notícia excluída com sucesso!");
+    } catch {
+      toast.error("Não foi possível excluir a notícia.");
+    }
   }
 
   return (
@@ -60,25 +84,49 @@ export function AdminNews() {
         />
         <button
           onClick={() => navigate("/admin/news/new")}
-          className="flex items-center gap-2 bg-green text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-green-800 transition-colors shrink-0 cursor-pointer"
+          className="flex items-center gap-2 bg-green text-white px-6 py-4 rounded-xl font-medium text-base hover:bg-green-800 transition-colors shrink-0 cursor-pointer"
         >
           <Plus size={18} />
           Nova Notícia
         </button>
       </div>
 
-      {/* Grid de notícias */}
-      <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredNews.map((news) => (
-          <NewsCard key={news.id} news={news} onEdit={handleEdit} onDelete={handleDelete} />
-        ))}
-      </div>
+      {loading && (
+        <div className="mt-16 flex flex-col items-center text-gray-400">
+          <Loader2 size={32} className="animate-spin mb-3" />
+          <p className="text-base">Carregando notícias...</p>
+        </div>
+      )}
 
-      {filteredNews.length === 0 && (
+      {!loading && error && (
+        <div className="mt-16 flex flex-col items-center text-gray-400">
+          <p className="text-base">Não foi possível carregar as notícias.</p>
+        </div>
+      )}
+
+      {!loading && !error && news.length === 0 && (
         <div className="mt-16 flex flex-col items-center text-gray-400">
           <Newspaper size={48} className="mb-3 opacity-40" />
-          <p className="text-base">Nenhuma notícia encontrada.</p>
+          <p className="text-base">Nenhuma notícia cadastrada ainda.</p>
         </div>
+      )}
+
+      {!loading && !error && news.length > 0 && (
+        <>
+          {/* Grid de notícias */}
+          <div className="mt-8 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredNews.map((item) => (
+              <NewsCard key={item.id} news={item} onEdit={handleEdit} onDelete={handleDelete} />
+            ))}
+          </div>
+
+          {filteredNews.length === 0 && (
+            <div className="mt-16 flex flex-col items-center text-gray-400">
+              <Newspaper size={48} className="mb-3 opacity-40" />
+              <p className="text-base">Nenhuma notícia encontrada.</p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

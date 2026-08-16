@@ -1,7 +1,7 @@
 // pages/AdminNewsForm/AdminNewsForm.jsx
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ImageIcon, Trash2, ArrowLeft } from "lucide-react";
+import { ImageIcon, Trash2, ArrowLeft, Loader2 } from "lucide-react";
 import { toast, Toaster } from "sonner";
 
 import { Typography } from "../../components/Typography/Typography.jsx";
@@ -10,16 +10,21 @@ import { Textarea } from "../../components/Textarea/Textarea.jsx";
 import { DeleteModal } from "../../components/DeleteModal/DeleteModal.jsx";
 import { ScheduleModal } from "../../components/ScheduleModal/ScheduleModal.jsx";
 
-import { mockNews } from "../../mocks/mockNews.js";
+import { getNewsById, createNews, updateNews, deleteNews } from "../../services/newsService.js";
+import { buildNewsFormData } from "./buildNewsFormData.js";
+import { deriveNewsStatus } from "../../utils/newsStatus.js";
 
 export function AdminNewsForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = !!id;
 
+  const [loading, setLoading] = useState(isEditing);
+  const [submitting, setSubmitting] = useState(false);
   const [cover, setCover] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
   const [title, setTitle] = useState("");
+  const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState(null);
   const [scheduleOpen, setScheduleOpen] = useState(false);
@@ -29,16 +34,22 @@ export function AdminNewsForm() {
   const isPublished = status === "published";
 
   useEffect(() => {
-    if (isEditing) {
-      const news = mockNews.find((n) => n.id === Number(id));
-      if (news) {
-        setCoverPreview(news.coverImage);
+    if (!isEditing) return;
+
+    getNewsById(id)
+      .then((news) => {
+        setCoverPreview(news.coverImageUrl);
         setTitle(news.title);
-        setContent(news.description);
-        setStatus(news.status);
-      }
-    }
-  }, [id]);
+        setSummary(news.summary ?? "");
+        setContent(news.content);
+        setStatus(deriveNewsStatus({ draft: news.draft, publishedAt: news.publishedAt }));
+      })
+      .catch(() => {
+        toast.error("Não foi possível carregar a notícia.");
+        navigate("/admin/news");
+      })
+      .finally(() => setLoading(false));
+  }, [id, isEditing, navigate]);
 
   function handleCoverChange(e) {
     const file = e.target.files[0];
@@ -47,8 +58,26 @@ export function AdminNewsForm() {
     setCoverPreview(URL.createObjectURL(file));
   }
 
+  async function submitNews({ draft, publishedAt, successMessage, successStyle }) {
+    setSubmitting(true);
+    try {
+      const formData = buildNewsFormData({ title, summary, content, draft, publishedAt, coverFile: cover });
+      if (isEditing) {
+        await updateNews(id, formData);
+      } else {
+        await createNews(formData);
+      }
+      toast.success(successMessage, successStyle ? { style: successStyle } : undefined);
+      navigate("/admin/news");
+    } catch {
+      toast.error("Não foi possível salvar a notícia.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   function handleSaveDraft() {
-    toast.warning("Rascunho salvo com sucesso!");
+    submitNews({ draft: true, publishedAt: null, successMessage: "Rascunho salvo com sucesso!" });
   }
 
   function handleConfirmSchedule() {
@@ -58,37 +87,59 @@ export function AdminNewsForm() {
       month: "long",
       year: "numeric",
     });
-    toast.success(`Notícia agendada para ${formattedDate}!`, {
-      style: { background: "#3b82f6", color: "white" },
+    submitNews({
+      draft: false,
+      publishedAt: selectedDate,
+      successMessage: `Notícia agendada para ${formattedDate}!`,
+      successStyle: { background: "#3b82f6", color: "white" },
     });
     setScheduleOpen(false);
     setSelectedDate(null);
   }
 
   function handlePublish() {
-    toast.success("Notícia publicada com sucesso!", {
-      style: { background: "#166534", color: "white" },
+    submitNews({
+      draft: false,
+      publishedAt: null,
+      successMessage: "Notícia publicada com sucesso!",
+      successStyle: { background: "#166534", color: "white" },
     });
   }
 
-  function handleConfirmDelete() {
-    toast.error("Notícia excluída com sucesso!");
-    setDeleteOpen(false);
-    navigate("/admin/news");
+  async function handleConfirmDelete() {
+    setSubmitting(true);
+    try {
+      await deleteNews(id);
+      toast.error("Notícia excluída com sucesso!");
+      setDeleteOpen(false);
+      navigate("/admin/news");
+    } catch {
+      toast.error("Não foi possível excluir a notícia.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="mt-16 flex flex-col items-center text-gray-400">
+        <Loader2 size={32} className="animate-spin mb-3" />
+        <p className="text-base">Carregando notícia...</p>
+      </div>
+    );
   }
 
   return (
-    <>
-       <button
+    <div className="font-poppins max-w-4xl mx-auto">
+      <Toaster position="top-center" richColors />
+
+      <button
         onClick={() => navigate("/admin/news")}
         className="flex items-center gap-2 text-dark-green hover:opacity-70 transition-opacity cursor-pointer mb-4"
       >
         <ArrowLeft size={20} />
         <span className="font-medium text-xl">Voltar</span>
       </button>
-
-      <div className="font-poppins max-w-4xl mx-auto">
-      <Toaster position="top-center" richColors />
 
       <Typography variant="h1">
         {isEditing ? "Editar notícia" : "Nova notícia"}
@@ -117,6 +168,13 @@ export function AdminNewsForm() {
           onChange={(e) => setTitle(e.target.value)}
         />
 
+        {/* Resumo */}
+        <InputField
+          placeholder="Resumo (opcional)"
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
+        />
+
         {/* Matéria */}
         <div className="border border-dark-green rounded-lg overflow-hidden">
           <Textarea
@@ -136,31 +194,32 @@ export function AdminNewsForm() {
       </div>
 
       {/* Botões */}
-      <div className="mt-8 flex items-center justify-between gap-4">
-        {isEditing ? (
+      <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        {isEditing && (
           <button
             onClick={() => setDeleteOpen(true)}
-            className="flex items-center gap-2 text-red-500 border border-red-400 px-6 py-3 rounded-xl hover:bg-red-50 transition-colors cursor-pointer font-semibold"
+            disabled={submitting}
+            className="flex items-center justify-center gap-2 text-red-500 border border-red-400 px-6 py-3 rounded-xl hover:bg-red-50 transition-colors cursor-pointer font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Trash2 size={18} />
             Excluir
           </button>
-        ) : (
-          <div />
         )}
 
-        <div className="flex items-center gap-4">
+        <div className={`flex flex-wrap items-center gap-4 ${isEditing ? "sm:justify-end" : "sm:ml-auto"}`}>
           {!isPublished && (
             <>
               <button
                 onClick={handleSaveDraft}
-                className="bg-yellow-400 text-white font-semibold px-6 py-3 rounded-xl hover:bg-yellow-500 transition-colors cursor-pointer"
+                disabled={submitting}
+                className="bg-yellow-400 text-white font-semibold px-6 py-3 rounded-xl hover:bg-yellow-500 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Salvar Rascunho
               </button>
               <button
                 onClick={() => setScheduleOpen(true)}
-                className="bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-600 transition-colors cursor-pointer"
+                disabled={submitting}
+                className="bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-600 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Agendar
               </button>
@@ -168,9 +227,10 @@ export function AdminNewsForm() {
           )}
           <button
             onClick={handlePublish}
-            className="bg-dark-green text-white font-semibold px-6 py-3 rounded-xl hover:bg-green-800 transition-colors cursor-pointer"
+            disabled={submitting}
+            className="bg-dark-green text-white font-semibold px-6 py-3 rounded-xl hover:bg-green-800 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            Publicar
+            {submitting ? "Salvando..." : "Publicar"}
           </button>
         </div>
       </div>
@@ -189,6 +249,5 @@ export function AdminNewsForm() {
         onConfirm={handleConfirmDelete}
       />
     </div>
-    </>
   );
 }
