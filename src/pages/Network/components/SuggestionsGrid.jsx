@@ -4,6 +4,8 @@ import networkAlumni from "../../../services/networkAlumni";
 import { useConnection } from "../../../hooks/useConnection";
 import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 import { SuggestionCard } from "./SuggestionCard";
+import { MOCK_SUGGESTIONS } from "../mocks/mocksUsers.js";
+import { Typography } from "../../../components/Typography/Typography.jsx";
 
 export function SuggestionsGrid() {
   const [users, setUsers] = useState([]);
@@ -14,21 +16,32 @@ export function SuggestionsGrid() {
   const { connect, statusFor } = useConnection();
 
   const loadPage = useCallback((targetPage) => {
-    setLoading(true);
-    networkAlumni.getSuggestions({ page: targetPage })
-      .then((data) => {
+  setLoading(true);
+  networkAlumni
+    .getSuggestions({ page: targetPage })
+    .then((data) => {
+      const content = Array.isArray(data) ? data : (data.content ?? []);
+      const last = Array.isArray(data) ? true : (data.last ?? true);
+
+      if (targetPage === 0 && content.length === 0) {
+        // TODO: remover fallback quando houver dados reais de sugestões em produção
+        setUsers(MOCK_SUGGESTIONS.content);
+        setIsLast(MOCK_SUGGESTIONS.last);
+      } else {
         setUsers((prev) =>
-          targetPage === 0 ? data.content : [...prev, ...data.content]
+          targetPage === 0 ? content : [...prev, ...content],
         );
-        setIsLast(data.last);
-      })
-      .catch((err) => {
-        const message = err.response?.data?.message ?? "Erro ao carregar sugestões.";
-        setError(message);
-        toast.error(message);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+        setIsLast(last);
+      }
+    })
+    .catch(() => {
+      if (targetPage === 0) {
+        setUsers(MOCK_SUGGESTIONS.content);
+        setIsLast(MOCK_SUGGESTIONS.last);
+      }
+    })
+    .finally(() => setLoading(false));
+}, []);
 
   useEffect(() => {
     loadPage(0);
@@ -47,15 +60,13 @@ export function SuggestionsGrid() {
 
   return (
     <section>
-      <h2 className="text-2xl font-bold text-dark-green mb-4">
+      <Typography variant="h2" className="mb-4">
         Pessoas que você talvez conheça
-      </h2>
+      </Typography>
 
-      {error && (
-        <p className="mb-4 text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {users.map((user) => (
           <SuggestionCard
             key={user.id}
