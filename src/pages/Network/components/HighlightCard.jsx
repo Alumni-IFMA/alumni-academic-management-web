@@ -3,7 +3,7 @@ import { ConnectButton } from "../../../components/ConnectButton/ConnectButton.j
 
 export function HighlightCard({ user, status, onConnect }) {
   return (
-    <div className="relative h-72 w-48 shrink-0 overflow-hidden rounded-2xl shadow-md snap-start">
+    <div className="relative h-90 w-60 shrink-0 overflow-hidden rounded-2xl shadow-md snap-start">
       <img
         src={user.avatarUrl}
         alt={user.name}
@@ -21,7 +21,7 @@ export function HighlightCard({ user, status, onConnect }) {
           <ConnectButton status={status} onClick={() => onConnect(user.id)} />
           <Link
             to={`/perfil/${user.id}`}
-            className="rounded-full bg-white/90 px-4 py-1.5 text-sm font-medium text-dark-green hover:bg-white"
+            className="rounded-full bg-white/90 px-4 py-1.5 text-sm font-medium text-dark-green hover:bg-white whitespace-nowrap"
           >
             Ver perfil
           </Link>

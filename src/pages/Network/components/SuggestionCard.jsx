@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton.jsx";
+import { Typography } from "../../../components/Typography/Typography.jsx";
 
 import avatar1 from "../../../assets/images/avatar1.svg";
 import avatar2 from "../../../assets/images/avatar2.svg";
@@ -14,34 +15,48 @@ function getAvatar(userId) {
   return AVATARS[index];
 }
 
-export function SuggestionCard({ user, status, onConnect, showConnect = true }) {
+export function SuggestionCard({
+  user,
+  status,
+  onConnect,
+  showConnect = true,
+}) {
   const avatar = user.avatarUrl || getAvatar(user.id);
 
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm">
-      <img
-        src={avatar}
-        alt={user.name}
-        className="h-12 w-12 shrink-0 rounded-full object-cover"
-        loading="lazy"
-      />
-      <div className="min-w-0 flex-1">
-        <p className="truncate font-semibold text-gray-900">{user.name}</p>
-        <p className="truncate text-xs text-gray-500">{user.role}</p>
-        <p className="truncate text-xs text-gray-400">
-          {[user.company, user.location].filter(Boolean).join(" · ")}
-        </p>
-        <div className="mt-2 flex items-center gap-2">
-          {showConnect && (
-            <ConnectButton status={status} onClick={() => onConnect(user.id)} />
-          )}
-          <Link
-            to={`/perfil/${user.id}`}
-            className="rounded-full bg-white border border-dark-green px-4 py-1.5 text-sm font-medium text-dark-green hover:bg-gray-50"
-          >
-            Ver perfil
-          </Link>
+    <div className="rounded-xl bg-white p-4 shadow-sm">
+      <div className="flex items-center gap-3">
+        <img
+          src={avatar}
+          alt={user.name}
+          className="h-20 w-20 shrink-0 rounded-full object-cover bg-gray-100"
+          loading="lazy"
+        />
+        <div className="min-w-0 flex-1">
+          <Typography variant="h3" className="truncate">
+            {user.name}
+          </Typography>
+          <p className="truncate text-xs text-gray-500">{user.role}</p>
+          <p className="truncate text-xs text-gray-400">
+            {[user.company, user.location].filter(Boolean).join(" · ")}
+          </p>
         </div>
+      </div>
+
+      <div className="mt-3 flex items-center gap-2 justify-center">
+        {showConnect && (
+          <ConnectButton
+            status={status}
+            onClick={() => onConnect(user.id)}
+            className="px-18"
+          />
+        )}
+        <Link
+          to={`/perfil/${user.id}`}
+          className="rounded-full bg-white border border-dark-green px-8 py-1.5 text-sm font-medium text-dark-green hover:bg-gray-50 whitespace-nowrap"
+        >
+          Ver perfil
+        </Link>
       </div>
     </div>
   );
