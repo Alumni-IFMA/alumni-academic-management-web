@@ -15,6 +15,7 @@ import { AdminNews } from "../pages/AdminNews";
 import { AdminNewsForm } from "../pages/AdminNewsForm";
 import { AdminLayout } from "../layouts/AdminLayout";
 import { AuthProvider, useAuth } from "../context/AuthContext";
+import RedeAlumni from "../pages/Network/RedeAlumni";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -42,6 +43,7 @@ function AppRoutes() {
       >
         <Route path="/home" element={<Home />} />
         <Route path="/diploma" element={<Diploma />} />
+        <Route path="/rede" element={<RedeAlumni />} />
       </Route>
       <Route
         path="/opportunities"
