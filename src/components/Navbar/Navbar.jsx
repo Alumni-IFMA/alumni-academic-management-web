@@ -10,7 +10,7 @@ import kenia from "../../assets/kenia.png";
 
 const navLinks = [
   { to: "/home", label: "Início" },
-  { to: "/network", label: "Rede" },
+  { to: "/rede", label: "Rede" },
   { to: "/opportunities", label: "Oportunidades" },
   { to: "/news", label: "Notícias" },
   { to: "/contact", label: "Fale conosco" },
