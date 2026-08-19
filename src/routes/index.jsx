@@ -44,20 +44,13 @@ function AppRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/diploma" element={<Diploma />} />
         <Route path="/rede" element={<RedeAlumni />} />
+        <Route path="/news" element={<News />} />
       </Route>
       <Route
         path="/opportunities"
         element={
           <PrivateRoute>
             <Opportunities />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/news"
-        element={
-          <PrivateRoute>
-            <News />
           </PrivateRoute>
         }
       />
