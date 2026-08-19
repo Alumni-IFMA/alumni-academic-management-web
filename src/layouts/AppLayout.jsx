@@ -3,11 +3,13 @@ import { Navbar } from "../components/Navbar/Navbar";
 import { DecorativeRibbon } from "../pages/Home/components/DecorativeRibbon";
 import { DiplomaRibbon } from "../pages/Diploma/components/DiplomaRibbon";
 import { NetworkRibbon } from "../pages/Network/components/NetworkRibbon";
+import { ContactRibbon } from "../pages/Contact/components/ContactRibbon";
 
 const RIBBONS = {
   "/home": DecorativeRibbon,
   "/diploma": DiplomaRibbon,
   "/rede": NetworkRibbon,
+  "/contact": ContactRibbon,
 };
 
 export function AppLayout() {

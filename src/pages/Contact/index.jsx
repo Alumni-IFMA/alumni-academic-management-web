@@ -41,18 +41,20 @@ export function Contact() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6">
       <Toaster position="top-center" richColors />
 
       <header className="text-center space-y-1 mb-8">
-        <Typography variant="h1">Fale conosco</Typography>
-        <Typography variant="p">
+        <Typography variant="h1" className="!text-4xl sm:!text-5xl">
+          Fale conosco
+        </Typography>
+        <Typography variant="p" className="!text-base sm:!text-lg">
           Nós estamos muito interessados no que você tem a dizer.
         </Typography>
       </header>
 
-      <div className="bg-white rounded-2xl shadow-sm p-8">
-        <Typography variant="h2" className="mb-6">
+      <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8">
+        <Typography variant="h2" className="mb-6 text-center !text-2xl sm:!text-4xl">
           Envie sua mensagem
         </Typography>
 
