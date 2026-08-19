@@ -12,9 +12,15 @@ const RIBBONS = {
   "/news": NewsRibbon,
 };
 
+function findRibbon(pathname) {
+  if (RIBBONS[pathname]) return RIBBONS[pathname];
+  const nestedMatch = Object.keys(RIBBONS).find((path) => pathname.startsWith(`${path}/`));
+  return nestedMatch ? RIBBONS[nestedMatch] : undefined;
+}
+
 export function AppLayout() {
   const { pathname } = useLocation();
-  const Ribbon = RIBBONS[pathname];
+  const Ribbon = findRibbon(pathname);
 
   return (
     <div className="relative overflow-hidden min-h-screen flex flex-col bg-page-bg font-inter">
