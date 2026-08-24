@@ -10,6 +10,11 @@ export async function getAdminNews(params = {}) {
   return data;
 }
 
+export async function getNews(params = {}) {
+  const { data } = await api.get("/news", { params });
+  return data;
+}
+
 export async function getNewsById(id) {
   const { data } = await api.get(`/news/${id}`);
   return data;
