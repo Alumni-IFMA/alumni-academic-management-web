@@ -4,12 +4,14 @@ import { DecorativeRibbon } from "../pages/Home/components/DecorativeRibbon";
 import { DiplomaRibbon } from "../pages/Diploma/components/DiplomaRibbon";
 import { NetworkRibbon } from "../pages/Network/components/NetworkRibbon";
 import { NewsRibbon } from "../pages/News/components/NewsRibbon";
+import { ContactRibbon } from "../pages/Contact/components/ContactRibbon";
 
 const RIBBONS = {
   "/home": DecorativeRibbon,
   "/diploma": DiplomaRibbon,
   "/rede": NetworkRibbon,
   "/news": NewsRibbon,
+  "/contact": ContactRibbon,
 };
 
 export function AppLayout() {
