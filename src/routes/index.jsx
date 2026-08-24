@@ -17,6 +17,7 @@ import { AdminNewsForm } from "../pages/AdminNewsForm";
 import { AdminLayout } from "../layouts/AdminLayout";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import RedeAlumni from "../pages/Network/RedeAlumni";
+import { Contact } from "../pages/Contact";
 
 function PrivateRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -47,6 +48,7 @@ function AppRoutes() {
         <Route path="/rede" element={<RedeAlumni />} />
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
+        <Route path="/contact" element={<Contact />} />
       </Route>
       <Route
         path="/opportunities"
