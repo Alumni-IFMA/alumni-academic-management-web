@@ -1,15 +1,19 @@
-import { deriveNewsStatus, formatPublishedAt } from "../../utils/newsStatus";
+import { deriveNewsStatus, formatPublishedAt, type NewsStatus } from "../../utils/newsStatus";
+import type { NewsRawDto } from "../../services/newsService";
+import type { NewsListItem } from "../News/mapNews";
+
+export type AdminNewsItem = NewsListItem & { status: NewsStatus };
 
 const DESCRIPTION_FALLBACK_LENGTH = 150;
 
-function fallbackDescription(content) {
+function fallbackDescription(content?: string | null): string {
   if (!content) return "";
   return content.length > DESCRIPTION_FALLBACK_LENGTH
     ? `${content.slice(0, DESCRIPTION_FALLBACK_LENGTH)}...`
     : content;
 }
 
-export function mapAdminNews(dto) {
+export function mapAdminNews(dto: NewsRawDto): AdminNewsItem {
   const status = deriveNewsStatus({ draft: dto.draft, publishedAt: dto.publishedAt });
 
   return {

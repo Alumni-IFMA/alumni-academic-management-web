@@ -8,8 +8,8 @@ export interface JobRawDto {
   location: string;
   createdAt?: number[] | null;
   description?: string;
-  workplaceType?: "REMOTE" | "HYBRID" | "ON_SITE";
-  experienceLevel?: "INTERNSHIP" | "JUNIOR" | "MID" | "SENIOR";
+  workplaceType?: "REMOTE" | "HYBRID" | "ON_SITE" | null;
+  experienceLevel?: "INTERNSHIP" | "JUNIOR" | "MID" | "SENIOR" | null;
   requirements?: string[];
   benefits?: string[];
 }

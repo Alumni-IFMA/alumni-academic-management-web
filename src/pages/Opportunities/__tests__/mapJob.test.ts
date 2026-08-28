@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { mapJob } from "../mapJob";
+import type { JobRawDto } from "../../../services/jobsService";
 
 describe("mapJob", () => {
   afterEach(() => vi.useRealTimers());
@@ -10,21 +11,17 @@ describe("mapJob", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2026, 7, 3, 12, 0, 0));
 
-    const dto = {
+    const dto: JobRawDto = {
       id: 2,
       title: "Desenvolvedor Java",
       company: "Empresa Supermercado carvalho",
       companyLogoUrl: "https://empresa.com/logo.png",
       description: "Vaga para desenvolvedor Java Sênior",
       location: "São Paulo, SP",
-      area: "Tecnologia",
       workplaceType: "HYBRID",
       experienceLevel: "SENIOR",
-      salary: 12000,
-      externalLink: null,
       requirements: ["Java", "Spring"],
       benefits: ["VR"],
-      active: true,
       createdAt: [2026, 8, 1, 17, 49, 56, 105229000],
     };
 
@@ -49,7 +46,7 @@ describe("mapJob", () => {
   });
 
   it("omits missing workplaceType/experienceLevel tags gracefully", () => {
-    const dto = {
+    const dto: JobRawDto = {
       id: 3,
       title: "Dev",
       company: "Empresa",
@@ -69,7 +66,7 @@ describe("mapJob", () => {
   });
 
   it("defaults requirements/benefits to empty arrays when absent", () => {
-    const dto = {
+    const dto: JobRawDto = {
       id: 4,
       title: "Dev",
       company: "Empresa",
