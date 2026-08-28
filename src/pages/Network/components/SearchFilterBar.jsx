@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SearchBar } from "../../../components/SearchBar/SearchBar.jsx";
+import { SearchBar } from "../../../components/SearchBar/SearchBar";
 
 const PROFILE_TYPES = [
   { value: "todos", label: "Todos" },

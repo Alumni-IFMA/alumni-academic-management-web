@@ -1,5 +1,5 @@
 import { SlidersHorizontal, MapPin } from "lucide-react";
-import { Dropdown } from "../Dropdown/Dropdown.jsx";
+import { Dropdown } from "../Dropdown/Dropdown";
 import computer from "../../assets/computer-icon.png";
 
 const AREAS = [

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Newspaper } from "lucide-react";
-import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
-import { Dropdown } from "../../components/Dropdown/Dropdown.jsx";
-import { Typography } from "../../components/Typography/Typography.jsx";
-import { NewsListItemCard } from "./components/NewsListItemCard.jsx";
-import { getNews } from "../../services/newsService.js";
-import { mapNews } from "./mapNews.js";
-import { useDebouncedValue } from "../../hooks/useDebouncedValue.js";
+import { SearchBar } from "../../components/SearchBar/SearchBar";
+import { Dropdown } from "../../components/Dropdown/Dropdown";
+import { Typography } from "../../components/Typography/Typography";
+import { NewsListItemCard } from "./components/NewsListItemCard";
+import { getNews } from "../../services/newsService";
+import { mapNews } from "./mapNews";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 
 const PAGE_SIZE = 9;
 const DEBOUNCE_MS = 400;

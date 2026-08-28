@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Dropdown } from "../../components/Dropdown/Dropdown.jsx";
-import { Navbar } from "../../components/Navbar/Navbar.jsx";
-import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
-import { Typography } from "../../components/Typography/Typography.jsx";
-import { FilterCard } from "../../components/FilterCard/FilterCard.jsx";
-import { JobCard } from "../../components/JobCard/JobCard.jsx";
-import { JobDetail } from "../../components/JobDetail/JobDetail.jsx";
+import { Dropdown } from "../../components/Dropdown/Dropdown";
+import { Navbar } from "../../components/Navbar/Navbar";
+import { SearchBar } from "../../components/SearchBar/SearchBar";
+import { Typography } from "../../components/Typography/Typography";
+import { FilterCard } from "../../components/FilterCard/FilterCard";
+import { JobCard } from "../../components/JobCard/JobCard";
+import { JobDetail } from "../../components/JobDetail/JobDetail";
 import { OpportunitiesRibbon } from "./components/OpportunitiesRibbon";
 import { SlidersHorizontal } from "lucide-react";
 import { getJobs, getJobById } from "../../services/jobsService";

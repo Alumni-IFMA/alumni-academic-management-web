@@ -1,4 +1,20 @@
+import type { SelectHTMLAttributes } from "react";
 import arrowDown from "../../assets/arrow-down.png";
+
+export interface DropdownItem {
+  id: string | number;
+  name: string | number;
+}
+
+interface DropdownProps
+  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "defaultValue" | "value" | "size"> {
+  items: DropdownItem[];
+  defaultValue?: string;
+  value?: string;
+  className?: string;
+  bordered?: boolean;
+  size?: "lg" | "sm";
+}
 
 export function Dropdown({
   items,
@@ -8,7 +24,7 @@ export function Dropdown({
   bordered = false,
   size = "lg",
   ...rest
-}) {
+}: DropdownProps) {
   const sizeStyles = {
     lg: "px-6 py-2 text-base",
     sm: "px-4 py-2 text-sm",

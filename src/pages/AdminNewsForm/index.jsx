@@ -4,15 +4,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ImageIcon, Trash2, ArrowLeft, Loader2 } from "lucide-react";
 import { toast, Toaster } from "sonner";
 
-import { Typography } from "../../components/Typography/Typography.jsx";
-import { InputField } from "../../components/InputField/InputField.jsx";
-import { Textarea } from "../../components/Textarea/Textarea.jsx";
-import { DeleteModal } from "../../components/DeleteModal/DeleteModal.jsx";
-import { ScheduleModal } from "../../components/ScheduleModal/ScheduleModal.jsx";
+import { Typography } from "../../components/Typography/Typography";
+import { InputField } from "../../components/InputField/InputField";
+import { Textarea } from "../../components/Textarea/Textarea";
+import { DeleteModal } from "../../components/DeleteModal/DeleteModal";
+import { ScheduleModal } from "../../components/ScheduleModal/ScheduleModal";
 
-import { getNewsById, createNews, updateNews, deleteNews } from "../../services/newsService.js";
-import { buildNewsFormData } from "./buildNewsFormData.js";
-import { deriveNewsStatus } from "../../utils/newsStatus.js";
+import { getNewsById, createNews, updateNews, deleteNews } from "../../services/newsService";
+import { buildNewsFormData } from "./buildNewsFormData";
+import { deriveNewsStatus } from "../../utils/newsStatus";
 
 export function AdminNewsForm() {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import lupa from "../../assets/lupa.png";
+import type { ChangeEventHandler, KeyboardEvent } from "react";
 
 export function SearchBar({
   placeholder = "Pesquise...",
@@ -8,8 +8,15 @@ export function SearchBar({
   onSearch,
   buttonText = "Buscar",
   className = "",
+}: {
+  placeholder?: string;
+  value: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  onSearch?: () => void;
+  buttonText?: string;
+  className?: string;
 }) {
-  function handleKeyDown(e) {
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       onSearch?.();
     }

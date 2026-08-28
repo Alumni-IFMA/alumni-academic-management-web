@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import DOMPurify from "dompurify";
-import { Typography } from "../../components/Typography/Typography.jsx";
-import { getNewsById } from "../../services/newsService.js";
-import { mapNewsDetail } from "./mapNewsDetail.js";
+import { Typography } from "../../components/Typography/Typography";
+import { getNewsById } from "../../services/newsService";
+import { mapNewsDetail } from "./mapNewsDetail";
 
 export function NewsDetail() {
   const { id } = useParams();

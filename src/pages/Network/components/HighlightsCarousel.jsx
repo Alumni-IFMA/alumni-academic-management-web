@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import userService from "../../../services/userService";
 import { useConnection } from "../../../hooks/useConnection";
 import { HighlightCard } from "./HighlightCard";
-import { MOCK_HIGHLIGHTS } from "../mocks/mocksUsers.js";
-import { Typography } from "../../../components/Typography/Typography.jsx";
+import { MOCK_HIGHLIGHTS } from "../mocks/mocksUsers";
+import { Typography } from "../../../components/Typography/Typography";
 
 export function HighlightsCarousel() {
   const [highlights, setHighlights] = useState([]);

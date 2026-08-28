@@ -1,4 +1,4 @@
-import { formatPublishedAt } from "../../utils/newsStatus.js";
+import { formatPublishedAt } from "../../utils/newsStatus";
 
 const DESCRIPTION_FALLBACK_LENGTH = 150;
 

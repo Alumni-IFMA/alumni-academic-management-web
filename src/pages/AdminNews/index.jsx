@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Newspaper, Plus } from "lucide-react";
 import { toast, Toaster } from "sonner";
-import { NewsCard } from "../../components/NewsCard/NewsCard.jsx";
-import { SearchBar } from "../../components/SearchBar/SearchBar.jsx";
-import { Dropdown } from "../../components/Dropdown/Dropdown.jsx";
-import { Typography } from "../../components/Typography/Typography.jsx";
-import { getAdminNews, deleteNews } from "../../services/newsService.js";
-import { mapAdminNews } from "./mapAdminNews.js";
-import { useDebouncedValue } from "../../hooks/useDebouncedValue.js";
+import { NewsCard } from "../../components/NewsCard/NewsCard";
+import { SearchBar } from "../../components/SearchBar/SearchBar";
+import { Dropdown } from "../../components/Dropdown/Dropdown";
+import { Typography } from "../../components/Typography/Typography";
+import { getAdminNews, deleteNews } from "../../services/newsService";
+import { mapAdminNews } from "./mapAdminNews";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 
 const statusFilters = [
   { id: "all", name: "Todas" },

@@ -1,4 +1,4 @@
-import { deriveNewsStatus, formatPublishedAt } from "../../utils/newsStatus.js";
+import { deriveNewsStatus, formatPublishedAt } from "../../utils/newsStatus";
 
 const DESCRIPTION_FALLBACK_LENGTH = 150;
 

@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { StatusBadge } from "../StatusBadge/StatusBadge.jsx";
-import { DeleteModal } from "../DeleteModal/DeleteModal.jsx";
+import { StatusBadge } from "../StatusBadge/StatusBadge";
+import { DeleteModal } from "../DeleteModal/DeleteModal";
 
 export function NewsCard({ news, onEdit, onDelete }) {
   const [deleteOpen, setDeleteOpen] = useState(false);

@@ -4,8 +4,8 @@ import networkAlumni from "../../../services/networkAlumni";
 import { useConnection } from "../../../hooks/useConnection";
 import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 import { SuggestionCard } from "./SuggestionCard";
-import { MOCK_SUGGESTIONS } from "../mocks/mocksUsers.js";
-import { Typography } from "../../../components/Typography/Typography.jsx";
+import { MOCK_SUGGESTIONS } from "../mocks/mocksUsers";
+import { Typography } from "../../../components/Typography/Typography";
 
 export function SuggestionsGrid() {
   const [users, setUsers] = useState([]);

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { ConnectButton } from "../../../components/ConnectButton/ConnectButton.jsx";
-import { Typography } from "../../../components/Typography/Typography.jsx";
+import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
+import { Typography } from "../../../components/Typography/Typography";
 
 import avatar1 from "../../../assets/images/avatar1.svg";
 import avatar2 from "../../../assets/images/avatar2.svg";

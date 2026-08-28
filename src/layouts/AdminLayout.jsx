@@ -1,7 +1,7 @@
 // layouts/AdminLayout.jsx
 import { Outlet, useLocation } from "react-router-dom";
-import { Sidebar } from "../components/Sidebar/Sidebar.jsx";
-import { AdminHeader } from "../components/AdminHeader/AdminHeader.jsx";
+import { Sidebar } from "../components/Sidebar/Sidebar";
+import { AdminHeader } from "../components/AdminHeader/AdminHeader";
 
 const pageTitles = {
   "/admin": "Administrador",
