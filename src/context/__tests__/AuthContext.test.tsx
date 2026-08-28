@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AuthProvider, useAuth } from "../AuthContext";
@@ -8,6 +8,8 @@ vi.mock("../../services/api", () => ({
 }));
 
 import api from "../../services/api";
+
+const mockedApi = api as Mocked<typeof api>;
 
 function ConsumidorDeTeste() {
   const { isAuthenticated, login, logout } = useAuth();
@@ -46,7 +48,7 @@ describe("AuthContext", () => {
   });
 
   it("login armazena o token e define isAuthenticated como true", async () => {
-    api.post.mockResolvedValue({
+    mockedApi.post.mockResolvedValue({
       data: { token: "jwt-123" },
     });
 
@@ -65,9 +67,9 @@ describe("AuthContext", () => {
   });
 
   it("login lança erro quando a API retorna falha", async () => {
-    api.post.mockRejectedValue(new Error("Não autorizado"));
+    mockedApi.post.mockRejectedValue(new Error("Não autorizado"));
 
-    let loginFn;
+    let loginFn: ((email: string, password: string) => Promise<void>) | undefined;
     function Capturador() {
       loginFn = useAuth().login;
       return null;
@@ -79,7 +81,7 @@ describe("AuthContext", () => {
       </AuthProvider>
     );
 
-    await expect(loginFn("u@test.com", "senha123")).rejects.toThrow("Não autorizado");
+    await expect(loginFn!("u@test.com", "senha123")).rejects.toThrow("Não autorizado");
   });
 
   it("logout limpa o token e define isAuthenticated como false", async () => {

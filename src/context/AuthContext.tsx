@@ -1,9 +1,24 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import api from "../services/api";
 
-export const AuthContext = createContext(null);
+interface AuthContextValue {
+  isAuthenticated: boolean;
+  userName: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+}
 
-function decodeJwtPayload(token) {
+interface LoginResponseDto {
+  token: string;
+  name?: string;
+  id?: number;
+  userId?: number;
+  user?: { id?: number };
+}
+
+export const AuthContext = createContext<AuthContextValue | null>(null);
+
+function decodeJwtPayload(token: string): { name?: string } | null {
   try {
     return JSON.parse(atob(token.split(".")[1]));
   } catch {
@@ -11,16 +26,16 @@ function decodeJwtPayload(token) {
   }
 }
 
-export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
-  const [userName, setUserName] = useState(() => {
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
+  const [userName, setUserName] = useState<string | null>(() => {
     const cachedToken = localStorage.getItem("token");
     const nameFromToken = cachedToken ? decodeJwtPayload(cachedToken)?.name : null;
     return nameFromToken ?? localStorage.getItem("userName");
   });
 
-  async function login(email, password) {
-    const { data } = await api.post("/auth/login", {
+  async function login(email: string, password: string) {
+    const { data } = await api.post<LoginResponseDto>("/auth/login", {
       email: email.trim(),
       password: password.trim(),
     });
@@ -34,12 +49,12 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function fetchUserName(loginResponse) {
+  async function fetchUserName(loginResponse: LoginResponseDto): Promise<string | null> {
     const userId = loginResponse.id ?? loginResponse.userId ?? loginResponse.user?.id;
     if (userId == null) return null;
 
     try {
-      const { data: user } = await api.get(`/auth/users/${userId}`);
+      const { data: user } = await api.get<{ name?: string }>(`/auth/users/${userId}`);
       return user?.name ?? null;
     } catch {
       return null;
@@ -67,9 +82,8 @@ export function AuthProvider({ children }) {
   );
 }
 
-export function useAuth() {
+export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
-  if (!context)
-    throw new Error("useAuth deve ser usado dentro de AuthProvider");
+  if (!context) throw new Error("useAuth deve ser usado dentro de AuthProvider");
   return context;
 }

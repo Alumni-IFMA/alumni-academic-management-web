@@ -1,7 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 
-export function useInfiniteScroll({ onIntersect, enabled = true }) {
-  const sentinelRef = useRef(null);
+export function useInfiniteScroll({
+  onIntersect,
+  enabled = true,
+}: {
+  onIntersect: () => void;
+  enabled?: boolean;
+}): RefObject<HTMLDivElement | null> {
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!enabled || !sentinelRef.current) return;
