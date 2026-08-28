@@ -13,6 +13,10 @@ const schema = yup.object({
   email: yup.string().trim().email("Email inválido").required("Email é obrigatório"),
 });
 
+interface ForgotPasswordFormValues {
+  email: string;
+}
+
 export function ForgotPassword() {
   const navigate = useNavigate();
 
@@ -20,18 +24,16 @@ export function ForgotPassword() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<ForgotPasswordFormValues>({ resolver: yupResolver(schema) });
 
-  async function onSubmit({ email }) {
+  async function onSubmit({ email }: ForgotPasswordFormValues) {
     try {
       await forgotPassword({ email });
       navigate("/auth/reset-password/code", { state: { email } });
     } catch (error) {
       console.error("Erro ao solicitar recuperação de senha:", error);
-      toast.error(
-        error.response?.data?.message ??
-          "Não foi possível enviar o código. Verifique o e-mail informado."
-      );
+      const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(message ?? "Não foi possível enviar o código. Verifique o e-mail informado.");
     }
   }
 
@@ -51,7 +53,6 @@ export function ForgotPassword() {
           <InputField
             type="email"
             id="email"
-            name="email"
             placeholder="Digite seu email cadastrado"
             autoComplete="email"
             {...register("email")}

@@ -22,6 +22,8 @@ vi.mock("react-router-dom", async () => {
 import { setPassword } from "../../../services/authService";
 import { toast } from "sonner";
 
+const mockedSetPassword = vi.mocked(setPassword);
+
 function renderPage(initialEntry = "/auth/set-password?token=abc123") {
   return render(
     <MemoryRouter initialEntries={[initialEntry]}>
@@ -58,7 +60,7 @@ describe("SetPassword", () => {
   });
 
   it("chama setPassword com o token da URL e navega para /auth/login em caso de sucesso", async () => {
-    setPassword.mockResolvedValue({ message: "ok" });
+    mockedSetPassword.mockResolvedValue({ message: "ok" });
     renderPage("/auth/set-password?token=abc123");
 
     await userEvent.type(screen.getByPlaceholderText("Digite sua senha"), "senha123");
@@ -72,7 +74,7 @@ describe("SetPassword", () => {
   });
 
   it("exibe toast de erro quando a API rejeita (token inválido/expirado)", async () => {
-    setPassword.mockRejectedValue({ response: { data: { message: "Token expirado" } } });
+    mockedSetPassword.mockRejectedValue({ response: { data: { message: "Token expirado" } } });
     renderPage();
 
     await userEvent.type(screen.getByPlaceholderText("Digite sua senha"), "senha123");
@@ -107,7 +109,7 @@ describe("SetPassword", () => {
   });
 
   it("desabilita o botão Salvar enquanto a requisição está em andamento", async () => {
-    setPassword.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    mockedSetPassword.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
     renderPage();
 
     await userEvent.type(screen.getByPlaceholderText("Digite sua senha"), "senha123");

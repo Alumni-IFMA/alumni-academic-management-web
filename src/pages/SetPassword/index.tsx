@@ -16,12 +16,17 @@ const schema = yup.object({
     .string()
     .required("Senha é obrigatória")
     .min(6, "Senha deve ter pelo menos 6 caracteres")
-    .test("no-spaces", "Senha não pode conter apenas espaços", (value) => value && value.trim().length > 0),
+    .test("no-spaces", "Senha não pode conter apenas espaços", (value) => Boolean(value && value.trim().length > 0)),
   confirmPassword: yup
     .string()
     .required("Confirmação de senha é obrigatória")
     .oneOf([yup.ref("password")], "As senhas não coincidem"),
 });
+
+interface SetPasswordFormValues {
+  password: string;
+  confirmPassword: string;
+}
 
 export function SetPassword() {
   const navigate = useNavigate();
@@ -34,9 +39,9 @@ export function SetPassword() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<SetPasswordFormValues>({ resolver: yupResolver(schema) });
 
-  async function onSubmit({ password }) {
+  async function onSubmit({ password }: SetPasswordFormValues) {
     if (!token) {
       toast.error("Link inválido ou expirado. Solicite um novo e-mail.");
       return;
@@ -48,10 +53,8 @@ export function SetPassword() {
       navigate("/auth/login");
     } catch (error) {
       console.error("Erro ao definir senha:", error);
-      toast.error(
-        error.response?.data?.message ??
-          "Não foi possível definir a senha. O link pode ter expirado."
-      );
+      const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(message ?? "Não foi possível definir a senha. O link pode ter expirado.");
     }
   }
 
@@ -71,7 +74,6 @@ export function SetPassword() {
               <InputField
                 type={showPassword ? "text" : "password"}
                 id="password"
-                name="password"
                 placeholder="Digite sua senha"
                 {...register("password")}
               />
@@ -95,7 +97,6 @@ export function SetPassword() {
               <InputField
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
-                name="confirmPassword"
                 placeholder="Digite a senha novamente"
                 {...register("confirmPassword")}
               />

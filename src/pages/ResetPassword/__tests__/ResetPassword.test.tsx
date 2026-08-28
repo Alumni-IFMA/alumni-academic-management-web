@@ -22,7 +22,14 @@ vi.mock("react-router-dom", async () => {
 import { resetPassword } from "../../../services/authService";
 import { toast } from "sonner";
 
-function renderWithState(state) {
+const mockedResetPassword = vi.mocked(resetPassword);
+
+interface ResetPasswordState {
+  email?: string;
+  code?: string;
+}
+
+function renderWithState(state: ResetPasswordState | undefined) {
   return render(
     <MemoryRouter initialEntries={[{ pathname: "/auth/reset-password", state }]}>
       <ResetPassword />
@@ -65,7 +72,7 @@ describe("ResetPassword", () => {
   });
 
   it("chama resetPassword com o código do state como token e navega para /auth/login", async () => {
-    resetPassword.mockResolvedValue({ message: "ok" });
+    mockedResetPassword.mockResolvedValue({ message: "ok" });
     renderWithState({ email: "user@test.com", code: "123456" });
 
     await userEvent.type(screen.getByPlaceholderText("Digite sua nova senha"), "senha123");
@@ -79,7 +86,7 @@ describe("ResetPassword", () => {
   });
 
   it("exibe toast de erro quando a API rejeita", async () => {
-    resetPassword.mockRejectedValue({ response: { data: { message: "Código expirado" } } });
+    mockedResetPassword.mockRejectedValue({ response: { data: { message: "Código expirado" } } });
     renderWithState({ email: "user@test.com", code: "123456" });
 
     await userEvent.type(screen.getByPlaceholderText("Digite sua nova senha"), "senha123");
@@ -101,7 +108,7 @@ describe("ResetPassword", () => {
   });
 
   it("desabilita o botão Salvar enquanto a requisição está em andamento", async () => {
-    resetPassword.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    mockedResetPassword.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
     renderWithState({ email: "user@test.com", code: "123456" });
 
     await userEvent.type(screen.getByPlaceholderText("Digite sua nova senha"), "senha123");

@@ -4,7 +4,7 @@ import { Button } from "../../components/Button/Button";
 import seta from "../../assets/back-button-register.png";
 import { Typography } from "../../components/Typography/Typography";
 import { RegisterForm } from "./RegisterForm";
-import campusCourseService from "../../services/campusCourseService";
+import campusCourseService, { type CampusCourse } from "../../services/campusCourseService";
 
 const currentYear = new Date().getFullYear();
 
@@ -18,9 +18,9 @@ const graduationYears = Array.from(
 
 export function Register() {
   const navigate = useNavigate();
-  const [campusCourses, setCampusCourses] = useState([]);
+  const [campusCourses, setCampusCourses] = useState<CampusCourse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     campusCourseService

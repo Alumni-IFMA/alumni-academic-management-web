@@ -14,7 +14,15 @@ const schema = yup.object({
   code: yup.string().trim().required("Código é obrigatório"),
 });
 
-function maskEmail(email) {
+interface VerifyResetCodeFormValues {
+  code: string;
+}
+
+interface VerifyResetCodeLocationState {
+  email?: string;
+}
+
+function maskEmail(email: string): string {
   const [local, domain] = email.split("@");
   if (!domain || local.length <= 2) {
     return email;
@@ -28,14 +36,15 @@ function maskEmail(email) {
 export function VerifyResetCode() {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email;
+  const state = location.state as VerifyResetCodeLocationState | null;
+  const email = state?.email;
   const [isResending, setIsResending] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<VerifyResetCodeFormValues>({ resolver: yupResolver(schema) });
 
   useEffect(() => {
     if (!email) {
@@ -44,22 +53,21 @@ export function VerifyResetCode() {
     }
   }, [email, navigate]);
 
-  async function onSubmit({ code }) {
+  async function onSubmit({ code }: VerifyResetCodeFormValues) {
     try {
-      await verifyResetCode({ email, code });
+      await verifyResetCode({ email: email!, code });
       navigate("/auth/reset-password", { state: { email, code } });
     } catch (error) {
       console.error("Erro ao verificar código:", error);
-      toast.error(
-        error.response?.data?.message ?? "Código inválido ou expirado. Tente novamente."
-      );
+      const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(message ?? "Código inválido ou expirado. Tente novamente.");
     }
   }
 
   async function handleResend() {
     setIsResending(true);
     try {
-      await forgotPassword({ email });
+      await forgotPassword({ email: email! });
       toast.success("Código reenviado!");
     } catch (error) {
       console.error("Erro ao reenviar código:", error);
@@ -100,7 +108,6 @@ export function VerifyResetCode() {
           <InputField
             type="text"
             id="code"
-            name="code"
             placeholder="Digite o código recebido por e-mail"
             autoComplete="one-time-code"
             {...register("code")}

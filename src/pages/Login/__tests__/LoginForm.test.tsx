@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
+import type { ReactNode } from "react";
 import { LoginForm } from "../LoginForm";
 import { AuthProvider } from "../../../context/AuthContext";
 
@@ -23,7 +24,9 @@ vi.mock("react-router-dom", async () => {
 import api from "../../../services/api";
 import { toast } from "sonner";
 
-function Wrapper({ children }) {
+const mockedApi = api as Mocked<typeof api>;
+
+function Wrapper({ children }: { children: ReactNode }) {
   return (
     <BrowserRouter>
       <AuthProvider>{children}</AuthProvider>
@@ -59,7 +62,7 @@ describe("LoginForm", () => {
   });
 
   it("chama login e navega para /home em caso de sucesso", async () => {
-    api.post.mockResolvedValue({ data: { token: "jwt-123" } });
+    mockedApi.post.mockResolvedValue({ data: { token: "jwt-123" } });
 
     render(<LoginForm />, { wrapper: Wrapper });
 
@@ -71,7 +74,7 @@ describe("LoginForm", () => {
   });
 
   it("exibe toast de erro quando as credenciais são inválidas", async () => {
-    api.post.mockRejectedValue(new Error("Não autorizado"));
+    mockedApi.post.mockRejectedValue(new Error("Não autorizado"));
 
     render(<LoginForm />, { wrapper: Wrapper });
 
@@ -85,7 +88,7 @@ describe("LoginForm", () => {
   });
 
   it("desabilita o botão de submit enquanto a requisição está em andamento", async () => {
-    api.post.mockImplementation(
+    mockedApi.post.mockImplementation(
       () => new Promise((resolve) => setTimeout(resolve, 100))
     );
 

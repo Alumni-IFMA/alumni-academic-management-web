@@ -17,9 +17,14 @@ const schema = yup.object({
     .required("Senha é obrigatória")  // ← Verifica vazio PRIMEIRO
     .min(6, "Senha deve ter pelo menos 6 caracteres")
     .test('no-spaces', 'Senha não pode conter apenas espaços', (value) => {
-      return value && value.trim().length > 0;  // ← Rejeita 6 espaços
+      return Boolean(value && value.trim().length > 0);  // ← Rejeita 6 espaços
     }),
 });
+
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
 
 export function LoginForm() {
   const { login } = useAuth();
@@ -28,9 +33,9 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<LoginFormValues>({ resolver: yupResolver(schema) });
 
-  async function onSubmit({ email, password }) {
+  async function onSubmit({ email, password }: LoginFormValues) {
     try {
       await login(email, password);
       navigate("/home");
@@ -52,7 +57,6 @@ export function LoginForm() {
           <InputField
             type="email"
             id="email"
-            name="email"
             placeholder="Digite seu email"
             autoComplete="email"
             maxLength={50}
@@ -66,9 +70,8 @@ export function LoginForm() {
           <Label htmlFor="pass">Senha</Label>
           <InputField
            type="password" 
-           id="password" 
-           name="password" 
-           placeholder="Digite sua senha" 
+           id="password"
+           placeholder="Digite sua senha"
            {...register("password")} 
           />
           {errors.password && (

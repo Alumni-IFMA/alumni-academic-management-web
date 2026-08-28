@@ -16,18 +16,29 @@ const schema = yup.object({
     .string()
     .required("Senha é obrigatória")
     .min(6, "Senha deve ter pelo menos 6 caracteres")
-    .test("no-spaces", "Senha não pode conter apenas espaços", (value) => value && value.trim().length > 0),
+    .test("no-spaces", "Senha não pode conter apenas espaços", (value) => Boolean(value && value.trim().length > 0)),
   confirmPassword: yup
     .string()
     .required("Confirmação de senha é obrigatória")
     .oneOf([yup.ref("password")], "As senhas não coincidem"),
 });
 
+interface ResetPasswordFormValues {
+  password: string;
+  confirmPassword: string;
+}
+
+interface ResetPasswordLocationState {
+  email?: string;
+  code?: string;
+}
+
 export function ResetPassword() {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email;
-  const code = location.state?.code;
+  const state = location.state as ResetPasswordLocationState | null;
+  const email = state?.email;
+  const code = state?.code;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -35,7 +46,7 @@ export function ResetPassword() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm<ResetPasswordFormValues>({ resolver: yupResolver(schema) });
 
   useEffect(() => {
     if (!email || !code) {
@@ -44,17 +55,15 @@ export function ResetPassword() {
     }
   }, [email, code, navigate]);
 
-  async function onSubmit({ password }) {
+  async function onSubmit({ password }: ResetPasswordFormValues) {
     try {
-      await resetPassword({ token: code, newPassword: password });
+      await resetPassword({ token: code!, newPassword: password });
       toast.success("Senha redefinida com sucesso!");
       navigate("/auth/login");
     } catch (error) {
       console.error("Erro ao redefinir senha:", error);
-      toast.error(
-        error.response?.data?.message ??
-          "Não foi possível redefinir a senha. O código pode ter expirado."
-      );
+      const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(message ?? "Não foi possível redefinir a senha. O código pode ter expirado.");
     }
   }
 
@@ -80,7 +89,6 @@ export function ResetPassword() {
               <InputField
                 type={showPassword ? "text" : "password"}
                 id="password"
-                name="password"
                 placeholder="Digite sua nova senha"
                 {...register("password")}
               />
@@ -104,7 +112,6 @@ export function ResetPassword() {
               <InputField
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
-                name="confirmPassword"
                 placeholder="Digite a senha novamente"
                 {...register("confirmPassword")}
               />

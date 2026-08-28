@@ -23,7 +23,14 @@ vi.mock("react-router-dom", async () => {
 import { verifyResetCode, forgotPassword } from "../../../services/authService";
 import { toast } from "sonner";
 
-function renderWithState(state) {
+const mockedVerifyResetCode = vi.mocked(verifyResetCode);
+const mockedForgotPassword = vi.mocked(forgotPassword);
+
+interface VerifyResetCodeState {
+  email?: string;
+}
+
+function renderWithState(state: VerifyResetCodeState | undefined) {
   return render(
     <MemoryRouter initialEntries={[{ pathname: "/auth/reset-password/code", state }]}>
       <VerifyResetCode />
@@ -52,7 +59,7 @@ describe("VerifyResetCode", () => {
   });
 
   it("chama verifyResetCode com o email do state e navega para reset-password com email e código", async () => {
-    verifyResetCode.mockResolvedValue({ message: "ok" });
+    mockedVerifyResetCode.mockResolvedValue({ message: "ok" });
     renderWithState({ email: "user@test.com" });
 
     await userEvent.type(
@@ -70,7 +77,7 @@ describe("VerifyResetCode", () => {
   });
 
   it("exibe toast de erro quando o código é inválido", async () => {
-    verifyResetCode.mockRejectedValue({ response: { data: { message: "Código inválido" } } });
+    mockedVerifyResetCode.mockRejectedValue({ response: { data: { message: "Código inválido" } } });
     renderWithState({ email: "user@test.com" });
 
     await userEvent.type(
@@ -92,7 +99,7 @@ describe("VerifyResetCode", () => {
   });
 
   it("desabilita o botão Verificar enquanto a requisição está em andamento", async () => {
-    verifyResetCode.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    mockedVerifyResetCode.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
     renderWithState({ email: "user@test.com" });
 
     await userEvent.type(
@@ -121,7 +128,7 @@ describe("VerifyResetCode", () => {
   });
 
   it("botão Reenviar o código chama forgotPassword com o email do state", async () => {
-    forgotPassword.mockResolvedValue({ message: "ok" });
+    mockedForgotPassword.mockResolvedValue({ message: "ok" });
     renderWithState({ email: "user@test.com" });
 
     await userEvent.click(screen.getByRole("button", { name: /reenviar o código/i }));

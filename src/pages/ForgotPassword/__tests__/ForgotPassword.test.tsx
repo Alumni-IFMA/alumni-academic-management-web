@@ -22,6 +22,8 @@ vi.mock("react-router-dom", async () => {
 import { forgotPassword } from "../../../services/authService";
 import { toast } from "sonner";
 
+const mockedForgotPassword = vi.mocked(forgotPassword);
+
 function renderPage() {
   return render(
     <MemoryRouter initialEntries={["/auth/forgot-password"]}>
@@ -45,7 +47,7 @@ describe("ForgotPassword", () => {
   });
 
   it("chama forgotPassword e navega para a tela de código com o email no state", async () => {
-    forgotPassword.mockResolvedValue({ message: "ok" });
+    mockedForgotPassword.mockResolvedValue({ message: "ok" });
     renderPage();
 
     await userEvent.type(
@@ -63,7 +65,7 @@ describe("ForgotPassword", () => {
   });
 
   it("exibe toast de erro quando a API rejeita", async () => {
-    forgotPassword.mockRejectedValue({ response: { data: { message: "Email não encontrado" } } });
+    mockedForgotPassword.mockRejectedValue({ response: { data: { message: "Email não encontrado" } } });
     renderPage();
 
     await userEvent.type(
@@ -86,7 +88,7 @@ describe("ForgotPassword", () => {
   });
 
   it("desabilita o botão Enviar enquanto a requisição está em andamento", async () => {
-    forgotPassword.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    mockedForgotPassword.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
     renderPage();
 
     await userEvent.type(

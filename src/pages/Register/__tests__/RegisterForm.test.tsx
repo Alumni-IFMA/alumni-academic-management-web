@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
@@ -15,6 +15,8 @@ vi.mock("sonner", () => ({
 
 import userService from "../../../services/userService";
 import { toast } from "sonner";
+
+const mockedUserService = userService as Mocked<typeof userService>;
 
 const campusCourses = [
   { id: 1, campusName: "Imperatriz", courseName: "Informática", modality: "INTEGRADO" },
@@ -33,12 +35,13 @@ function renderForm() {
         campusCourses={campusCourses}
         campuses={campuses}
         graduationYears={graduationYears}
+        disabled={false}
       />
     </MemoryRouter>
   );
 }
 
-async function fillValidForm(user) {
+async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByPlaceholderText("Digite o nome"), "Maria Silva");
   await user.type(screen.getByPlaceholderText("000.000.000-00"), "12345678901");
   await user.type(screen.getByPlaceholderText("exemplo@email.com"), "maria@example.com");
@@ -92,7 +95,7 @@ describe("RegisterForm", () => {
   });
 
   it("chama userService.register com o payload correto e mostra mensagem de sucesso", async () => {
-    userService.register.mockResolvedValue({ id: 1 });
+    mockedUserService.register.mockResolvedValue({ id: 1 });
     const user = userEvent.setup();
     renderForm();
 
@@ -117,7 +120,7 @@ describe("RegisterForm", () => {
   });
 
   it("exibe toast de erro quando a API retorna CPF duplicado", async () => {
-    userService.register.mockRejectedValue({
+    mockedUserService.register.mockRejectedValue({
       response: { data: { message: "User already exists" } },
     });
     const user = userEvent.setup();
@@ -132,7 +135,7 @@ describe("RegisterForm", () => {
   });
 
   it("desabilita o botão de submit enquanto a requisição está em andamento", async () => {
-    userService.register.mockImplementation(
+    mockedUserService.register.mockImplementation(
       () => new Promise((resolve) => setTimeout(resolve, 100))
     );
     const user = userEvent.setup();

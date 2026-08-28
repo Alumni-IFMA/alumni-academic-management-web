@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, type Resolver } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast, Toaster } from "sonner";
 import { InputField } from "../../components/InputField/InputField";
@@ -10,9 +10,28 @@ import { Dropdown } from "../../components/Dropdown/Dropdown";
 import { Button } from "../../components/Button/Button";
 import { Typography } from "../../components/Typography/Typography";
 import userService from "../../services/userService";
+import type { CampusCourse } from "../../services/campusCourseService";
 import { registerFormSchema } from "./registerFormSchema";
 
-export function RegisterForm({ campusCourses, campuses, graduationYears, disabled }) {
+interface RegisterFormProps {
+  campusCourses: CampusCourse[];
+  campuses: { id: string; name: string }[];
+  graduationYears: { id: number; name: number }[];
+  disabled: boolean;
+}
+
+interface RegisterFormValues {
+  name: string;
+  cpf: string;
+  email: string;
+  campus: string;
+  modality: string;
+  lastCourse: string;
+  graduationYear: string;
+  yearEntry: string;
+}
+
+export function RegisterForm({ campusCourses, campuses, graduationYears, disabled }: RegisterFormProps) {
   const [successMessage, setSuccessMessage] = useState(false);
 
   const {
@@ -23,8 +42,8 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: yupResolver(registerFormSchema),
+  } = useForm<RegisterFormValues>({
+    resolver: yupResolver(registerFormSchema) as unknown as Resolver<RegisterFormValues>,
     defaultValues: {
       name: "",
       cpf: "",
@@ -72,16 +91,16 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
     setValue("yearEntry", "");
   }, [graduationYear, setValue]);
 
-  async function onSubmit(data) {
+  async function onSubmit(data: RegisterFormValues) {
     setSuccessMessage(false);
 
     const payload = {
       name: data.name.trim(),
       cpf: data.cpf,
       email: data.email.trim(),
-      campusCourseId: data.lastCourse,
-      entryYear: data.yearEntry,
-      conclusionYear: data.graduationYear,
+      campusCourseId: Number(data.lastCourse),
+      entryYear: Number(data.yearEntry),
+      conclusionYear: Number(data.graduationYear),
     };
 
     try {
@@ -90,10 +109,8 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
       reset();
     } catch (error) {
       console.error("Erro no cadastro:", error);
-      toast.error(
-        error.response?.data?.message ??
-          "Não foi possível concluir o cadastro. Tente novamente."
-      );
+      const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(message ?? "Não foi possível concluir o cadastro. Tente novamente.");
     }
   }
 
@@ -108,7 +125,6 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
             <InputField
               type="text"
               id="name"
-              name="name"
               placeholder="Digite o nome"
               {...register("name")}
             />
@@ -122,7 +138,6 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
             <InputField
               type="text"
               id="cpf"
-              name="cpf"
               placeholder="000.000.000-00"
               inputMode="numeric"
               maxLength={14}
@@ -139,7 +154,6 @@ export function RegisterForm({ campusCourses, campuses, graduationYears, disable
             <InputField
               type="email"
               id="email"
-              name="email"
               placeholder="exemplo@email.com"
               autoComplete="email"
               maxLength={50}
