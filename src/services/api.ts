@@ -1,5 +1,12 @@
 import axios from "axios";
 
+export interface Page<T> {
+  content: T[];
+  totalPages: number;
+  number: number;
+  last: boolean;
+}
+
 const BASE_URL = import.meta.env.VITE_API_URL || "<http://localhost:8080>";
 
 const api = axios.create({ baseURL: BASE_URL });

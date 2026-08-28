@@ -3,7 +3,7 @@ import MockAdapter from "axios-mock-adapter";
 import api from "../api";
 
 describe("interceptors do api", () => {
-  let mock;
+  let mock: MockAdapter;
 
   beforeEach(() => {
     mock = new MockAdapter(api);
@@ -35,7 +35,9 @@ describe("interceptors do api", () => {
     localStorage.setItem("token", "jwt-expirado");
     mock.onGet("/protegido").reply(401);
 
+    // @ts-expect-error - substitui window.location por um stub para capturar o redirect
     delete window.location;
+    // @ts-expect-error - stub mínimo, só o campo href é lido pelo código sob teste
     window.location = { href: "" };
 
     try {
