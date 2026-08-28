@@ -3,7 +3,7 @@ import { parseBackendDate, deriveNewsStatus, formatPublishedAt } from "../newsSt
 
 describe("parseBackendDate", () => {
   it("parses a Java array date (1-indexed month)", () => {
-    const result = parseBackendDate([2026, 8, 1, 17, 51, 16, 524174000]);
+    const result = parseBackendDate([2026, 8, 1, 17, 51, 16, 524174000])!;
     expect(result.getFullYear()).toBe(2026);
     expect(result.getMonth()).toBe(7); // 0-indexed: August
     expect(result.getDate()).toBe(1);
@@ -12,7 +12,7 @@ describe("parseBackendDate", () => {
   });
 
   it("parses an ISO string", () => {
-    const result = parseBackendDate("2026-08-01T17:51:16");
+    const result = parseBackendDate("2026-08-01T17:51:16")!;
     expect(result.getFullYear()).toBe(2026);
     expect(result.getMonth()).toBe(7);
     expect(result.getDate()).toBe(1);

@@ -1,6 +1,9 @@
 import { format } from "date-fns";
 
-export function parseBackendDate(value) {
+export type NewsStatus = "draft" | "scheduled" | "published";
+export type BackendDate = string | number[] | null | undefined;
+
+export function parseBackendDate(value: BackendDate): Date | null {
   if (value == null) return null;
 
   if (Array.isArray(value)) {
@@ -12,7 +15,13 @@ export function parseBackendDate(value) {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
-export function deriveNewsStatus({ draft, publishedAt }) {
+export function deriveNewsStatus({
+  draft,
+  publishedAt,
+}: {
+  draft: boolean;
+  publishedAt?: BackendDate;
+}): NewsStatus {
   if (draft) return "draft";
 
   const parsedDate = parseBackendDate(publishedAt);
@@ -21,7 +30,7 @@ export function deriveNewsStatus({ draft, publishedAt }) {
   return "published";
 }
 
-export function formatPublishedAt(publishedAt, fallbackDate) {
+export function formatPublishedAt(publishedAt?: BackendDate, fallbackDate?: BackendDate): string {
   const parsedDate = parseBackendDate(publishedAt) ?? parseBackendDate(fallbackDate);
   return parsedDate ? format(parsedDate, "dd/MM/yyyy") : "Não publicado";
 }
