@@ -23,9 +23,9 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [hasNotifications, setHasNotifications] = useState(false);
+  const [hasNotifications] = useState(false);
   const lastScrollY = useRef(0);
-  const profileRef = useRef(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -44,8 +44,8 @@ export function Navbar() {
   useEffect(() => {
     if (!profileOpen) return;
 
-    function handleClickOutside(e) {
-      if (profileRef.current && !profileRef.current.contains(e.target)) {
+    function handleClickOutside(e: MouseEvent) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
         setProfileOpen(false);
       }
     }

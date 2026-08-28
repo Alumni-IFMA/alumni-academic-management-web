@@ -1,6 +1,27 @@
 import { MapPin, Clock, Bookmark, Share2 } from "lucide-react";
 
-export function JobDetail({ job, loading = false, error = null }) {
+export interface JobDetailData {
+  id: number;
+  companyLogo?: string | null;
+  companyName: string;
+  title: string;
+  location: string;
+  postedAt: string;
+  tags: string[];
+  description: string;
+  requirements?: string[];
+  benefits?: string[];
+}
+
+export function JobDetail({
+  job,
+  loading = false,
+  error = null,
+}: {
+  job: JobDetailData | null;
+  loading?: boolean;
+  error?: string | null;
+}) {
   if (loading) {
     return (
       <div className="flex-1 bg-white rounded-2xl shadow-md p-6 flex items-center justify-center">

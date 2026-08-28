@@ -11,6 +11,12 @@ export function ScheduleModal({
   onConfirm,
   selectedDate,
   onSelectDate,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  selectedDate: Date | undefined;
+  onSelectDate: (date: Date | undefined) => void;
 }) {
   if (!isOpen) return null;
 

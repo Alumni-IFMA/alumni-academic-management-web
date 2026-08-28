@@ -3,7 +3,7 @@ import lua from "../../assets/lua.png";
 import sino from "../../assets/sino.png";
 import kenia from "../../assets/kenia.png";
 
-export function AdminHeader({ title }) {
+export function AdminHeader({ title }: { title: string }) {
   return (
     <header className="w-full h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-8 font-poppins shrink-0">
       {/* Título da página */}

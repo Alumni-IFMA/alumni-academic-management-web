@@ -1,13 +1,22 @@
 import { Button } from "../Button/Button";
+import type { ConnectStatus } from "../../hooks/useConnection";
 
-const LABELS = {
+const LABELS: Record<ConnectStatus, string> = {
   idle: "Conectar",
   pending: "Enviando...",
   sent: "Solicitado",
   error: "Tentar de novo",
 };
 
-export function ConnectButton({ status, onClick, className = "" }) {
+export function ConnectButton({
+  status,
+  onClick,
+  className = "",
+}: {
+  status: ConnectStatus;
+  onClick: () => void;
+  className?: string;
+}) {
   const disabled = status === "pending" || status === "sent";
 
   return (

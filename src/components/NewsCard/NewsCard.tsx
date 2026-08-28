@@ -1,11 +1,28 @@
 // components/NewsCard/NewsCard.jsx
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
-import { toast } from "sonner";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
 import { DeleteModal } from "../DeleteModal/DeleteModal";
+import type { NewsStatus } from "../../utils/newsStatus";
 
-export function NewsCard({ news, onEdit, onDelete }) {
+export interface AdminNewsCardData {
+  id: number;
+  title: string;
+  description: string;
+  coverImage?: string | null;
+  status: NewsStatus;
+  publishedAt: string;
+}
+
+export function NewsCard({
+  news,
+  onEdit,
+  onDelete,
+}: {
+  news: AdminNewsCardData;
+  onEdit: (id: number) => void;
+  onDelete?: (id: number) => void;
+}) {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   function handleConfirmDelete() {
@@ -19,7 +36,7 @@ export function NewsCard({ news, onEdit, onDelete }) {
         {/* Imagem com badge */}
         <div className="relative">
           <img
-            src={news.coverImage}
+            src={news.coverImage ?? undefined}
             alt={news.title}
             className="w-full h-40 object-cover"
           />

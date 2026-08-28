@@ -1,6 +1,7 @@
 // components/StatusBadge/StatusBadge.jsx
+import type { NewsStatus } from "../../utils/newsStatus";
 
-const statusConfig = {
+const statusConfig: Record<NewsStatus, { label: string; className: string }> = {
   published: {
     label: "Publicado",
     className: "bg-green text-white",
@@ -15,7 +16,7 @@ const statusConfig = {
   },
 };
 
-export function StatusBadge({ status }) {
+export function StatusBadge({ status }: { status: NewsStatus }) {
   const config = statusConfig[status] ?? statusConfig.draft;
 
   return (

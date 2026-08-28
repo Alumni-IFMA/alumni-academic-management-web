@@ -1,7 +1,15 @@
 // components/DeleteModal/DeleteModal.jsx
 import { X } from "lucide-react";
 
-export function DeleteModal({ isOpen, onClose, onConfirm }) {
+export function DeleteModal({
+  isOpen,
+  onClose,
+  onConfirm,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
   if (!isOpen) return null;
 
   return (

@@ -1,6 +1,6 @@
 import { User, Shield, LogOut } from "lucide-react";
 
-function LinkedinIcon({ size = 16, className }) {
+function LinkedinIcon({ size = 16, className }: { size?: number; className?: string }) {
   return (
     <svg
       width={size}
@@ -20,7 +20,15 @@ const MENU_ITEMS = [
   { icon: Shield, label: "Privacidade" },
 ];
 
-export function ProfileMenu({ userName, avatarSrc, onLogout }) {
+export function ProfileMenu({
+  userName,
+  avatarSrc,
+  onLogout,
+}: {
+  userName: string | null;
+  avatarSrc: string;
+  onLogout: () => void;
+}) {
   return (
     <div className="absolute right-0 top-full mt-3 w-96 bg-dark-green text-white rounded-2xl shadow-lg p-5 z-50">
       <div className="flex items-center gap-3 min-w-0 mb-4">

@@ -28,6 +28,16 @@ export function FilterCard({
   onExperienceToggle,
   remoteOnly,
   onRemoteOnlyChange,
+}: {
+  hideTitle?: boolean;
+  location: string;
+  onLocationChange: (value: string) => void;
+  area: string;
+  onAreaChange: (value: string) => void;
+  experience: string[];
+  onExperienceToggle: (id: string) => void;
+  remoteOnly: boolean;
+  onRemoteOnlyChange: (value: boolean) => void;
 }) {
   return (
     <div className="bg-white rounded-2xl shadow-md p-6 w-[100%] flex flex-col gap-5">

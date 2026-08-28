@@ -1,7 +1,26 @@
 import { Bookmark } from "lucide-react";
 import { MapPin, Clock } from "lucide-react";
 
-export function JobCard({ job, isSelected = false, onClick }) {
+export interface JobCardData {
+  id: number;
+  companyLogo?: string | null;
+  companyName: string;
+  title: string;
+  location: string;
+  postedAt: string;
+  description: string;
+  tags: string[];
+}
+
+export function JobCard({
+  job,
+  isSelected = false,
+  onClick,
+}: {
+  job: JobCardData;
+  isSelected?: boolean;
+  onClick?: () => void;
+}) {
   return (
     <div
       onClick={onClick}
@@ -14,7 +33,7 @@ export function JobCard({ job, isSelected = false, onClick }) {
         <div className="flex items-center gap-2">
           <div className="h-11 w-11 rounded-md bg-gray-200 overflow-hidden">
             <img
-              src={job.companyLogo}
+              src={job.companyLogo ?? undefined}
               alt={job.companyName}
               className="h-full w-full object-cover"
             />
