@@ -15,6 +15,7 @@ function renderAt(path) {
             <Route path="/home" element={<div>Home content</div>} />
             <Route path="/diploma" element={<div>Diploma content</div>} />
             <Route path="/news" element={<div>News content</div>} />
+            <Route path="/news/:id" element={<div>News detail content</div>} />
           </Route>
         </Routes>
       </MemoryRouter>
@@ -39,5 +40,11 @@ describe("AppLayout ribbon", () => {
     const { container } = renderAt("/home");
     expect(screen.getByText("Home content")).toBeInTheDocument();
     expect(container.querySelector("svg[viewBox='0 0 1728 1337']")).toBeInTheDocument();
+  });
+
+  it("also reuses the news ribbon on nested /news/:id routes", () => {
+    const { container } = renderAt("/news/42");
+    expect(screen.getByText("News detail content")).toBeInTheDocument();
+    expect(container.querySelector('svg[viewBox="0 0 1728 1857"]')).toBeInTheDocument();
   });
 });

@@ -11,6 +11,7 @@ import { AuthLayout } from "../layouts/AuthLayout";
 import { AppLayout } from "../layouts/AppLayout";
 import { Opportunities } from "../pages/Opportunities";
 import { News } from "../pages/News";
+import { NewsDetail } from "../pages/NewsDetail";
 import { AdminNews } from "../pages/AdminNews";
 import { AdminNewsForm } from "../pages/AdminNewsForm";
 import { AdminLayout } from "../layouts/AdminLayout";
@@ -46,6 +47,7 @@ function AppRoutes() {
         <Route path="/diploma" element={<Diploma />} />
         <Route path="/rede" element={<RedeAlumni />} />
         <Route path="/news" element={<News />} />
+        <Route path="/news/:id" element={<NewsDetail />} />
         <Route path="/contact" element={<Contact />} />
       </Route>
       <Route
