@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
 import networkAlumni from "../../../services/networkAlumni";
+import type { NetworkUser } from "../../../services/userService";
 import { useConnection } from "../../../hooks/useConnection";
 import { useInfiniteScroll } from "../../../hooks/useInfiniteScroll";
 import { SuggestionCard } from "./SuggestionCard";
@@ -8,40 +8,40 @@ import { MOCK_SUGGESTIONS } from "../mocks/mocksUsers";
 import { Typography } from "../../../components/Typography/Typography";
 
 export function SuggestionsGrid() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<NetworkUser[]>([]);
   const [page, setPage] = useState(0);
   const [isLast, setIsLast] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState<string | null>(null);
   const { connect, statusFor } = useConnection();
 
-  const loadPage = useCallback((targetPage) => {
-  setLoading(true);
-  networkAlumni
-    .getSuggestions({ page: targetPage })
-    .then((data) => {
-      const content = Array.isArray(data) ? data : (data.content ?? []);
-      const last = Array.isArray(data) ? true : (data.last ?? true);
+  const loadPage = useCallback((targetPage: number) => {
+    setLoading(true);
+    networkAlumni
+      .getSuggestions({ page: targetPage })
+      .then((data) => {
+        const content = Array.isArray(data) ? data : (data.content ?? []);
+        const last = Array.isArray(data) ? true : (data.last ?? true);
 
-      if (targetPage === 0 && content.length === 0) {
-        // TODO: remover fallback quando houver dados reais de sugestões em produção
-        setUsers(MOCK_SUGGESTIONS.content);
-        setIsLast(MOCK_SUGGESTIONS.last);
-      } else {
-        setUsers((prev) =>
-          targetPage === 0 ? content : [...prev, ...content],
-        );
-        setIsLast(last);
-      }
-    })
-    .catch(() => {
-      if (targetPage === 0) {
-        setUsers(MOCK_SUGGESTIONS.content);
-        setIsLast(MOCK_SUGGESTIONS.last);
-      }
-    })
-    .finally(() => setLoading(false));
-}, []);
+        if (targetPage === 0 && content.length === 0) {
+          // TODO: remover fallback quando houver dados reais de sugestões em produção
+          setUsers(MOCK_SUGGESTIONS.content);
+          setIsLast(MOCK_SUGGESTIONS.last);
+        } else {
+          setUsers((prev) =>
+            targetPage === 0 ? content : [...prev, ...content],
+          );
+          setIsLast(last);
+        }
+      })
+      .catch(() => {
+        if (targetPage === 0) {
+          setUsers(MOCK_SUGGESTIONS.content);
+          setIsLast(MOCK_SUGGESTIONS.last);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   useEffect(() => {
     loadPage(0);

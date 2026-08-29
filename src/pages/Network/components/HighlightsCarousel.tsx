@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import userService from "../../../services/userService";
+import type { NetworkUser } from "../../../services/userService";
 import { useConnection } from "../../../hooks/useConnection";
 import { HighlightCard } from "./HighlightCard";
 import { MOCK_HIGHLIGHTS } from "../mocks/mocksUsers";
 import { Typography } from "../../../components/Typography/Typography";
 
 export function HighlightsCarousel() {
-  const [highlights, setHighlights] = useState([]);
+  const [highlights, setHighlights] = useState<NetworkUser[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState<string | null>(null);
   const { connect, statusFor } = useConnection();
 
   useEffect(() => {

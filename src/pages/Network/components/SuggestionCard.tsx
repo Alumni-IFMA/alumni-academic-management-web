@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
 import { Typography } from "../../../components/Typography/Typography";
+import type { NetworkUser } from "../../../services/userService";
+import type { ConnectStatus } from "../../../hooks/useConnection";
 
 import avatar1 from "../../../assets/images/avatar1.svg";
 import avatar2 from "../../../assets/images/avatar2.svg";
@@ -10,7 +12,7 @@ import avatar5 from "../../../assets/images/avatar5.svg";
 
 const AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5];
 
-function getAvatar(userId) {
+function getAvatar(userId: number) {
   const index = userId % AVATARS.length;
   return AVATARS[index];
 }
@@ -20,6 +22,11 @@ export function SuggestionCard({
   status,
   onConnect,
   showConnect = true,
+}: {
+  user: NetworkUser;
+  status: ConnectStatus;
+  onConnect: (userId: number) => void;
+  showConnect?: boolean;
 }) {
   const avatar = user.avatarUrl || getAvatar(user.id);
 

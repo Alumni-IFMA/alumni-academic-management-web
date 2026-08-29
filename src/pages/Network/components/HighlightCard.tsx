@@ -1,11 +1,21 @@
 import { Link } from "react-router-dom";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
+import type { NetworkUser } from "../../../services/userService";
+import type { ConnectStatus } from "../../../hooks/useConnection";
 
-export function HighlightCard({ user, status, onConnect }) {
+export function HighlightCard({
+  user,
+  status,
+  onConnect,
+}: {
+  user: NetworkUser;
+  status: ConnectStatus;
+  onConnect: (userId: number) => void;
+}) {
   return (
     <div className="relative h-90 w-60 shrink-0 overflow-hidden rounded-2xl shadow-md snap-start">
       <img
-        src={user.avatarUrl}
+        src={user.avatarUrl ?? undefined}
         alt={user.name}
         className="h-full w-full object-cover"
         loading="lazy"

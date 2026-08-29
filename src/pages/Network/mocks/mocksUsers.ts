@@ -3,9 +3,11 @@ import avatar2 from "../../../assets/images/avatar2.svg";
 import avatar3 from "../../../assets/images/avatar3.svg";
 import avatar4 from "../../../assets/images/avatar4.svg";
 import avatar5 from "../../../assets/images/avatar5.svg";
-import avatarSuggestion from "../../../assets/images/avatar-suggestions.svg"
+import avatarSuggestion from "../../../assets/images/avatar-suggestions.svg";
+import type { NetworkUser } from "../../../services/userService";
+import type { Page } from "../../../services/api";
 
-export const MOCK_HIGHLIGHTS = [
+export const MOCK_HIGHLIGHTS: NetworkUser[] = [
   { id: 1, name: "Kenia Reis", role: "Desenvolvedor(a) frontend", avatarUrl: avatar1 },
   { id: 2, name: "Júlio Reis", role: "Desenvolvedor(a) backend", avatarUrl: avatar2 },
   { id: 3, name: "Kenia Reis", role: "Desenvolvedor(a) frontend", avatarUrl: avatar3 },
@@ -13,7 +15,7 @@ export const MOCK_HIGHLIGHTS = [
   { id: 5, name: "Júlio Reis", role: "Desenvolvedor(a) frontend", avatarUrl: avatar5 },
 ];
 
-export const MOCK_SUGGESTIONS = {
+export const MOCK_SUGGESTIONS: Page<NetworkUser> = {
   content: [
     { id: 101, name: "Júlio Reis", role: "Desenvolvedor(a) frontend", company: "Meta", location: "Imperatriz, MA", avatarUrl: avatarSuggestion },
     { id: 102, name: "Júlio Reis", role: "Desenvolvedor(a) backend", company: "Google", location: "Imperatriz, MA", avatarUrl: avatarSuggestion },
@@ -23,5 +25,7 @@ export const MOCK_SUGGESTIONS = {
     { id: 106, name: "Júlio Reis", role: "Desenvolvedor(a) frontend", company: "Meta", location: "Imperatriz, MA", avatarUrl: avatarSuggestion },
     { id: 107, name: "Júlio Reis", role: "Desenvolvedor(a) backend", company: "Google", location: "Imperatriz, MA", avatarUrl: avatarSuggestion },
   ],
+  totalPages: 1,
+  number: 0,
   last: true,
 };

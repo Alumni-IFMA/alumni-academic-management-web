@@ -7,6 +7,7 @@ export interface NetworkUser {
   company?: string;
   location?: string;
   avatarUrl?: string | null;
+  connected?: boolean;
 }
 
 export interface RegisterPayload {

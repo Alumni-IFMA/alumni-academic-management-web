@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import userService from "../../../services/userService";
+import type { NetworkUser } from "../../../services/userService";
 import { useConnection } from "../../../hooks/useConnection";
 import { SuggestionCard } from "./SuggestionCard";
 
-export function SearchResults({ query, onClear }) {
-  const [results, setResults] = useState([]);
+export function SearchResults({
+  query,
+  onClear,
+}: {
+  query: string;
+  onClear: () => void;
+}) {
+  const [results, setResults] = useState<NetworkUser[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const { connect, statusFor } = useConnection();
 
   useEffect(() => {

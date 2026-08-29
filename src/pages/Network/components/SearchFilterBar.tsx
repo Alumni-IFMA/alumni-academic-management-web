@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { SearchBar } from "../../../components/SearchBar/SearchBar";
 
 const PROFILE_TYPES = [
@@ -8,7 +8,16 @@ const PROFILE_TYPES = [
   { value: "professor", label: "Professores" },
 ];
 
-export function SearchFilterBar({ onSearch }) {
+export interface SearchFilterParams {
+  query: string;
+  profileType: string;
+}
+
+export function SearchFilterBar({
+  onSearch,
+}: {
+  onSearch: (params: SearchFilterParams) => void;
+}) {
   const [query, setQuery] = useState("");
   const [profileType, setProfileType] = useState("todos");
 
@@ -21,7 +30,7 @@ export function SearchFilterBar({ onSearch }) {
       <SearchBar
         placeholder="Mentores, egressos e professores"
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
         onSearch={handleSearch}
         className="flex-1"
       />
@@ -29,7 +38,7 @@ export function SearchFilterBar({ onSearch }) {
       <div className="relative">
         <select
           value={profileType}
-          onChange={(e) => setProfileType(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) => setProfileType(e.target.value)}
           className="w-full appearance-none rounded-3xl bg-white px-5 py-3 pr-9 text-sm text-gray-700 outline-none shadow-[0_-4px_10px_rgba(0,0,0,0.08),0_4px_10px_rgba(0,0,0,0.08)] sm:w-40"
         >
           {PROFILE_TYPES.map((type) => (

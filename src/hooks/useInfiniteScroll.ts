@@ -6,7 +6,7 @@ export function useInfiniteScroll({
 }: {
   onIntersect: () => void;
   enabled?: boolean;
-}): RefObject<HTMLDivElement | null> {
+}): RefObject<HTMLDivElement> {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
