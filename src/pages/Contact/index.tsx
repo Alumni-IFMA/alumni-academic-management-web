@@ -15,28 +15,28 @@ const contactFormSchema = yup.object({
   message: yup.string().trim().required("Mensagem é obrigatória"),
 });
 
+type ContactFormValues = yup.InferType<typeof contactFormSchema>;
+
 export function Contact() {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<ContactFormValues>({
     resolver: yupResolver(contactFormSchema),
     defaultValues: { subject: "", message: "" },
   });
 
-  async function onSubmit(data) {
+  async function onSubmit(data: ContactFormValues) {
     try {
       await sendMessage({ subject: data.subject.trim(), message: data.message.trim() });
       toast.success("Mensagem enviada com sucesso!");
       reset();
     } catch (error) {
       console.error("Erro ao enviar mensagem de contato:", error);
-      toast.error(
-        error.response?.data?.message ??
-          "Não foi possível enviar sua mensagem. Tente novamente."
-      );
+      const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(message ?? "Não foi possível enviar sua mensagem. Tente novamente.");
     }
   }
 
@@ -64,7 +64,6 @@ export function Contact() {
             <InputField
               type="text"
               id="subject"
-              name="subject"
               placeholder="Assunto"
               {...register("subject")}
             />
@@ -77,7 +76,6 @@ export function Contact() {
             <Label htmlFor="message">Sua mensagem</Label>
             <Textarea
               id="message"
-              name="message"
               placeholder="Sua mensagem"
               rows={6}
               {...register("message")}

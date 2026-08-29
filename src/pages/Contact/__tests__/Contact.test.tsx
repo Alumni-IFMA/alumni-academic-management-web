@@ -15,6 +15,8 @@ vi.mock("sonner", () => ({
 import { sendMessage } from "../../../services/supportService";
 import { toast } from "sonner";
 
+const mockedSendMessage = vi.mocked(sendMessage);
+
 function renderPage() {
   return render(<Contact />);
 }
@@ -31,11 +33,11 @@ describe("Contact", () => {
 
     expect(await screen.findByText("Assunto é obrigatório")).toBeInTheDocument();
     expect(await screen.findByText("Mensagem é obrigatória")).toBeInTheDocument();
-    expect(sendMessage).not.toHaveBeenCalled();
+    expect(mockedSendMessage).not.toHaveBeenCalled();
   });
 
   it("envia a mensagem, exibe toast de sucesso e limpa o formulário", async () => {
-    sendMessage.mockResolvedValue({ id: 1 });
+    mockedSendMessage.mockResolvedValue({ id: 1 });
     renderPage();
 
     await userEvent.type(screen.getByPlaceholderText("Assunto"), "Dúvida sobre diploma");
@@ -46,7 +48,7 @@ describe("Contact", () => {
     await userEvent.click(screen.getByRole("button", { name: /enviar mensagem/i }));
 
     await waitFor(() => {
-      expect(sendMessage).toHaveBeenCalledWith({
+      expect(mockedSendMessage).toHaveBeenCalledWith({
         subject: "Dúvida sobre diploma",
         message: "Como solicito a segunda via?",
       });
@@ -58,7 +60,7 @@ describe("Contact", () => {
   });
 
   it("exibe toast de erro quando a API rejeita", async () => {
-    sendMessage.mockRejectedValue({ response: { data: { message: "Falha ao enviar" } } });
+    mockedSendMessage.mockRejectedValue({ response: { data: { message: "Falha ao enviar" } } });
     renderPage();
 
     await userEvent.type(screen.getByPlaceholderText("Assunto"), "Assunto teste");
@@ -69,7 +71,7 @@ describe("Contact", () => {
   });
 
   it("desabilita o botão Enviar mensagem enquanto a requisição está em andamento", async () => {
-    sendMessage.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    mockedSendMessage.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
     renderPage();
 
     await userEvent.type(screen.getByPlaceholderText("Assunto"), "Assunto teste");
