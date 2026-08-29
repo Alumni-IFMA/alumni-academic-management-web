@@ -4,16 +4,17 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import DOMPurify from "dompurify";
 import { Typography } from "../../components/Typography/Typography";
 import { getNewsById } from "../../services/newsService";
-import { mapNewsDetail } from "./mapNewsDetail";
+import { mapNewsDetail, type NewsArticle } from "./mapNewsDetail";
 
 export function NewsDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [news, setNews] = useState(null);
+  const [news, setNews] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!id) return;
     let cancelled = false;
     setLoading(true);
     setLoadError(null);
@@ -60,7 +61,7 @@ export function NewsDetail() {
       {!loading && !loadError && news && (
         <article className="mt-4 bg-white rounded-3xl shadow-sm p-6 sm:p-10">
           <img
-            src={news.coverImage}
+            src={news.coverImage ?? undefined}
             alt={news.title}
             className="w-full max-h-[420px] object-cover rounded-2xl"
           />

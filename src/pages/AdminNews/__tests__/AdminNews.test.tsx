@@ -1,16 +1,20 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mocked } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { AdminNews } from "../index";
 import * as newsService from "../../../services/newsService";
+import type { NewsRawDto } from "../../../services/newsService";
+import type { Page } from "../../../services/api";
 
 vi.mock("../../../services/newsService");
+
+const mockedNewsService = newsService as Mocked<typeof newsService>;
 
 const mockDtos = [
   { id: 1, title: "Seletivo IFMA", summary: "S1", coverImageUrl: "/img1.jpg", draft: false, publishedAt: [2020, 1, 1] },
   { id: 2, title: "Robótica", summary: "S2", coverImageUrl: "/img2.jpg", draft: true, publishedAt: null },
-];
+] as unknown as NewsRawDto[];
 
 function renderAdminNews() {
   return render(
@@ -28,11 +32,11 @@ describe("AdminNews page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Real GET /news returns a Spring Page wrapper, not a bare array.
-    newsService.getAdminNews.mockResolvedValue({ content: mockDtos });
+    mockedNewsService.getAdminNews.mockResolvedValue({ content: mockDtos } as unknown as Page<NewsRawDto>);
   });
 
   it("shows a loading state while fetching", () => {
-    newsService.getAdminNews.mockReturnValue(new Promise(() => {}));
+    mockedNewsService.getAdminNews.mockReturnValue(new Promise(() => {}));
     renderAdminNews();
     expect(screen.getByText(/carregando/i)).toBeInTheDocument();
   });
@@ -46,7 +50,7 @@ describe("AdminNews page", () => {
   });
 
   it("shows a message when the backend returns zero news", async () => {
-    newsService.getAdminNews.mockResolvedValue({ content: [] });
+    mockedNewsService.getAdminNews.mockResolvedValue({ content: [] } as unknown as Page<NewsRawDto>);
     renderAdminNews();
     await waitFor(() => {
       expect(screen.getByText("Nenhuma notícia cadastrada ainda.")).toBeInTheDocument();
@@ -54,7 +58,7 @@ describe("AdminNews page", () => {
   });
 
   it("also renders correctly if the backend ever returns a bare array", async () => {
-    newsService.getAdminNews.mockResolvedValue(mockDtos);
+    mockedNewsService.getAdminNews.mockResolvedValue(mockDtos);
     renderAdminNews();
     await waitFor(() => {
       expect(screen.getByText("Seletivo IFMA")).toBeInTheDocument();
@@ -62,7 +66,7 @@ describe("AdminNews page", () => {
   });
 
   it("shows an error message when the fetch fails", async () => {
-    newsService.getAdminNews.mockRejectedValue(new Error("network error"));
+    mockedNewsService.getAdminNews.mockRejectedValue(new Error("network error"));
     renderAdminNews();
     await waitFor(() => {
       expect(screen.getByText(/não foi possível carregar/i)).toBeInTheDocument();
@@ -91,7 +95,7 @@ describe("AdminNews page", () => {
   });
 
   it("deletes a news item on confirm", async () => {
-    newsService.deleteNews.mockResolvedValue();
+    mockedNewsService.deleteNews.mockResolvedValue();
     renderAdminNews();
     await waitFor(() => expect(screen.getByText("Seletivo IFMA")).toBeInTheDocument());
 
@@ -100,7 +104,7 @@ describe("AdminNews page", () => {
     await userEvent.click(screen.getByRole("button", { name: "Excluir" }));
 
     await waitFor(() => {
-      expect(newsService.deleteNews).toHaveBeenCalledWith(1);
+      expect(mockedNewsService.deleteNews).toHaveBeenCalledWith(1);
       expect(screen.queryByText("Seletivo IFMA")).not.toBeInTheDocument();
     });
   });

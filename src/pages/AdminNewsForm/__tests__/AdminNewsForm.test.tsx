@@ -1,11 +1,14 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mocked } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { AdminNewsForm } from "../index";
 import * as newsService from "../../../services/newsService";
+import type { NewsRawDto } from "../../../services/newsService";
 
 vi.mock("../../../services/newsService");
+
+const mockedNewsService = newsService as Mocked<typeof newsService>;
 
 function renderCreate() {
   return render(
@@ -33,15 +36,15 @@ describe("AdminNewsForm - create mode", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("publishes immediately: calls createNews with draft=false and no publishedAt", async () => {
-    newsService.createNews.mockResolvedValue({ id: 1 });
+    mockedNewsService.createNews.mockResolvedValue({ id: 1 } as unknown as NewsRawDto);
     renderCreate();
 
     await userEvent.type(screen.getByPlaceholderText("Titulo"), "New title");
     await userEvent.type(screen.getByPlaceholderText("Matéria"), "Body");
     await userEvent.click(screen.getByRole("button", { name: "Publicar" }));
 
-    await waitFor(() => expect(newsService.createNews).toHaveBeenCalledTimes(1));
-    const formData = newsService.createNews.mock.calls[0][0];
+    await waitFor(() => expect(mockedNewsService.createNews).toHaveBeenCalledTimes(1));
+    const formData = mockedNewsService.createNews.mock.calls[0][0];
     expect(formData.get("title")).toBe("New title");
     expect(formData.get("draft")).toBe("false");
     expect(formData.has("publishedAt")).toBe(false);
@@ -49,7 +52,7 @@ describe("AdminNewsForm - create mode", () => {
   });
 
   it("includes the Resumo field in the submitted FormData", async () => {
-    newsService.createNews.mockResolvedValue({ id: 1 });
+    mockedNewsService.createNews.mockResolvedValue({ id: 1 } as unknown as NewsRawDto);
     renderCreate();
 
     await userEvent.type(screen.getByPlaceholderText("Titulo"), "New title");
@@ -57,26 +60,26 @@ describe("AdminNewsForm - create mode", () => {
     await userEvent.type(screen.getByPlaceholderText("Matéria"), "Body");
     await userEvent.click(screen.getByRole("button", { name: "Publicar" }));
 
-    await waitFor(() => expect(newsService.createNews).toHaveBeenCalledTimes(1));
-    const formData = newsService.createNews.mock.calls[0][0];
+    await waitFor(() => expect(mockedNewsService.createNews).toHaveBeenCalledTimes(1));
+    const formData = mockedNewsService.createNews.mock.calls[0][0];
     expect(formData.get("summary")).toBe("Short summary");
   });
 
   it("saves as draft: calls createNews with draft=true", async () => {
-    newsService.createNews.mockResolvedValue({ id: 1 });
+    mockedNewsService.createNews.mockResolvedValue({ id: 1 } as unknown as NewsRawDto);
     renderCreate();
 
     await userEvent.type(screen.getByPlaceholderText("Titulo"), "Draft title");
     await userEvent.type(screen.getByPlaceholderText("Matéria"), "Body");
     await userEvent.click(screen.getByRole("button", { name: "Salvar Rascunho" }));
 
-    await waitFor(() => expect(newsService.createNews).toHaveBeenCalledTimes(1));
-    const formData = newsService.createNews.mock.calls[0][0];
+    await waitFor(() => expect(mockedNewsService.createNews).toHaveBeenCalledTimes(1));
+    const formData = mockedNewsService.createNews.mock.calls[0][0];
     expect(formData.get("draft")).toBe("true");
   });
 
   it("disables the submit buttons while submitting", async () => {
-    newsService.createNews.mockReturnValue(new Promise(() => {}));
+    mockedNewsService.createNews.mockReturnValue(new Promise(() => {}));
     renderCreate();
 
     await userEvent.type(screen.getByPlaceholderText("Titulo"), "T");
@@ -91,13 +94,13 @@ describe("AdminNewsForm - edit mode", () => {
   beforeEach(() => vi.clearAllMocks());
 
   it("shows a loading state while fetching the existing news", () => {
-    newsService.getNewsById.mockReturnValue(new Promise(() => {}));
+    mockedNewsService.getNewsById.mockReturnValue(new Promise(() => {}));
     renderEdit();
     expect(screen.getByText(/carregando/i)).toBeInTheDocument();
   });
 
   it("populates the form with fetched data", async () => {
-    newsService.getNewsById.mockResolvedValue({
+    mockedNewsService.getNewsById.mockResolvedValue({
       id: 7,
       title: "Existing",
       summary: "Existing summary",
@@ -116,7 +119,7 @@ describe("AdminNewsForm - edit mode", () => {
   });
 
   it("calls updateNews with the existing id on publish", async () => {
-    newsService.getNewsById.mockResolvedValue({
+    mockedNewsService.getNewsById.mockResolvedValue({
       id: 7,
       title: "Existing",
       content: "Existing body",
@@ -124,17 +127,17 @@ describe("AdminNewsForm - edit mode", () => {
       draft: true,
       publishedAt: null,
     });
-    newsService.updateNews.mockResolvedValue({ id: 7 });
+    mockedNewsService.updateNews.mockResolvedValue({ id: 7 } as unknown as NewsRawDto);
     renderEdit();
 
     await waitFor(() => expect(screen.getByPlaceholderText("Titulo")).toHaveValue("Existing"));
     await userEvent.click(screen.getByRole("button", { name: "Publicar" }));
 
-    await waitFor(() => expect(newsService.updateNews).toHaveBeenCalledWith("7", expect.any(FormData)));
+    await waitFor(() => expect(mockedNewsService.updateNews).toHaveBeenCalledWith("7", expect.any(FormData)));
   });
 
   it("deletes the news on confirm", async () => {
-    newsService.getNewsById.mockResolvedValue({
+    mockedNewsService.getNewsById.mockResolvedValue({
       id: 7,
       title: "Existing",
       content: "Existing body",
@@ -142,7 +145,7 @@ describe("AdminNewsForm - edit mode", () => {
       draft: false,
       publishedAt: null,
     });
-    newsService.deleteNews.mockResolvedValue();
+    mockedNewsService.deleteNews.mockResolvedValue();
     renderEdit();
 
     await waitFor(() => expect(screen.getByPlaceholderText("Titulo")).toHaveValue("Existing"));
@@ -151,7 +154,7 @@ describe("AdminNewsForm - edit mode", () => {
     await userEvent.click(excluirButtons[excluirButtons.length - 1]);
 
     await waitFor(() => {
-      expect(newsService.deleteNews).toHaveBeenCalledWith("7");
+      expect(mockedNewsService.deleteNews).toHaveBeenCalledWith("7");
       expect(screen.getByText("List page")).toBeInTheDocument();
     });
   });

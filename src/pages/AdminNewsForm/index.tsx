@@ -1,5 +1,5 @@
 // pages/AdminNewsForm/AdminNewsForm.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ChangeEvent, type CSSProperties } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageIcon, Trash2, ArrowLeft, Loader2 } from "lucide-react";
 import { toast, Toaster } from "sonner";
@@ -12,7 +12,7 @@ import { ScheduleModal } from "../../components/ScheduleModal/ScheduleModal";
 
 import { getNewsById, createNews, updateNews, deleteNews } from "../../services/newsService";
 import { buildNewsFormData } from "./buildNewsFormData";
-import { deriveNewsStatus } from "../../utils/newsStatus";
+import { deriveNewsStatus, type NewsStatus } from "../../utils/newsStatus";
 
 export function AdminNewsForm() {
   const navigate = useNavigate();
@@ -21,27 +21,27 @@ export function AdminNewsForm() {
 
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
-  const [cover, setCover] = useState(null);
-  const [coverPreview, setCoverPreview] = useState(null);
+  const [cover, setCover] = useState<File | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null | undefined>(null);
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState<NewsStatus | null>(null);
   const [scheduleOpen, setScheduleOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const isPublished = status === "published";
 
   useEffect(() => {
-    if (!isEditing) return;
+    if (!id) return;
 
     getNewsById(id)
       .then((news) => {
         setCoverPreview(news.coverImageUrl);
         setTitle(news.title);
         setSummary(news.summary ?? "");
-        setContent(news.content);
+        setContent(news.content ?? "");
         setStatus(deriveNewsStatus({ draft: news.draft, publishedAt: news.publishedAt }));
       })
       .catch(() => {
@@ -49,16 +49,26 @@ export function AdminNewsForm() {
         navigate("/admin/news");
       })
       .finally(() => setLoading(false));
-  }, [id, isEditing, navigate]);
+  }, [id, navigate]);
 
-  function handleCoverChange(e) {
-    const file = e.target.files[0];
+  function handleCoverChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
     if (!file) return;
     setCover(file);
     setCoverPreview(URL.createObjectURL(file));
   }
 
-  async function submitNews({ draft, publishedAt, successMessage, successStyle }) {
+  async function submitNews({
+    draft,
+    publishedAt,
+    successMessage,
+    successStyle,
+  }: {
+    draft: boolean;
+    publishedAt: Date | null;
+    successMessage: string;
+    successStyle?: CSSProperties;
+  }) {
     setSubmitting(true);
     try {
       const formData = buildNewsFormData({ title, summary, content, draft, publishedAt, coverFile: cover });
@@ -94,7 +104,7 @@ export function AdminNewsForm() {
       successStyle: { background: "#3b82f6", color: "white" },
     });
     setScheduleOpen(false);
-    setSelectedDate(null);
+    setSelectedDate(undefined);
   }
 
   function handlePublish() {
@@ -107,6 +117,7 @@ export function AdminNewsForm() {
   }
 
   async function handleConfirmDelete() {
+    if (!id) return;
     setSubmitting(true);
     try {
       await deleteNews(id);

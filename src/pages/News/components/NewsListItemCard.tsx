@@ -1,7 +1,19 @@
-export function NewsListItemCard({ news, onViewMore }) {
+import type { NewsListItem } from "../mapNews";
+
+export function NewsListItemCard({
+  news,
+  onViewMore,
+}: {
+  news: NewsListItem;
+  onViewMore: () => void;
+}) {
   return (
     <article className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col">
-      <img src={news.coverImage} alt={news.title} className="w-full h-40 object-cover" />
+      <img
+        src={news.coverImage ?? undefined}
+        alt={news.title}
+        className="w-full h-40 object-cover"
+      />
 
       <div className="p-4 flex flex-col gap-2 flex-1">
         <h3 className="font-semibold text-gray-900 text-base leading-snug line-clamp-2">

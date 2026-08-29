@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Newspaper } from "lucide-react";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
 import { Typography } from "../../components/Typography/Typography";
 import { NewsListItemCard } from "./components/NewsListItemCard";
-import { getNews } from "../../services/newsService";
-import { mapNews } from "./mapNews";
+import { getNews, type NewsRawDto } from "../../services/newsService";
+import type { Page } from "../../services/api";
+import { mapNews, type NewsListItem } from "./mapNews";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 
 const PAGE_SIZE = 9;
@@ -17,12 +18,15 @@ const SORT_OPTIONS = [
   { id: "recent", name: "Mais recentes" },
 ];
 
-const SORT_PARAMS = {
+const SORT_PARAMS: Record<string, string | undefined> = {
   all: undefined,
   recent: "publishedAt,desc",
 };
 
-function extractPage(data) {
+function extractPage(data: NewsRawDto[] | Page<NewsRawDto>): {
+  content: NewsRawDto[];
+  last: boolean;
+} {
   return {
     content: Array.isArray(data) ? data : (data?.content ?? []),
     last: Array.isArray(data) ? true : Boolean(data?.last),
@@ -36,12 +40,12 @@ export function News() {
   const debouncedSearch = useDebouncedValue(search, DEBOUNCE_MS);
   const sortParam = SORT_PARAMS[sort];
 
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState<NewsListItem[]>([]);
   const [page, setPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [loadError, setLoadError] = useState(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -108,14 +112,14 @@ export function News() {
           className="sm:w-[65%]"
           placeholder="Procure por notícias"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
           onSearch={handleSearch}
         />
         <Dropdown
           className="sm:w-[35%] rounded-4xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
           items={SORT_OPTIONS}
           value={sort}
-          onChange={(e) => setSort(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) => setSort(e.target.value)}
           size="lg"
         />
       </div>

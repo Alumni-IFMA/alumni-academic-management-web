@@ -1,5 +1,5 @@
 // pages/AdminNews/AdminNews.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Newspaper, Plus } from "lucide-react";
 import { toast, Toaster } from "sonner";
@@ -8,7 +8,8 @@ import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
 import { Typography } from "../../components/Typography/Typography";
 import { getAdminNews, deleteNews } from "../../services/newsService";
-import { mapAdminNews } from "./mapAdminNews";
+import { mapAdminNews, type AdminNewsItem } from "./mapAdminNews";
+import type { NewsStatus } from "../../utils/newsStatus";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 
 const statusFilters = [
@@ -20,11 +21,11 @@ const statusFilters = [
 
 export function AdminNews() {
   const navigate = useNavigate();
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState<AdminNewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | NewsStatus>("all");
 
   const debouncedSearch = useDebouncedValue(search, 400);
 
@@ -47,11 +48,11 @@ export function AdminNews() {
     return matchesSearch && matchesStatus;
   });
 
-  function handleEdit(id) {
+  function handleEdit(id: number) {
     navigate(`/admin/news/edit/${id}`);
   }
 
-  async function handleDelete(id) {
+  async function handleDelete(id: number) {
     try {
       await deleteNews(id);
       setNews((prev) => prev.filter((item) => item.id !== id));
@@ -73,14 +74,16 @@ export function AdminNews() {
           className="flex-1"
           placeholder="Mentores, egressos e professores"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
           onSearch={() => {}}
         />
         <Dropdown
           className="w-48 rounded-4xl shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
           items={statusFilters}
           defaultValue="all"
-          onChange={(value) => setStatusFilter(value)}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            setStatusFilter(e.target.value as "all" | NewsStatus)
+          }
         />
         <button
           onClick={() => navigate("/admin/news/new")}
