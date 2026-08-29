@@ -35,7 +35,7 @@ function renderHome() {
       <MemoryRouter initialEntries={["/home"]}>
         <Routes>
           <Route path="/home" element={<Home />} />
-          <Route path="/network" element={<div>Rede page</div>} />
+          <Route path="/rede" element={<div>Rede page</div>} />
         </Routes>
       </MemoryRouter>
     </AuthContext.Provider>
@@ -82,7 +82,7 @@ describe("Home page", () => {
     });
   });
 
-  it("navigates to /network with search term on search submit", async () => {
+  it("navigates to /rede with search term on search submit", async () => {
     renderHome();
     const input = screen.getByPlaceholderText("Mentores, egressos e professores");
     await userEvent.type(input, "Maria");
