@@ -1,0 +1,50 @@
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { describe, it, expect, vi } from "vitest";
+import { AuthContext } from "../../context/AuthContext";
+import { AppLayout } from "../AppLayout";
+
+const fakeAuth = { isAuthenticated: true, userName: "Kenia", login: vi.fn(), logout: vi.fn() };
+
+function renderAt(path: string) {
+  return render(
+    <AuthContext.Provider value={fakeAuth}>
+      <MemoryRouter initialEntries={[path]}>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route path="/home" element={<div>Home content</div>} />
+            <Route path="/diploma" element={<div>Diploma content</div>} />
+            <Route path="/news" element={<div>News content</div>} />
+            <Route path="/news/:id" element={<div>News detail content</div>} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    </AuthContext.Provider>
+  );
+}
+
+describe("AppLayout ribbon", () => {
+  it("renders the diploma ribbon svg on /diploma", () => {
+    const { container } = renderAt("/diploma");
+    expect(screen.getByText("Diploma content")).toBeInTheDocument();
+    expect(container.querySelector('svg[viewBox="0 0 1583 927"]')).toBeInTheDocument();
+  });
+
+  it("does not render a ribbon svg on routes without one", () => {
+    const { container } = renderAt("/news");
+    expect(screen.getByText("News content")).toBeInTheDocument();
+    expect(container.querySelector('svg[viewBox="0 0 1583 927"]')).not.toBeInTheDocument();
+  });
+
+  it("renders the home ribbon svg on /home", () => {
+    const { container } = renderAt("/home");
+    expect(screen.getByText("Home content")).toBeInTheDocument();
+    expect(container.querySelector("svg[viewBox='0 0 1728 1337']")).toBeInTheDocument();
+  });
+
+  it("also reuses the news ribbon on nested /news/:id routes", () => {
+    const { container } = renderAt("/news/42");
+    expect(screen.getByText("News detail content")).toBeInTheDocument();
+    expect(container.querySelector('svg[viewBox="0 0 1728 1857"]')).toBeInTheDocument();
+  });
+});
