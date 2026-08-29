@@ -99,9 +99,9 @@ export function News() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pb-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16">
       <header className="space-y-1">
-        <Typography variant="h1">Notícias</Typography>
+        <Typography variant="h1" className="!text-4xl md:!text-5xl !font-bold !leading-none">Notícias</Typography>
         <Typography variant="p">
           Fique por dentro das novidades e conquistas da comunidade Alumni IFMA.
         </Typography>

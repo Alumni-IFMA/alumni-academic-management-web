@@ -65,7 +65,7 @@ export function Diploma() {
 
         <Typography
           variant="h1"
-          className="!text-2xl sm:!text-4xl md:!text-5xl text-center px-10 sm:px-14 mb-8"
+          className="!text-2xl sm:!text-4xl md:!text-5xl !font-bold text-center px-10 sm:px-14 mb-8"
         >
           Baixe seu diploma
         </Typography>

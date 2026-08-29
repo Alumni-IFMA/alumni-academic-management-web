@@ -18,10 +18,10 @@ export default function RedeAlumni() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-8 sm:px-8 lg:px-16">
-      <div className="mx-auto max-w-7xl space-y-10">
+    <main className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
+      <div className="space-y-10">
         <header className="space-y-1">
-          <Typography variant="h1" className="">Conecte-se com seus colegas</Typography>
+          <Typography variant="h1" className="!text-4xl md:!text-5xl !font-bold !leading-none">Conecte-se com seus colegas</Typography>
           <Typography variant="p">Descubra pessoas, histórias e oportunidades. Encontre colegas por área de atuação e curso.</Typography>
         </header>
         <SearchFilterBar key={activeSearch ?? "empty"} onSearch={handleSearch} />

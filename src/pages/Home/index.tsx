@@ -19,7 +19,7 @@ export function Home() {
       <ShortcutCards />
 
       {/* Bottom two-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-6 md:px-12 pb-12 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12 items-stretch">
         <div className="lg:col-span-2">
           <NewsSection />
         </div>

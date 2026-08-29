@@ -67,7 +67,7 @@ export function NewsDetail() {
           />
 
           <div className="mt-8 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
-            <Typography variant="h1" className="!text-3xl sm:!text-4xl">
+            <Typography variant="h1" className="!text-3xl sm:!text-4xl !font-bold">
               {news.title}
             </Typography>
             <span className="text-gray-400 text-sm shrink-0">
