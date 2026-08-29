@@ -15,7 +15,7 @@ export function HeroSection({ userName, onSearch }: HeroSectionProps) {
   }
 
   return (
-    <section className="relative px-6 md:px-12 pt-10 pb-8">
+    <section className="relative pt-10 pb-8">
       <h1 className="text-4xl md:text-5xl font-bold text-dark-green mb-3 relative z-10">
         Bem-vindo(a), {userName}!
       </h1>

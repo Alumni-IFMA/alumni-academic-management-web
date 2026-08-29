@@ -41,11 +41,11 @@ export function Contact() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 pt-14">
       <Toaster position="top-center" richColors />
 
       <header className="text-center space-y-1 mb-8">
-        <Typography variant="h1" className="!text-4xl sm:!text-5xl">
+        <Typography variant="h1" className="!text-4xl sm:!text-5xl !font-bold">
           Fale conosco
         </Typography>
         <Typography variant="p" className="!text-base sm:!text-lg">

@@ -62,7 +62,7 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-3 left-0 right-0 z-50 w-[95%] mx-auto px-6 py-2 border border-gray-200 bg-white/70 backdrop-blur-md rounded-3xl shadow-lg transition-transform duration-300 ease-in-out ${
+      className={`fixed top-3 left-0 right-0 z-50 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 border border-gray-200 bg-white/70 backdrop-blur-md rounded-3xl shadow-lg transition-transform duration-300 ease-in-out ${
         hidden && !menuOpen ? "-translate-y-[calc(100%_+_2rem)]" : "translate-y-0"
       }`}
     >

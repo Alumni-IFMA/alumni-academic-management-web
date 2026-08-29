@@ -9,6 +9,15 @@ button:not(:disabled), [role="button"], summary, label[for], select {
   cursor: pointer;
 }
 
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 @theme {
     --color-dark-green: #15351E;
     --color-cambrige-blue: #76BA9D;

@@ -139,19 +139,19 @@ export function Opportunities() {
   };
 
   return (
-     <div className="relative overflow-hidden font-poppins">
+     <div className="relative overflow-hidden font-inter">
       <OpportunitiesRibbon />
       <Navbar />
 
       <div className="relative z-10 max-w-7xl mx-auto">
-      <div className="pt-24 px-6 md:px-12">
-        <Typography variant="h1">Encontre oportunidades</Typography>
+      <div className="pt-[152px] px-4 sm:px-6 lg:px-8">
+        <Typography variant="h1" className="!text-4xl md:!text-5xl !font-bold !leading-none">Encontre oportunidades</Typography>
         <Typography variant="p">
           Explore e encontre uma vaga perfeita para você.
         </Typography>
       </div>
 
-      <div className="mt-6 flex gap-4 items-center px-6 md:px-12">
+      <div className="mt-6 flex gap-4 items-center px-4 sm:px-6 lg:px-8">
         {/* Botão de filtro — visível apenas quando FilterCard está oculto */}
         <button
           onClick={() => setFilterOpen(true)}
@@ -177,7 +177,7 @@ export function Opportunities() {
       </div>
 
       {/* Conteúdo principal */}
-      <div className="mt-6 px-6 md:px-12 flex gap-4 items-start pb-11">
+      <div className="mt-6 px-4 sm:px-6 lg:px-8 flex gap-4 items-start pb-11">
 
         {/* FilterCard fixo em telas grandes */}
         <div className="hidden 2xl:block w-[28%] shrink-0">
