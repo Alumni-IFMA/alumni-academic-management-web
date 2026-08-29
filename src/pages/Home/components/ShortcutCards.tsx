@@ -15,7 +15,7 @@ const CARDS: Card[] = [
     icon: Users,
     title: "Rede Alumni",
     subtitle: "Encontre colegas e mentores",
-    action: { type: "navigate", to: "/network" },
+    action: { type: "navigate", to: "/rede" },
   },
   {
     icon: MessageCircle,

@@ -10,7 +10,7 @@ export function Home() {
   const navigate = useNavigate();
 
   function handleSearch(term: string) {
-    navigate(`/network?q=${encodeURIComponent(term)}`);
+    navigate(`/rede?q=${encodeURIComponent(term)}`);
   }
 
   return (
