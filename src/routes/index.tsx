@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import type { ReactNode } from "react";
 import { Register } from "../pages/Register";
 import { Login } from "../pages/Login";
 import { Home } from "../pages/Home";
@@ -19,7 +20,7 @@ import { AuthProvider, useAuth } from "../context/AuthContext";
 import RedeAlumni from "../pages/Network/RedeAlumni";
 import { Contact } from "../pages/Contact";
 
-function PrivateRoute({ children }) {
+function PrivateRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/auth/login" replace />;
 }

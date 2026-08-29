@@ -1,9 +1,9 @@
-// layouts/AdminLayout.jsx
+// layouts/AdminLayout.tsx
 import { Outlet, useLocation } from "react-router-dom";
 import { Sidebar } from "../components/Sidebar/Sidebar";
 import { AdminHeader } from "../components/AdminHeader/AdminHeader";
 
-const pageTitles = {
+const pageTitles: Record<string, string> = {
   "/admin": "Administrador",
   "/admin/egressos": "Administrador",
   "/admin/vagas": "Administrador",

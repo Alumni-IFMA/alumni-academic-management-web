@@ -6,7 +6,7 @@ import { AppLayout } from "../AppLayout";
 
 const fakeAuth = { isAuthenticated: true, userName: "Kenia", login: vi.fn(), logout: vi.fn() };
 
-function renderAt(path) {
+function renderAt(path: string) {
   return render(
     <AuthContext.Provider value={fakeAuth}>
       <MemoryRouter initialEntries={[path]}>

@@ -44,7 +44,7 @@ export function SearchResults({
     <section>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-dark-green">
-          Resultados para "{query}"
+          Resultados para &quot;{query}&quot;
         </h2>
         <button
           type="button"

@@ -6,7 +6,7 @@ import { NetworkRibbon } from "../pages/Network/components/NetworkRibbon";
 import { NewsRibbon } from "../pages/News/components/NewsRibbon";
 import { ContactRibbon } from "../pages/Contact/components/ContactRibbon";
 
-const RIBBONS = {
+const RIBBONS: Record<string, () => JSX.Element> = {
   "/home": DecorativeRibbon,
   "/diploma": DiplomaRibbon,
   "/rede": NetworkRibbon,
@@ -14,7 +14,7 @@ const RIBBONS = {
   "/contact": ContactRibbon,
 };
 
-function findRibbon(pathname) {
+function findRibbon(pathname: string) {
   if (RIBBONS[pathname]) return RIBBONS[pathname];
   const nestedMatch = Object.keys(RIBBONS).find((path) => pathname.startsWith(`${path}/`));
   return nestedMatch ? RIBBONS[nestedMatch] : undefined;
