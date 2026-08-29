@@ -8,7 +8,7 @@ export interface JobDetailData {
   location: string;
   postedAt: string;
   tags: string[];
-  description: string;
+  description?: string;
   requirements?: string[];
   benefits?: string[];
 }

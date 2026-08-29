@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "../../components/Button/Button";
 import { Typography } from "../../components/Typography/Typography";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
-import { getMyDegrees, getDownloadUrl } from "../../services/degreeService";
+import { getMyDegrees, getDownloadUrl, type Degree } from "../../services/degreeService";
 
 export function Diploma() {
   const navigate = useNavigate();
-  const [degrees, setDegrees] = useState([]);
+  const [degrees, setDegrees] = useState<Degree[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [selectedDegreeId, setSelectedDegreeId] = useState("");
-  const [downloadError, setDownloadError] = useState(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
   const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export function Diploma() {
               id="degree-select"
               items={degrees.map((d) => ({ id: d.id, name: d.title }))}
               value={selectedDegreeId}
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 setSelectedDegreeId(e.target.value);
                 setDownloadError(null);
               }}

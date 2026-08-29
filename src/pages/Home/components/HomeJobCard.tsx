@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bookmark, MapPin, Megaphone } from "lucide-react";
+import type { JobRawDto } from "../../../services/jobsService";
 
-const WORKPLACE_TYPE_LABELS = {
+const WORKPLACE_TYPE_LABELS: Record<string, string> = {
   HYBRID: "Híbrido",
   REMOTE: "Remoto",
   ONSITE: "Presencial",
 };
 
-export function HomeJobCard({ job }) {
-  const workplaceLabel = WORKPLACE_TYPE_LABELS[job.workplaceType] ?? job.workplaceType;
+export function HomeJobCard({ job }: { job: JobRawDto }) {
+  const workplaceLabel = WORKPLACE_TYPE_LABELS[job.workplaceType ?? ""] ?? job.workplaceType;
   const [logoFailed, setLogoFailed] = useState(false);
   const [saved, setSaved] = useState(false);
   const navigate = useNavigate();

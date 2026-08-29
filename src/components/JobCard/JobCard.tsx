@@ -8,7 +8,7 @@ export interface JobCardData {
   title: string;
   location: string;
   postedAt: string;
-  description: string;
+  description?: string;
   tags: string[];
 }
 

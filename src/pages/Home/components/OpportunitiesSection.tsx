@@ -1,16 +1,21 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HomeJobCard } from "./HomeJobCard";
-import { getLatestJobs } from "../../../services/jobsService";
+import { getLatestJobs, type JobRawDto } from "../../../services/jobsService";
+
+type JobsResponse = JobRawDto[] | { jobs?: JobRawDto[]; content?: JobRawDto[]; data?: JobRawDto[] };
 
 export function OpportunitiesSection() {
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<JobRawDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getLatestJobs()
-      .then((data) => setJobs(Array.isArray(data) ? data : (data?.jobs ?? data?.content ?? data?.data ?? [])))
+      .then((data) => {
+        const payload = data as unknown as JobsResponse;
+        setJobs(Array.isArray(payload) ? payload : (payload?.jobs ?? payload?.content ?? payload?.data ?? []));
+      })
       .catch(() => setError("Não foi possível carregar as oportunidades."))
       .finally(() => setLoading(false));
   }, []);

@@ -1,7 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { Users, MessageCircle, BookOpen, Download } from "lucide-react";
+import { Users, MessageCircle, BookOpen, Download, type LucideIcon } from "lucide-react";
 
-const CARDS = [
+type CardAction = { type: "navigate"; to: string } | { type: "external"; href: string };
+
+interface Card {
+  icon: LucideIcon;
+  title: string;
+  subtitle: string;
+  action: CardAction;
+}
+
+const CARDS: Card[] = [
   {
     icon: Users,
     title: "Rede Alumni",
@@ -31,7 +40,7 @@ const CARDS = [
 export function ShortcutCards() {
   const navigate = useNavigate();
 
-  function handleClick(action) {
+  function handleClick(action: CardAction) {
     if (action.type === "navigate") {
       navigate(action.to);
     } else {

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { NewsRawDto } from "../../../services/newsService";
 
-export function HomeNewsCard({ news }) {
+export function HomeNewsCard({ news }: { news: NewsRawDto }) {
   const navigate = useNavigate();
   const [coverFailed, setCoverFailed] = useState(false);
 

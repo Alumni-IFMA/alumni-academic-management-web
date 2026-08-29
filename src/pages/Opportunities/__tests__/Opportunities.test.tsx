@@ -5,10 +5,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { AuthContext } from "../../../context/AuthContext";
 import { Opportunities } from "../index";
 import * as jobsService from "../../../services/jobsService";
+import type { JobRawDto } from "../../../services/jobsService";
+import type { Page } from "../../../services/api";
+import type { Mocked } from "vitest";
 
 vi.mock("../../../services/jobsService");
 
-function makePage(content, overrides = {}) {
+const mockedJobsService = jobsService as Mocked<typeof jobsService>;
+
+function makePage(content: JobRawDto[], overrides: Partial<Page<JobRawDto>> = {}): Page<JobRawDto> {
   return { content, totalPages: 1, number: 0, last: true, ...overrides };
 }
 
@@ -20,8 +25,8 @@ const job1Dto = {
   description: "Descrição A",
   location: "São Paulo, SP",
   area: "Tecnologia",
-  workplaceType: "HYBRID",
-  experienceLevel: "SENIOR",
+  workplaceType: "HYBRID" as const,
+  experienceLevel: "SENIOR" as const,
   requirements: [],
   benefits: [],
   createdAt: [2026, 8, 1, 12, 0, 0, 0],
@@ -35,8 +40,8 @@ const job2Dto = {
   description: "Descrição B",
   location: "Remoto",
   area: "Design",
-  workplaceType: "REMOTE",
-  experienceLevel: "JUNIOR",
+  workplaceType: "REMOTE" as const,
+  experienceLevel: "JUNIOR" as const,
   requirements: [],
   benefits: [],
   createdAt: [2026, 8, 1, 12, 0, 0, 0],
@@ -60,11 +65,11 @@ describe("Opportunities page", () => {
   });
 
   it("loads jobs on mount with no filters", async () => {
-    jobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
     renderPage();
 
     await waitFor(() => {
-      expect(jobsService.getJobs).toHaveBeenCalledWith(expect.objectContaining({ page: 0, size: 10 }));
+      expect(mockedJobsService.getJobs).toHaveBeenCalledWith(expect.objectContaining({ page: 0, size: 10 }));
       // job1 is auto-selected, so it renders in both the list and the detail panel
       expect(screen.getAllByText("Desenvolvedor Java").length).toBeGreaterThan(0);
       expect(screen.getByText("Designer UX")).toBeInTheDocument();
@@ -72,7 +77,7 @@ describe("Opportunities page", () => {
   });
 
   it("shows an error message when loading fails", async () => {
-    jobsService.getJobs.mockRejectedValue(new Error("network error"));
+    mockedJobsService.getJobs.mockRejectedValue(new Error("network error"));
     renderPage();
 
     await waitFor(() => {
@@ -81,7 +86,7 @@ describe("Opportunities page", () => {
   });
 
   it("shows an empty state when there are no matching jobs", async () => {
-    jobsService.getJobs.mockResolvedValue(makePage([]));
+    mockedJobsService.getJobs.mockResolvedValue(makePage([]));
     renderPage();
 
     await waitFor(() => {
@@ -90,50 +95,50 @@ describe("Opportunities page", () => {
   });
 
   it("debounces the keyword search before re-fetching", async () => {
-    jobsService.getJobs.mockResolvedValue(makePage([job1Dto]));
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto]));
     renderPage();
-    await waitFor(() => expect(jobsService.getJobs).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(mockedJobsService.getJobs).toHaveBeenCalledTimes(1));
 
     await userEvent.type(screen.getByPlaceholderText("Procure por oportunidades"), "java");
 
     await waitFor(
       () => {
-        expect(jobsService.getJobs).toHaveBeenLastCalledWith(
+        expect(mockedJobsService.getJobs).toHaveBeenLastCalledWith(
           expect.objectContaining({ keyword: "java", page: 0 })
         );
       },
       { timeout: 1000 }
     );
 
-    expect(jobsService.getJobs).toHaveBeenCalledTimes(2);
+    expect(mockedJobsService.getJobs).toHaveBeenCalledTimes(2);
   });
 
   it("re-fetches immediately when the sort dropdown changes", async () => {
-    jobsService.getJobs.mockResolvedValue(makePage([job1Dto]));
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto]));
     renderPage();
-    await waitFor(() => expect(jobsService.getJobs).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(mockedJobsService.getJobs).toHaveBeenCalledTimes(1));
 
     await userEvent.selectOptions(screen.getByDisplayValue("Todas"), "salary");
 
     await waitFor(() => {
-      expect(jobsService.getJobs).toHaveBeenLastCalledWith(expect.objectContaining({ sort: "salary,desc" }));
+      expect(mockedJobsService.getJobs).toHaveBeenLastCalledWith(expect.objectContaining({ sort: "salary,desc" }));
     });
   });
 
   it("re-fetches immediately when the remote toggle changes", async () => {
-    jobsService.getJobs.mockResolvedValue(makePage([job1Dto]));
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto]));
     renderPage();
-    await waitFor(() => expect(jobsService.getJobs).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(mockedJobsService.getJobs).toHaveBeenCalledTimes(1));
 
     await userEvent.click(screen.getAllByRole("button", { name: "Apenas remoto" })[0]);
 
     await waitFor(() => {
-      expect(jobsService.getJobs).toHaveBeenLastCalledWith(expect.objectContaining({ remote: true }));
+      expect(mockedJobsService.getJobs).toHaveBeenLastCalledWith(expect.objectContaining({ remote: true }));
     });
   });
 
   it("loads the next page when the job list is scrolled near the bottom", async () => {
-    jobsService.getJobs
+    mockedJobsService.getJobs
       .mockResolvedValueOnce(makePage([job1Dto], { totalPages: 2, number: 0, last: false }))
       .mockResolvedValueOnce(makePage([job2Dto], { totalPages: 2, number: 1, last: true }));
 
@@ -148,13 +153,13 @@ describe("Opportunities page", () => {
     fireEvent.scroll(list);
 
     await waitFor(() => {
-      expect(jobsService.getJobs).toHaveBeenLastCalledWith(expect.objectContaining({ page: 1 }));
+      expect(mockedJobsService.getJobs).toHaveBeenLastCalledWith(expect.objectContaining({ page: 1 }));
       expect(screen.getByText("Designer UX")).toBeInTheDocument();
     });
   });
 
   it("does not request another page once the last page has been reached", async () => {
-    jobsService.getJobs.mockResolvedValue(makePage([job1Dto], { totalPages: 1, number: 0, last: true }));
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto], { totalPages: 1, number: 0, last: true }));
     renderPage();
     await waitFor(() => expect(screen.getByText("Desenvolvedor Java")).toBeInTheDocument());
 
@@ -165,11 +170,11 @@ describe("Opportunities page", () => {
 
     fireEvent.scroll(list);
 
-    await waitFor(() => expect(jobsService.getJobs).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(mockedJobsService.getJobs).toHaveBeenCalledTimes(1));
   });
 
   it("resets accumulated pages when a filter changes", async () => {
-    jobsService.getJobs
+    mockedJobsService.getJobs
       .mockResolvedValueOnce(makePage([job1Dto], { totalPages: 2, number: 0, last: false }))
       .mockResolvedValueOnce(makePage([job2Dto], { totalPages: 2, number: 1, last: true }))
       .mockResolvedValueOnce(makePage([job2Dto], { totalPages: 1, number: 0, last: true }));
@@ -182,20 +187,20 @@ describe("Opportunities page", () => {
     Object.defineProperty(list, "clientHeight", { value: 500, configurable: true });
     Object.defineProperty(list, "scrollTop", { value: 950, configurable: true });
     fireEvent.scroll(list);
-    await waitFor(() => expect(jobsService.getJobs).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(mockedJobsService.getJobs).toHaveBeenCalledTimes(2));
 
     await userEvent.selectOptions(screen.getByDisplayValue("Todas"), "salary");
 
     await waitFor(() => {
-      expect(jobsService.getJobs).toHaveBeenLastCalledWith(
+      expect(mockedJobsService.getJobs).toHaveBeenLastCalledWith(
         expect.objectContaining({ page: 0, sort: "salary,desc" })
       );
     });
   });
 
   it("fetches job details on click and shows them in the detail panel", async () => {
-    jobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
-    jobsService.getJobById.mockResolvedValue({ ...job2Dto, description: "Descrição completa B" });
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
+    mockedJobsService.getJobById.mockResolvedValue({ ...job2Dto, description: "Descrição completa B" });
 
     renderPage();
     await waitFor(() => expect(screen.getByText("Designer UX")).toBeInTheDocument());
@@ -203,14 +208,14 @@ describe("Opportunities page", () => {
     await userEvent.click(screen.getByText("Designer UX"));
 
     await waitFor(() => {
-      expect(jobsService.getJobById).toHaveBeenCalledWith(2);
+      expect(mockedJobsService.getJobById).toHaveBeenCalledWith(2);
       expect(screen.getByText("Descrição completa B")).toBeInTheDocument();
     });
   });
 
   it("shows an error in the detail panel when fetching details fails", async () => {
-    jobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
-    jobsService.getJobById.mockRejectedValue(new Error("network error"));
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
+    mockedJobsService.getJobById.mockRejectedValue(new Error("network error"));
 
     renderPage();
     await waitFor(() => expect(screen.getByText("Designer UX")).toBeInTheDocument());

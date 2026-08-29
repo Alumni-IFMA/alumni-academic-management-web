@@ -1,16 +1,21 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HomeNewsCard } from "./HomeNewsCard";
-import { getLatestNews } from "../../../services/newsService";
+import { getLatestNews, type NewsRawDto } from "../../../services/newsService";
+
+type NewsResponse = NewsRawDto[] | { news?: NewsRawDto[]; content?: NewsRawDto[]; data?: NewsRawDto[] };
 
 export function NewsSection() {
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState<NewsRawDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getLatestNews()
-      .then((data) => setNews(Array.isArray(data) ? data : (data?.news ?? data?.content ?? data?.data ?? [])))
+      .then((data) => {
+        const payload = data as unknown as NewsResponse;
+        setNews(Array.isArray(payload) ? payload : (payload?.news ?? payload?.content ?? payload?.data ?? []));
+      })
       .catch(() => setError("Não foi possível carregar as notícias."))
       .finally(() => setLoading(false));
   }, []);

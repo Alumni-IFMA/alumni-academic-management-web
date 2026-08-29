@@ -9,7 +9,7 @@ export function Home() {
   const { userName } = useAuth();
   const navigate = useNavigate();
 
-  function handleSearch(term) {
+  function handleSearch(term: string) {
     navigate(`/network?q=${encodeURIComponent(term)}`);
   }
 

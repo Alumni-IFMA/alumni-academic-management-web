@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type UIEvent } from "react";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
@@ -9,7 +9,7 @@ import { JobDetail } from "../../components/JobDetail/JobDetail";
 import { OpportunitiesRibbon } from "./components/OpportunitiesRibbon";
 import { SlidersHorizontal } from "lucide-react";
 import { getJobs, getJobById } from "../../services/jobsService";
-import { mapJob } from "./mapJob";
+import { mapJob, type Job } from "./mapJob";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 
 const PAGE_SIZE = 10;
@@ -21,7 +21,7 @@ const SORT_OPTIONS = [
   { id: "salary", name: "Maior Salário" },
 ];
 
-const SORT_PARAMS = {
+const SORT_PARAMS: Record<string, string | undefined> = {
   all: undefined,
   recent: "createdAt,desc",
   salary: "salary,desc",
@@ -31,7 +31,7 @@ export function Opportunities() {
   const [keyword, setKeyword] = useState("");
   const [location, setLocation] = useState("");
   const [area, setArea] = useState("");
-  const [experience, setExperience] = useState([]);
+  const [experience, setExperience] = useState<string[]>([]);
   const [remoteOnly, setRemoteOnly] = useState(false);
   const [sort, setSort] = useState("all");
   const [filterOpen, setFilterOpen] = useState(false);
@@ -51,15 +51,15 @@ export function Opportunities() {
     [debouncedKeyword, debouncedLocation, area, experience, remoteOnly, sort]
   );
 
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [page, setPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [loadError, setLoadError] = useState(null);
-  const [selectedJob, setSelectedJob] = useState(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [selectedJobLoading, setSelectedJobLoading] = useState(false);
-  const [selectedJobError, setSelectedJobError] = useState(null);
+  const [selectedJobError, setSelectedJobError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -103,14 +103,14 @@ export function Opportunities() {
       .finally(() => setLoadingMore(false));
   }
 
-  function handleListScroll(e) {
+  function handleListScroll(e: UIEvent<HTMLDivElement>) {
     const el = e.currentTarget;
     if (el.scrollHeight - el.scrollTop - el.clientHeight < 100) {
       handleLoadMore();
     }
   }
 
-  function handleSelectJob(job) {
+  function handleSelectJob(job: Job) {
     setSelectedJob(job);
     setSelectedJobError(null);
     setSelectedJobLoading(true);
@@ -121,7 +121,7 @@ export function Opportunities() {
       .finally(() => setSelectedJobLoading(false));
   }
 
-  function toggleExperience(id) {
+  function toggleExperience(id: string) {
     setExperience((prev) => (prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]));
   }
 

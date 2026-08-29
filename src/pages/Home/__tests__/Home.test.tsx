@@ -1,26 +1,31 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, type Mocked } from "vitest";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
 import { Home } from "../index";
 import * as newsService from "../../../services/newsService";
 import * as jobsService from "../../../services/jobsService";
+import type { NewsRawDto } from "../../../services/newsService";
+import type { JobRawDto } from "../../../services/jobsService";
 
 vi.mock("../../../services/newsService");
 vi.mock("../../../services/jobsService");
+
+const mockedNewsService = newsService as Mocked<typeof newsService>;
+const mockedJobsService = jobsService as Mocked<typeof jobsService>;
 
 const mockNews = [
   { id: 1, title: "Seletivo Técnico IFMA", summary: "Inscrições abertas.", coverImageUrl: "/img1.jpg" },
   { id: 2, title: "Copa de Robótica", summary: "Competição de robótica.", coverImageUrl: "/img2.jpg" },
   { id: 3, title: "Desafio Mermãs", summary: "Mulheres na tecnologia.", coverImageUrl: "/img3.jpg" },
-];
+] as unknown as NewsRawDto[];
 
 const mockJobs = [
   { id: 1, title: "Desenvolvedor Backend", company: "Mermãs Digitais", companyLogoUrl: "", location: "Imperatriz - MA", workplaceType: "HYBRID" },
   { id: 2, title: "Designer UX", company: "Tech Co", companyLogoUrl: "", location: "São Luís - MA", workplaceType: "ONSITE" },
   { id: 3, title: "Analista de Dados", company: "DataLab", companyLogoUrl: "", location: "Remoto", workplaceType: "REMOTE" },
-];
+] as unknown as JobRawDto[];
 
 const fakeAuth = { isAuthenticated: true, userName: "Kenia", login: vi.fn(), logout: vi.fn() };
 
@@ -40,8 +45,8 @@ function renderHome() {
 describe("Home page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    newsService.getLatestNews.mockResolvedValue(mockNews);
-    jobsService.getLatestJobs.mockResolvedValue(mockJobs);
+    mockedNewsService.getLatestNews.mockResolvedValue(mockNews);
+    mockedJobsService.getLatestJobs.mockResolvedValue(mockJobs);
   });
 
   it("shows welcome message with user name", () => {
@@ -88,7 +93,7 @@ describe("Home page", () => {
   });
 
   it("shows error message when news fetch fails", async () => {
-    newsService.getLatestNews.mockRejectedValue(new Error("network error"));
+    mockedNewsService.getLatestNews.mockRejectedValue(new Error("network error"));
     renderHome();
     await waitFor(() => {
       expect(screen.getByText("Não foi possível carregar as notícias.")).toBeInTheDocument();
@@ -96,7 +101,7 @@ describe("Home page", () => {
   });
 
   it("shows error message when jobs fetch fails", async () => {
-    jobsService.getLatestJobs.mockRejectedValue(new Error("network error"));
+    mockedJobsService.getLatestJobs.mockRejectedValue(new Error("network error"));
     renderHome();
     await waitFor(() => {
       expect(screen.getByText("Não foi possível carregar as oportunidades.")).toBeInTheDocument();

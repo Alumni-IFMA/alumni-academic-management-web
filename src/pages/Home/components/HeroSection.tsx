@@ -2,7 +2,12 @@ import { useState } from "react";
 /* import { Search } from "lucide-react"; */
 import { SearchBar } from "../../../components/SearchBar/SearchBar";
 
-export function HeroSection({ userName, onSearch }) {
+interface HeroSectionProps {
+  userName: string | null;
+  onSearch: (term: string) => void;
+}
+
+export function HeroSection({ userName, onSearch }: HeroSectionProps) {
   const [term, setTerm] = useState("");
 
   function handleSearch() {
