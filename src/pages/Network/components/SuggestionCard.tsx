@@ -3,19 +3,7 @@ import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
 import { Typography } from "../../../components/Typography/Typography";
 import type { NetworkUser } from "../../../services/userService";
 import type { ConnectStatus } from "../../../hooks/useConnection";
-
-import avatar1 from "../../../assets/images/avatar1.svg";
-import avatar2 from "../../../assets/images/avatar2.svg";
-import avatar3 from "../../../assets/images/avatar3.svg";
-import avatar4 from "../../../assets/images/avatar4.svg";
-import avatar5 from "../../../assets/images/avatar5.svg";
-
-const AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5];
-
-function getAvatar(userId: number) {
-  const index = userId % AVATARS.length;
-  return AVATARS[index];
-}
+import { getAvatarForUser } from "../avatarFallback";
 
 export function SuggestionCard({
   user,
@@ -28,7 +16,7 @@ export function SuggestionCard({
   onConnect: (userId: number) => void;
   showConnect?: boolean;
 }) {
-  const avatar = user.avatarUrl || getAvatar(user.id);
+  const avatar = user.avatarUrl || getAvatarForUser(user.id);
 
   return (
     <div className="rounded-xl bg-white p-4 shadow-sm">
@@ -43,10 +31,8 @@ export function SuggestionCard({
           <Typography variant="h3" className="truncate">
             {user.name}
           </Typography>
-          <p className="truncate text-xs text-gray-500">{user.role}</p>
-          <p className="truncate text-xs text-gray-400">
-            {[user.company, user.location].filter(Boolean).join(" · ")}
-          </p>
+          {user.subtitle && <p className="truncate text-xs text-gray-500">{user.subtitle}</p>}
+          {user.meta && <p className="truncate text-xs text-gray-400">{user.meta}</p>}
         </div>
       </div>
 

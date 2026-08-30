@@ -1,21 +1,33 @@
-import api, { type Page } from "./api";
-import type { NetworkUser } from "./userService";
+import api from "./api";
+import { mapUser, type NetworkUser, type UserSimpleDto } from "./userService";
 
-/** GET /connections/suggestions?page=&size= */
-async function getSuggestions({
-  page = 0,
-  size = 8,
-}: { page?: number; size?: number } = {}): Promise<Page<NetworkUser>> {
-  const { data } = await api.get<Page<NetworkUser>>("/connections/suggestions", {
-    params: { page, size },
-  });
-  return data;
+export interface ConnectionResponseDto {
+  id: number;
+  requester: UserSimpleDto;
+  addressee: UserSimpleDto;
+  status: "PENDING" | "ACCEPTED";
+}
+
+interface PageUserSimpleDto {
+  content: UserSimpleDto[];
+}
+
+/** GET /connections/suggestions */
+async function getSuggestions(): Promise<NetworkUser[]> {
+  const { data } = await api.get<PageUserSimpleDto>("/connections/suggestions");
+  return data.content.map(mapUser);
 }
 
 /** POST /connections */
-async function sendRequest(targetUserId: number): Promise<unknown> {
-  const { data } = await api.post("/connections", { targetUserId });
+async function sendRequest(addresseeId: number): Promise<unknown> {
+  const { data } = await api.post("/connections", { addresseeId });
   return data;
 }
 
-export default { getSuggestions, sendRequest };
+/** GET /connections/sent */
+async function getSentRequests(): Promise<ConnectionResponseDto[]> {
+  const { data } = await api.get<ConnectionResponseDto[]>("/connections/sent");
+  return data;
+}
+
+export default { getSuggestions, sendRequest, getSentRequests };
