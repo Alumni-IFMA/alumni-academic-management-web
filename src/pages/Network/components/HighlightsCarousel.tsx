@@ -63,6 +63,20 @@ export function HighlightsCarousel({
     el?.releasePointerCapture(e.pointerId);
   }
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    function handleWheel(e: WheelEvent) {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      e.preventDefault();
+      el!.scrollLeft += e.deltaY;
+    }
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, []);
+
   return (
     <section>
       <Typography variant="h2" className="text-center mb-5">

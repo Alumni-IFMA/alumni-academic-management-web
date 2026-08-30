@@ -7,7 +7,7 @@ import { Typography } from "../../components/Typography/Typography";
 import { useSuggestions } from "./hooks/useSuggestions";
 import { useConnection } from "../../hooks/useConnection";
 
-const HIGHLIGHTS_COUNT = 5;
+const HIGHLIGHTS_COUNT = 8;
 
 export default function RedeAlumni() {
   const [searchParams, setSearchParams] = useSearchParams();

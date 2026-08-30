@@ -8,7 +8,7 @@ import networkAlumni from "../../../services/networkAlumni";
 vi.mock("../../../services/networkAlumni");
 const mockedNetworkAlumni = networkAlumni as Mocked<typeof networkAlumni>;
 
-const users = Array.from({ length: 7 }, (_, i) => ({ id: i + 1, name: `Alumni ${i + 1}` }));
+const users = Array.from({ length: 9 }, (_, i) => ({ id: i + 1, name: `Alumni ${i + 1}` }));
 
 function renderPage() {
   return render(
@@ -25,11 +25,11 @@ describe("RedeAlumni", () => {
     mockedNetworkAlumni.getSentRequests.mockResolvedValue([]);
   });
 
-  it("splits the first 5 suggestions into Destaques and the rest into the grid", async () => {
+  it("splits the first 8 suggestions into Destaques and the rest into the grid", async () => {
     renderPage();
     await waitFor(() => {
       expect(screen.getByText("Alumni 1")).toBeInTheDocument();
-      expect(screen.getByText("Alumni 7")).toBeInTheDocument();
+      expect(screen.getByText("Alumni 9")).toBeInTheDocument();
     });
   });
 
