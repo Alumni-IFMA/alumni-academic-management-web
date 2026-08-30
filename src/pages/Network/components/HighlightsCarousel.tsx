@@ -1,19 +1,25 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import userService from "../../../services/userService";
 import type { NetworkUser } from "../../../services/userService";
-import { useConnection } from "../../../hooks/useConnection";
+import type { ConnectStatus } from "../../../hooks/useConnection";
 import { HighlightCard } from "./HighlightCard";
-import { MOCK_HIGHLIGHTS } from "../mocks/mocksUsers";
 import { Typography } from "../../../components/Typography/Typography";
 
 const SCROLL_AMOUNT = 264; // largura do card (240px) + gap (24px)
 
-export function HighlightsCarousel() {
-  const [highlights, setHighlights] = useState<NetworkUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error] = useState<string | null>(null);
-  const { connect, statusFor } = useConnection();
+export function HighlightsCarousel({
+  users,
+  loading,
+  error,
+  statusFor,
+  onConnect,
+}: {
+  users: NetworkUser[];
+  loading: boolean;
+  error: string | null;
+  statusFor: (userId: number) => ConnectStatus;
+  onConnect: (userId: number) => void;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const dragState = useRef<{ startX: number; startScrollLeft: number; dragging: boolean }>({
     startX: 0,
@@ -22,27 +28,6 @@ export function HighlightsCarousel() {
   });
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false; // Variável de controle para evitar atualizações de estado após o componente ser desmontado
-
-    userService
-      .getHighlights()
-      .then((data) => {
-        if (!cancelled) setHighlights(data);
-      })
-      .catch(() => {
-        // TODO: remover fallback quando o CORS de produção for corrigido
-        if (!cancelled) setHighlights(MOCK_HIGHLIGHTS);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   function updateScrollState() {
     const el = scrollRef.current;
@@ -53,7 +38,7 @@ export function HighlightsCarousel() {
 
   useEffect(() => {
     updateScrollState();
-  }, [highlights]);
+  }, [users]);
 
   function scrollBy(direction: -1 | 1) {
     scrollRef.current?.scrollBy({ left: direction * SCROLL_AMOUNT, behavior: "smooth" });
@@ -107,13 +92,9 @@ export function HighlightsCarousel() {
               onScroll={updateScrollState}
               className="flex gap-4 overflow-x-auto snap-x scrollbar-hide pb-2 cursor-grab select-none touch-pan-y active:cursor-grabbing"
             >
-              {highlights.map((user, index) => (
+              {users.map((user, index) => (
                 <div key={user.id} className={index % 2 === 1 ? "mt-6" : ""}>
-                  <HighlightCard
-                    user={user}
-                    status={statusFor(user.id)}
-                    onConnect={connect}
-                  />
+                  <HighlightCard user={user} status={statusFor(user.id)} onConnect={onConnect} />
                 </div>
               ))}
             </div>
