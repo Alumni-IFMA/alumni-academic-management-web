@@ -48,6 +48,7 @@ export function HighlightsCarousel({
     const el = scrollRef.current;
     if (!el) return;
     dragState.current = { startX: e.clientX, startScrollLeft: el.scrollLeft, dragging: true };
+    el.style.scrollSnapType = "none";
     el.setPointerCapture(e.pointerId);
   }
 
@@ -60,6 +61,7 @@ export function HighlightsCarousel({
   function handlePointerUp(e: ReactPointerEvent<HTMLDivElement>) {
     const el = scrollRef.current;
     dragState.current.dragging = false;
+    if (el) el.style.scrollSnapType = "";
     el?.releasePointerCapture(e.pointerId);
   }
 
