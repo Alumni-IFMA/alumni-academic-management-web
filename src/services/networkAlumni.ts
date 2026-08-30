@@ -8,10 +8,14 @@ export interface ConnectionResponseDto {
   status: "PENDING" | "ACCEPTED";
 }
 
+interface PageUserSimpleDto {
+  content: UserSimpleDto[];
+}
+
 /** GET /connections/suggestions */
 async function getSuggestions(): Promise<NetworkUser[]> {
-  const { data } = await api.get<UserSimpleDto[]>("/connections/suggestions");
-  return data.map(mapUser);
+  const { data } = await api.get<PageUserSimpleDto>("/connections/suggestions");
+  return data.content.map(mapUser);
 }
 
 /** POST /connections */

@@ -18,8 +18,8 @@ const dto: UserSimpleDto = {
 describe("networkAlumni.getSuggestions", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("calls GET /connections/suggestions with no params and maps the result", async () => {
-    mockedApi.get.mockResolvedValue({ data: [dto] });
+  it("calls GET /connections/suggestions with no params and maps the paginated content", async () => {
+    mockedApi.get.mockResolvedValue({ data: { content: [dto] } });
 
     const result = await networkAlumni.getSuggestions();
 
