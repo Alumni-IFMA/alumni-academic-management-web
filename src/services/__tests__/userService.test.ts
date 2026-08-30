@@ -49,4 +49,31 @@ describe("mapUser", () => {
       avatarUrl: null,
     });
   });
+
+  it("maps profilePictureUrl into avatarUrl when present", () => {
+    const dto: UserSimpleDto = {
+      id: 9,
+      name: "Ana Costa",
+      email: "ana@example.com",
+      status: "ACTIVE",
+      role: "ALUMNI",
+      profilePictureUrl: "https://s3.example.com/avatars/9.jpg",
+      academicProfiles: [],
+    };
+
+    expect(mapUser(dto).avatarUrl).toBe("https://s3.example.com/avatars/9.jpg");
+  });
+
+  it("falls back to null avatarUrl when profilePictureUrl is absent", () => {
+    const dto: UserSimpleDto = {
+      id: 10,
+      name: "Bruno Lima",
+      email: "bruno@example.com",
+      status: "ACTIVE",
+      role: "ALUMNI",
+      academicProfiles: [],
+    };
+
+    expect(mapUser(dto).avatarUrl).toBeNull();
+  });
 });

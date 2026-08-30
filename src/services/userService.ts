@@ -23,6 +23,7 @@ export interface UserSimpleDto {
   id: number;
   name: string;
   email: string;
+  profilePictureUrl?: string | null;
   academicProfiles?: AcademicProfileDto[];
   status: string;
   role: string;
@@ -44,7 +45,7 @@ export function mapUser(dto: UserSimpleDto): NetworkUser {
     name: dto.name,
     subtitle: profile?.courseName,
     meta: profile ? `${profile.campusName} · ${profile.entryYear}-${profile.conclusionYear}` : undefined,
-    avatarUrl: null,
+    avatarUrl: dto.profilePictureUrl || null,
   };
 }
 
