@@ -73,7 +73,7 @@ export function ProfileSidebar({
   ];
 
   return (
-    <aside className="relative w-full lg:w-96 shrink-0 h-[760px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center">
+    <aside className="relative w-full lg:w-96 shrink-0 h-[760px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center justify-center">
       {isOwnProfile ? (
         <button
           type="button"
@@ -87,7 +87,7 @@ export function ProfileSidebar({
         <ConnectButton status={connectStatus} onClick={onConnect} className={CORNER_BUTTON_CLASS} />
       )}
 
-      <div className="flex flex-col items-center gap-1 w-full mt-2">
+      <div className="flex flex-col items-center gap-1 w-full">
         <img src={avatar} alt={profile.name} className="h-40 w-40 rounded-full object-cover bg-white/10 mb-3" />
 
         <Typography variant="h3" className="!text-white truncate text-center">
