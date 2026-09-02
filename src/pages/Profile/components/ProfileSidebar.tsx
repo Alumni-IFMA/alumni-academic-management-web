@@ -1,4 +1,4 @@
-import { Pencil, Clock, LayoutGrid, BookOpen, Phone, Mail } from "lucide-react";
+import { Pencil, Phone, Mail } from "lucide-react";
 import { Typography } from "../../../components/Typography/Typography";
 import { Button } from "../../../components/Button/Button";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
@@ -68,9 +68,9 @@ export function ProfileSidebar({
   const mainAcademicProfile = profile.academicProfiles[0];
 
   const stats = [
-    { icon: Clock, value: mockYearsOfExperience, label: "Anos de Experiência" },
-    { icon: LayoutGrid, value: mockProjects.length, label: "Projetos Completos" },
-    { icon: BookOpen, value: mockResearches.length, label: "Pesquisas Publicadas" },
+    { value: mockYearsOfExperience, label: "Anos de Experiência" },
+    { value: mockProjects.length, label: "Projetos Completos" },
+    { value: mockResearches.length, label: "Pesquisas Publicadas" },
   ];
 
   return (
@@ -121,11 +121,10 @@ export function ProfileSidebar({
 
       {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
       <div className="w-full grid grid-cols-3 gap-2 text-center border-t border-white/10 pt-4">
-        {stats.map(({ icon: Icon, value, label }) => (
+        {stats.map(({ value, label }) => (
           <div key={label} className="flex flex-col items-center gap-1">
             <p className="font-semibold">{value}</p>
             <p className="text-xs text-white/70 leading-tight">{label}</p>
-            <Icon size={14} className="text-white/60" />
           </div>
         ))}
       </div>
