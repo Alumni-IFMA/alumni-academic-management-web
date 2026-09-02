@@ -122,4 +122,90 @@ describe("AuthContext", () => {
     expect(screen.getByTestId("name")).toHaveTextContent("Kenia");
     localStorage.clear();
   });
+
+  it("login extracts and persists userId from the login response", async () => {
+    mockedApi.post.mockResolvedValue({ data: { token: "jwt-123", id: 42 } });
+
+    function Probe() {
+      const { userId } = useAuth();
+      return <span data-testid="userId">{userId}</span>;
+    }
+
+    render(
+      <AuthProvider>
+        <ConsumidorDeTeste />
+        <Probe />
+      </AuthProvider>
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByText("Entrar"));
+    });
+
+    expect(localStorage.getItem("userId")).toBe("42");
+    expect(screen.getByTestId("userId").textContent).toBe("42");
+  });
+
+  it("userId stays null when the login response has no id", async () => {
+    mockedApi.post.mockResolvedValue({ data: { token: "jwt-123" } });
+
+    function Probe() {
+      const { userId } = useAuth();
+      return <span data-testid="userId">{userId ?? "null"}</span>;
+    }
+
+    render(
+      <AuthProvider>
+        <ConsumidorDeTeste />
+        <Probe />
+      </AuthProvider>
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByText("Entrar"));
+    });
+
+    expect(screen.getByTestId("userId").textContent).toBe("null");
+  });
+
+  it("reads userId from localStorage on mount", () => {
+    localStorage.setItem("userId", "7");
+
+    function Probe() {
+      const { userId } = useAuth();
+      return <span data-testid="userId">{userId}</span>;
+    }
+
+    render(
+      <AuthProvider>
+        <Probe />
+      </AuthProvider>
+    );
+
+    expect(screen.getByTestId("userId").textContent).toBe("7");
+  });
+
+  it("logout clears userId", async () => {
+    localStorage.setItem("token", "jwt-123");
+    localStorage.setItem("userId", "7");
+
+    function Probe() {
+      const { userId } = useAuth();
+      return <span data-testid="userId">{userId ?? "null"}</span>;
+    }
+
+    render(
+      <AuthProvider>
+        <ConsumidorDeTeste />
+        <Probe />
+      </AuthProvider>
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByText("Sair"));
+    });
+
+    expect(localStorage.getItem("userId")).toBeNull();
+    expect(screen.getByTestId("userId").textContent).toBe("null");
+  });
 });

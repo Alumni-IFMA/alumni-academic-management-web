@@ -4,7 +4,7 @@ import { describe, it, expect, vi } from "vitest";
 import { AuthContext } from "../../context/AuthContext";
 import { AppLayout } from "../AppLayout";
 
-const fakeAuth = { isAuthenticated: true, userName: "Kenia", login: vi.fn(), logout: vi.fn() };
+const fakeAuth = { isAuthenticated: true, userName: "Kenia", userId: 1, login: vi.fn(), logout: vi.fn() };
 
 function renderAt(path: string) {
   return render(

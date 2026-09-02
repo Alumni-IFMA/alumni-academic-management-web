@@ -47,7 +47,7 @@ const job2Dto = {
   createdAt: [2026, 8, 1, 12, 0, 0, 0],
 };
 
-const fakeAuth = { isAuthenticated: true, userName: "Kenia", login: vi.fn(), logout: vi.fn() };
+const fakeAuth = { isAuthenticated: true, userName: "Kenia", userId: 1, login: vi.fn(), logout: vi.fn() };
 
 function renderPage() {
   return render(

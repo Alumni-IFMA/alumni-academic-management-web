@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { ProfileMenu } from "./ProfileMenu";
-import lua from "../../assets/lua.png";
+import profileService from "../../services/profileService";
+import { getAvatarForUser } from "../../pages/Network/avatarFallback";
 import sino from "../../assets/sino.png";
 import alumni from "../../assets/alumni-ifma.png";
 import kenia from "../../assets/kenia.png";
@@ -19,13 +20,32 @@ const navLinks = [
 export function Navbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { userName, logout } = useAuth();
+  const { userName, userId, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [hasNotifications] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const lastScrollY = useRef(0);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (userId == null) return;
+    let cancelled = false;
+
+    profileService
+      .getProfile(userId)
+      .then((profile) => {
+        if (!cancelled) setAvatarUrl(profile.avatarUrl);
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
+  const avatarSrc = avatarUrl || (userId != null ? getAvatarForUser(userId) : kenia);
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -58,6 +78,11 @@ export function Navbar() {
     logout();
     setProfileOpen(false);
     navigate("/auth/login");
+  }
+
+  function handleNavigate(path: string) {
+    setProfileOpen(false);
+    navigate(path);
   }
 
   return (
@@ -95,9 +120,6 @@ export function Navbar() {
         {/* Actions */}
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex gap-2">
-            <button className="p-1 rounded-full hover:bg-gray-100">
-              <img src={lua} alt="Alternar tema" className="h-9 w-9" />
-            </button>
             <button className="relative p-1 rounded-full hover:bg-gray-100">
               <img src={sino} alt="Notificações" className="h-9 w-9" />
               {hasNotifications && (
@@ -111,10 +133,15 @@ export function Navbar() {
               aria-label="Abrir menu de perfil"
               className="rounded-full overflow-hidden h-11 w-11 border-2 border-green"
             >
-              <img src={kenia} alt="Foto de perfil" className="h-full w-full object-cover" />
+              <img src={avatarSrc} alt="Foto de perfil" className="h-full w-full object-cover" />
             </button>
             {profileOpen && (
-              <ProfileMenu userName={userName ?? "Usuário"} avatarSrc={kenia} onLogout={handleLogout} />
+              <ProfileMenu
+                userName={userName ?? "Usuário"}
+                avatarSrc={avatarSrc}
+                onLogout={handleLogout}
+                onNavigate={handleNavigate}
+              />
             )}
           </div>
           {/* Hamburger — mobile only */}

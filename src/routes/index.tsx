@@ -19,6 +19,7 @@ import { AdminLayout } from "../layouts/AdminLayout";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import RedeAlumni from "../pages/Network/RedeAlumni";
 import { Contact } from "../pages/Contact";
+import { Profile } from "../pages/Profile";
 
 function PrivateRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -47,6 +48,8 @@ function AppRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/diploma" element={<Diploma />} />
         <Route path="/rede" element={<RedeAlumni />} />
+        <Route path="/perfil" element={<Profile />} />
+        <Route path="/perfil/:id" element={<Profile />} />
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
         <Route path="/contact" element={<Contact />} />

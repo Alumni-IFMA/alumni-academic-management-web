@@ -15,19 +15,21 @@ function LinkedinIcon({ size = 16, className }: { size?: number; className?: str
 }
 
 const MENU_ITEMS = [
-  { icon: User, label: "Ver Perfil" },
-  { icon: LinkedinIcon, label: "Linkedin" },
-  { icon: Shield, label: "Privacidade" },
+  { icon: User, label: "Ver Perfil", to: "/perfil" },
+  { icon: LinkedinIcon, label: "Linkedin", to: undefined },
+  { icon: Shield, label: "Privacidade", to: undefined },
 ];
 
 export function ProfileMenu({
   userName,
   avatarSrc,
   onLogout,
+  onNavigate,
 }: {
   userName: string | null;
   avatarSrc: string;
   onLogout: () => void;
+  onNavigate: (path: string) => void;
 }) {
   return (
     <div className="absolute right-0 top-full mt-3 w-96 bg-dark-green text-white rounded-2xl shadow-lg p-5 z-50">
@@ -37,9 +39,10 @@ export function ProfileMenu({
       </div>
 
       <div className="grid grid-cols-3 gap-x-2 gap-y-3 text-sm mb-4">
-        {MENU_ITEMS.map(({ icon: Icon, label }) => (
+        {MENU_ITEMS.map(({ icon: Icon, label, to }) => (
           <button
             key={label}
+            onClick={to ? () => onNavigate(to) : undefined}
             className="flex items-center gap-1.5 text-left text-white/90 hover:text-white"
           >
             <Icon size={16} className="shrink-0" />

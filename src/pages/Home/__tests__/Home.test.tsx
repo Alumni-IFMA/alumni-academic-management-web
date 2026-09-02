@@ -27,7 +27,7 @@ const mockJobs = [
   { id: 3, title: "Analista de Dados", company: "DataLab", companyLogoUrl: "", location: "Remoto", workplaceType: "REMOTE" },
 ] as unknown as JobRawDto[];
 
-const fakeAuth = { isAuthenticated: true, userName: "Kenia", login: vi.fn(), logout: vi.fn() };
+const fakeAuth = { isAuthenticated: true, userName: "Kenia", userId: 1, login: vi.fn(), logout: vi.fn() };
 
 function renderHome() {
   return render(
