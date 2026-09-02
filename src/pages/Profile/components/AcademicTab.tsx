@@ -1,15 +1,7 @@
 import { AcademicTrajectory } from "./AcademicTrajectory";
 import { TccCard } from "./TccCard";
 import type { AcademicProfileDto } from "../../../services/userService";
-
-const LEVEL_LABEL: Record<string, string> = { TECNICO: "Técnico", GRADUACAO: "Graduação" };
-const MODALITY_LABEL: Record<string, string> = {
-  INTEGRADO: "Integrado",
-  CONCOMITANTE: "Concomitante",
-  SUBSEQUENTE: "Subsequente",
-  BACHARELADO: "Bacharelado",
-  LICENCIATURA: "Licenciatura",
-};
+import { LEVEL_LABEL, MODALITY_LABEL } from "../labels";
 
 export function AcademicTab({ academicProfiles }: { academicProfiles: AcademicProfileDto[] }) {
   return (

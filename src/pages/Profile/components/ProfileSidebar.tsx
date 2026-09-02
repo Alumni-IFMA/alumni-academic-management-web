@@ -1,13 +1,15 @@
-import { Link as LinkIcon, Phone, Mail } from "lucide-react";
+import { Pencil, Clock, LayoutGrid, BookOpen, Phone, Mail } from "lucide-react";
 import { Typography } from "../../../components/Typography/Typography";
 import { Button } from "../../../components/Button/Button";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
 import { getAvatarForUser } from "../../Network/avatarFallback";
 import type { UserProfile } from "../../../services/profileService";
 import type { ConnectStatus } from "../../../hooks/useConnection";
-import { mockSkills, mockStats, mockPhone, mockSocialLinks } from "../mockProfileExtras";
+import { mockSkills, mockPhone, mockSocialLinks, mockYearsOfExperience, mockProjects, mockResearches } from "../mockProfileExtras";
+import { MODALITY_LABEL } from "../labels";
 
-const ACTION_BUTTON_CLASS = "!bg-white !text-dark-green hover:!bg-gray-100 w-full justify-center text-center";
+const CORNER_BUTTON_CLASS =
+  "absolute top-4 right-4 !bg-green !text-white hover:!bg-green-600 !px-4 !py-1.5 flex items-center gap-1.5";
 
 function LinkedinIcon({ size = 16, className }: { size?: number; className?: string }) {
   return (
@@ -33,6 +35,22 @@ function GithubIcon({ size = 16, className }: { size?: number; className?: strin
   );
 }
 
+function XIcon({ size = 16, className }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ size = 16, className }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.98-.374 1.752v1.297h3.919l-.386 1.933-.287 1.734h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z" />
+    </svg>
+  );
+}
+
 export function ProfileSidebar({
   profile,
   isOwnProfile,
@@ -49,93 +67,116 @@ export function ProfileSidebar({
   const avatar = profile.avatarUrl || getAvatarForUser(profile.id);
   const mainAcademicProfile = profile.academicProfiles[0];
 
-  return (
-    <aside className="w-full lg:w-80 shrink-0 rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center gap-4">
-      <img src={avatar} alt={profile.name} className="h-28 w-28 rounded-full object-cover bg-white/10" />
+  const stats = [
+    { icon: Clock, value: mockYearsOfExperience, label: "Anos de Experiência" },
+    { icon: LayoutGrid, value: mockProjects.length, label: "Projetos Completos" },
+    { icon: BookOpen, value: mockResearches.length, label: "Pesquisas Publicadas" },
+  ];
 
-      <div className="text-center">
-        <Typography variant="h3" className="!text-white">
+  return (
+    <aside className="relative w-full lg:w-96 shrink-0 h-[760px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center">
+      {isOwnProfile ? (
+        <Button variant="connect" onClick={onEdit} className={CORNER_BUTTON_CLASS}>
+          Editar <Pencil size={14} />
+        </Button>
+      ) : (
+        <ConnectButton status={connectStatus} onClick={onConnect} className={CORNER_BUTTON_CLASS} />
+      )}
+
+      <img src={avatar} alt={profile.name} className="mt-4 h-28 w-28 rounded-full object-cover bg-white/10" />
+
+      <div className="text-center mt-4 w-full">
+        <Typography variant="h3" className="!text-white truncate">
           {profile.name}
         </Typography>
-        {profile.currentPosition && <p className="text-sm text-white/80">{profile.currentPosition}</p>}
+        {profile.currentPosition && <p className="text-sm text-white/80 truncate">{profile.currentPosition}</p>}
         {mainAcademicProfile && (
-          <p className="text-sm text-white/70">
-            {mainAcademicProfile.courseName} · {mainAcademicProfile.entryYear}-{mainAcademicProfile.conclusionYear}
-          </p>
+          <p className="text-sm text-white/70 truncate">Alumni IFMA | {mainAcademicProfile.campusName}</p>
         )}
       </div>
 
-      {isOwnProfile ? (
-        <Button variant="connect" onClick={onEdit} className={ACTION_BUTTON_CLASS}>
-          Editar
-        </Button>
-      ) : (
-        <ConnectButton status={connectStatus} onClick={onConnect} className={ACTION_BUTTON_CLASS} />
+      {mainAcademicProfile && (
+        <div className="text-center mt-4 w-full">
+          <p className="text-sm text-white/85">
+            Turma de {mainAcademicProfile.conclusionYear} ({mainAcademicProfile.entryYear} -{" "}
+            {mainAcademicProfile.conclusionYear})
+          </p>
+          <p className="text-sm text-white/85 truncate">
+            {MODALITY_LABEL[mainAcademicProfile.modality] ?? mainAcademicProfile.modality} em{" "}
+            {mainAcademicProfile.courseName}
+          </p>
+        </div>
       )}
 
       {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-      <div className="w-full flex flex-wrap gap-2 justify-center">
+      <div className="w-full flex flex-wrap gap-2 justify-center mt-4 max-h-14 overflow-hidden">
         {mockSkills.map((skill) => (
-          <span key={skill} className="rounded-full bg-white/10 px-3 py-1 text-xs">
+          <span key={skill} className="rounded-full bg-white/10 px-3 py-1 text-xs whitespace-nowrap">
             {skill}
           </span>
         ))}
       </div>
 
       {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-      <div className="w-full grid grid-cols-3 gap-2 text-center border-t border-white/10 pt-4">
-        {mockStats.map((stat) => (
-          <div key={stat.label}>
-            <p className="font-semibold">{stat.value}</p>
-            <p className="text-xs text-white/70">{stat.label}</p>
+      <div className="w-full grid grid-cols-3 gap-2 text-center border-t border-white/10 pt-4 mt-4">
+        {stats.map(({ icon: Icon, value, label }) => (
+          <div key={label} className="flex flex-col items-center gap-1">
+            <p className="font-semibold">{value}</p>
+            <p className="text-xs text-white/70 leading-tight">{label}</p>
+            <Icon size={14} className="text-white/60" />
           </div>
         ))}
       </div>
 
-      <div className="w-full flex flex-col gap-2 border-t border-white/10 pt-4 text-sm">
-        <span className="flex items-center gap-2 text-white/85">
-          <Mail size={16} /> {profile.email}
+      <div className="w-full flex items-center justify-center gap-6 border-t border-white/10 pt-4 mt-4 text-sm">
+        <span className="flex items-center gap-2 text-white/85 min-w-0">
+          <Phone size={16} className="shrink-0" /> {mockPhone}
         </span>
-        {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-        <span className="flex items-center gap-2 text-white/85">
-          <Phone size={16} /> {mockPhone}
+        <span className="flex items-center gap-2 text-white/85 min-w-0">
+          <Mail size={16} className="shrink-0" />
+          <span className="truncate">{profile.email}</span>
         </span>
+      </div>
+
+      {profile.portfolioUrl && (
+        <a
+          href={profile.portfolioUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-3 text-sm text-white/85 hover:text-white underline"
+        >
+          Ver Portifólio
+        </a>
+      )}
+
+      <div className="w-full flex items-center justify-center gap-4 mt-auto pt-4">
         {profile.linkedinUrl && (
-          <a
-            href={profile.linkedinUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-2 text-white/85 hover:text-white"
-          >
-            <LinkedinIcon size={16} /> LinkedIn
-          </a>
-        )}
-        {profile.portfolioUrl && (
-          <a
-            href={profile.portfolioUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-2 text-white/85 hover:text-white"
-          >
-            <LinkIcon size={16} /> Portfólio
+          <a href={profile.linkedinUrl} target="_blank" rel="noreferrer" className="text-white/85 hover:text-white">
+            <LinkedinIcon size={18} />
           </a>
         )}
         {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
+        <a href={mockSocialLinks.twitter} target="_blank" rel="noreferrer" className="text-white/85 hover:text-white">
+          <XIcon size={18} />
+        </a>
+        <a
+          href={mockSocialLinks.facebook}
+          target="_blank"
+          rel="noreferrer"
+          className="text-white/85 hover:text-white"
+        >
+          <FacebookIcon size={18} />
+        </a>
         <a
           href={mockSocialLinks.instagram}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 text-white/85 hover:text-white"
+          className="text-white/85 hover:text-white"
         >
-          <InstagramIcon size={16} /> Instagram
+          <InstagramIcon size={18} />
         </a>
-        <a
-          href={mockSocialLinks.github}
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-2 text-white/85 hover:text-white"
-        >
-          <GithubIcon size={16} /> GitHub
+        <a href={mockSocialLinks.github} target="_blank" rel="noreferrer" className="text-white/85 hover:text-white">
+          <GithubIcon size={18} />
         </a>
       </div>
     </aside>

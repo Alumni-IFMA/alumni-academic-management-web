@@ -1,15 +1,11 @@
 // mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md
 export const mockSkills = ["React", "TypeScript", "Node.js", "Figma", "Scrum"];
 
-export const mockStats = [
-  { label: "Conexões", value: 128 },
-  { label: "Projetos", value: 6 },
-  { label: "Publicações", value: 2 },
-];
-
 export const mockPhone = "(98) 99999-0000";
 
 export const mockSocialLinks = {
+  twitter: "https://x.com/alumni_ifma",
+  facebook: "https://facebook.com/alumni.ifma",
   instagram: "https://instagram.com/alumni.ifma",
   github: "https://github.com/alumni-ifma",
 };
@@ -43,6 +39,7 @@ export const mockAcademicTrajectory: MockTrajectoryItem[] = [
 export const mockTcc = {
   title: "Sistema de recomendação para egressos do IFMA",
   year: 2023,
+  fileUrl: "#",
 };
 
 export const mockMutualConnectionsCount = 5;
