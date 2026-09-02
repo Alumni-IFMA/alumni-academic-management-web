@@ -74,7 +74,7 @@ export function ProfileSidebar({
   ];
 
   return (
-    <aside className="relative w-full lg:w-96 shrink-0 h-[760px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center">
+    <aside className="relative w-full lg:w-96 shrink-0 h-[760px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center justify-between">
       {isOwnProfile ? (
         <Button variant="connect" onClick={onEdit} className={CORNER_BUTTON_CLASS}>
           Editar <Pencil size={14} />
@@ -83,20 +83,22 @@ export function ProfileSidebar({
         <ConnectButton status={connectStatus} onClick={onConnect} className={CORNER_BUTTON_CLASS} />
       )}
 
-      <img src={avatar} alt={profile.name} className="mt-4 h-28 w-28 rounded-full object-cover bg-white/10" />
+      <div className="flex flex-col items-center gap-2 w-full">
+        <img src={avatar} alt={profile.name} className="h-36 w-36 rounded-full object-cover bg-white/10" />
 
-      <div className="text-center mt-4 w-full">
-        <Typography variant="h3" className="!text-white truncate">
-          {profile.name}
-        </Typography>
-        {profile.currentPosition && <p className="text-sm text-white/80 truncate">{profile.currentPosition}</p>}
-        {mainAcademicProfile && (
-          <p className="text-sm text-white/70 truncate">Alumni IFMA | {mainAcademicProfile.campusName}</p>
-        )}
+        <div className="text-center w-full">
+          <Typography variant="h3" className="!text-white truncate">
+            {profile.name}
+          </Typography>
+          {profile.currentPosition && <p className="text-sm text-white/80 truncate">{profile.currentPosition}</p>}
+          {mainAcademicProfile && (
+            <p className="text-sm text-white/70 truncate">Alumni IFMA | {mainAcademicProfile.campusName}</p>
+          )}
+        </div>
       </div>
 
       {mainAcademicProfile && (
-        <div className="text-center mt-4 w-full">
+        <div className="text-center w-full">
           <p className="text-sm text-white/85">
             Turma de {mainAcademicProfile.conclusionYear} ({mainAcademicProfile.entryYear} -{" "}
             {mainAcademicProfile.conclusionYear})
@@ -109,7 +111,7 @@ export function ProfileSidebar({
       )}
 
       {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-      <div className="w-full flex flex-wrap gap-2 justify-center mt-4 max-h-14 overflow-hidden">
+      <div className="w-full flex flex-wrap gap-2 justify-center max-h-14 overflow-hidden">
         {mockSkills.map((skill) => (
           <span key={skill} className="rounded-full bg-white/10 px-3 py-1 text-xs whitespace-nowrap">
             {skill}
@@ -118,7 +120,7 @@ export function ProfileSidebar({
       </div>
 
       {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-      <div className="w-full grid grid-cols-3 gap-2 text-center border-t border-white/10 pt-4 mt-4">
+      <div className="w-full grid grid-cols-3 gap-2 text-center border-t border-white/10 pt-4">
         {stats.map(({ icon: Icon, value, label }) => (
           <div key={label} className="flex flex-col items-center gap-1">
             <p className="font-semibold">{value}</p>
@@ -128,28 +130,30 @@ export function ProfileSidebar({
         ))}
       </div>
 
-      <div className="w-full flex items-center justify-center gap-6 border-t border-white/10 pt-4 mt-4 text-sm">
-        <span className="flex items-center gap-2 text-white/85 min-w-0">
-          <Phone size={16} className="shrink-0" /> {mockPhone}
-        </span>
-        <span className="flex items-center gap-2 text-white/85 min-w-0">
-          <Mail size={16} className="shrink-0" />
-          <span className="truncate">{profile.email}</span>
-        </span>
+      <div className="w-full flex flex-col items-center gap-2 border-t border-white/10 pt-4">
+        <div className="flex items-center justify-center gap-6 text-sm">
+          <span className="flex items-center gap-2 text-white/85 min-w-0">
+            <Phone size={16} className="shrink-0" /> {mockPhone}
+          </span>
+          <span className="flex items-center gap-2 text-white/85 min-w-0">
+            <Mail size={16} className="shrink-0" />
+            <span className="truncate">{profile.email}</span>
+          </span>
+        </div>
+
+        {profile.portfolioUrl && (
+          <a
+            href={profile.portfolioUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-sm text-white/85 hover:text-white underline"
+          >
+            Ver Portifólio
+          </a>
+        )}
       </div>
 
-      {profile.portfolioUrl && (
-        <a
-          href={profile.portfolioUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-3 text-sm text-white/85 hover:text-white underline"
-        >
-          Ver Portifólio
-        </a>
-      )}
-
-      <div className="w-full flex items-center justify-center gap-4 mt-auto pt-4">
+      <div className="w-full flex items-center justify-center gap-4 border-t border-white/10 pt-4">
         {profile.linkedinUrl && (
           <a href={profile.linkedinUrl} target="_blank" rel="noreferrer" className="text-white/85 hover:text-white">
             <LinkedinIcon size={18} />
