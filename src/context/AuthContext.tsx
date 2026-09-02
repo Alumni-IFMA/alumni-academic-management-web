@@ -4,6 +4,7 @@ import api from "../services/api";
 interface AuthContextValue {
   isAuthenticated: boolean;
   userName: string | null;
+  userId: number | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }
@@ -26,12 +27,20 @@ function decodeJwtPayload(token: string): { name?: string } | null {
   }
 }
 
+function resolveUserId(loginResponse: LoginResponseDto): number | null {
+  return loginResponse.id ?? loginResponse.userId ?? loginResponse.user?.id ?? null;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
   const [userName, setUserName] = useState<string | null>(() => {
     const cachedToken = localStorage.getItem("token");
     const nameFromToken = cachedToken ? decodeJwtPayload(cachedToken)?.name : null;
     return nameFromToken ?? localStorage.getItem("userName");
+  });
+  const [userId, setUserId] = useState<number | null>(() => {
+    const stored = localStorage.getItem("userId");
+    return stored ? Number(stored) : null;
   });
 
   async function login(email: string, password: string) {
@@ -42,15 +51,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("token", data.token);
     setToken(data.token);
 
-    const name = decodeJwtPayload(data.token)?.name ?? data.name ?? (await fetchUserName(data));
+    const id = resolveUserId(data);
+    if (id != null) {
+      localStorage.setItem("userId", String(id));
+      setUserId(id);
+    }
+
+    const name = decodeJwtPayload(data.token)?.name ?? data.name ?? (await fetchUserName(id));
     if (name) {
       localStorage.setItem("userName", name);
       setUserName(name);
     }
   }
 
-  async function fetchUserName(loginResponse: LoginResponseDto): Promise<string | null> {
-    const userId = loginResponse.id ?? loginResponse.userId ?? loginResponse.user?.id;
+  async function fetchUserName(userId: number | null): Promise<string | null> {
     if (userId == null) return null;
 
     try {
@@ -64,8 +78,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
+    localStorage.removeItem("userId");
     setToken(null);
     setUserName(null);
+    setUserId(null);
   }
 
   return (
@@ -73,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         isAuthenticated: !!token,
         userName: token ? (userName ?? "Usuário") : null,
+        userId,
         login,
         logout,
       }}
