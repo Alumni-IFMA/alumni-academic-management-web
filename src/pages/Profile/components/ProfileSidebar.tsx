@@ -84,7 +84,7 @@ export function ProfileSidebar({
       )}
 
       <div className="flex flex-col items-center gap-2 w-full">
-        <img src={avatar} alt={profile.name} className="h-36 w-36 rounded-full object-cover bg-white/10" />
+        <img src={avatar} alt={profile.name} className="h-44 w-44 rounded-full object-cover bg-white/10" />
 
         <div className="text-center w-full">
           <Typography variant="h3" className="!text-white truncate">
