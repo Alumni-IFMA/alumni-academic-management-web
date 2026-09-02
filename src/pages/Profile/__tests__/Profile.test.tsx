@@ -74,7 +74,7 @@ describe("Profile", () => {
     renderAt("/perfil");
 
     expect(await screen.findByText("Kenia Reis")).toBeInTheDocument();
-    expect(screen.getByText("Editar")).toBeInTheDocument();
+    expect(screen.getByLabelText("Editar perfil")).toBeInTheDocument();
     expect(screen.queryByText(/conexões em comum/)).not.toBeInTheDocument();
   });
 
@@ -107,6 +107,6 @@ describe("Profile", () => {
     renderAt("/perfil/abc");
 
     expect(await screen.findByText("Kenia Reis")).toBeInTheDocument();
-    expect(screen.getByText("Editar")).toBeInTheDocument();
+    expect(screen.getByLabelText("Editar perfil")).toBeInTheDocument();
   });
 });

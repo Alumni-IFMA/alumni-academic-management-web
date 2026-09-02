@@ -1,6 +1,4 @@
 // mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md
-export const mockSkills = ["React", "TypeScript", "Node.js", "Figma", "Scrum"];
-
 export const mockPhone = "(98) 99999-0000";
 
 export const mockSocialLinks = {

@@ -1,11 +1,10 @@
 import { Pencil, Phone, Mail } from "lucide-react";
 import { Typography } from "../../../components/Typography/Typography";
-import { Button } from "../../../components/Button/Button";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
 import { getAvatarForUser } from "../../Network/avatarFallback";
 import type { UserProfile } from "../../../services/profileService";
 import type { ConnectStatus } from "../../../hooks/useConnection";
-import { mockSkills, mockPhone, mockSocialLinks, mockYearsOfExperience, mockProjects, mockResearches } from "../mockProfileExtras";
+import { mockPhone, mockSocialLinks, mockYearsOfExperience, mockProjects, mockResearches } from "../mockProfileExtras";
 import { MODALITY_LABEL } from "../labels";
 
 const CORNER_BUTTON_CLASS =
@@ -74,53 +73,49 @@ export function ProfileSidebar({
   ];
 
   return (
-    <aside className="relative w-full lg:w-96 shrink-0 h-[760px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center justify-between">
+    <aside className="relative w-full lg:w-96 shrink-0 h-[760px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center">
       {isOwnProfile ? (
-        <Button variant="connect" onClick={onEdit} className={CORNER_BUTTON_CLASS}>
-          Editar <Pencil size={14} />
-        </Button>
+        <button
+          type="button"
+          onClick={onEdit}
+          aria-label="Editar perfil"
+          className="absolute top-4 right-4 text-white/90 hover:text-white cursor-pointer"
+        >
+          <Pencil size={20} />
+        </button>
       ) : (
         <ConnectButton status={connectStatus} onClick={onConnect} className={CORNER_BUTTON_CLASS} />
       )}
 
-      <div className="flex flex-col items-center gap-3 w-full">
-        <img src={avatar} alt={profile.name} className="h-40 w-40 rounded-full object-cover bg-white/10" />
+      <div className="flex flex-col items-center gap-1 w-full mt-2">
+        <img src={avatar} alt={profile.name} className="h-40 w-40 rounded-full object-cover bg-white/10 mb-3" />
 
-        <div className="text-center w-full">
-          <Typography variant="h3" className="!text-white truncate">
-            {profile.name}
-          </Typography>
-          {profile.currentPosition && <p className="text-sm text-white/80 truncate">{profile.currentPosition}</p>}
-          {mainAcademicProfile && (
-            <p className="text-sm text-white/70 truncate">Alumni IFMA | {mainAcademicProfile.campusName}</p>
-          )}
-        </div>
-
+        <Typography variant="h3" className="!text-white truncate text-center">
+          {profile.name}
+        </Typography>
+        {profile.currentPosition && (
+          <p className="text-sm text-white/80 truncate text-center">{profile.currentPosition}</p>
+        )}
         {mainAcademicProfile && (
-          <div className="text-center w-full">
-            <p className="text-sm text-white/85">
-              Turma de {mainAcademicProfile.conclusionYear} ({mainAcademicProfile.entryYear} -{" "}
-              {mainAcademicProfile.conclusionYear})
-            </p>
-            <p className="text-sm text-white/85 truncate">
-              {MODALITY_LABEL[mainAcademicProfile.modality] ?? mainAcademicProfile.modality} em{" "}
-              {mainAcademicProfile.courseName}
-            </p>
-          </div>
+          <p className="text-sm text-white/70 truncate text-center">Alumni IFMA | {mainAcademicProfile.campusName}</p>
         )}
       </div>
 
-      {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-      <div className="w-full flex flex-wrap gap-2 justify-center max-h-14 overflow-hidden">
-        {mockSkills.map((skill) => (
-          <span key={skill} className="rounded-full bg-white/10 px-3 py-1 text-xs whitespace-nowrap">
-            {skill}
-          </span>
-        ))}
-      </div>
+      {mainAcademicProfile && (
+        <div className="text-center w-full mt-10">
+          <p className="text-sm text-white/85">
+            Turma de {mainAcademicProfile.conclusionYear} ({mainAcademicProfile.entryYear} -{" "}
+            {mainAcademicProfile.conclusionYear})
+          </p>
+          <p className="text-sm text-white/85 truncate">
+            {MODALITY_LABEL[mainAcademicProfile.modality] ?? mainAcademicProfile.modality} em{" "}
+            {mainAcademicProfile.courseName}
+          </p>
+        </div>
+      )}
 
       {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-      <div className="w-full grid grid-cols-3 gap-2 text-center border-t border-white/10 pt-4">
+      <div className="w-full grid grid-cols-3 gap-2 text-center mt-10">
         {stats.map(({ value, label }) => (
           <div key={label} className="flex flex-col items-center gap-1">
             <p className="font-semibold">{value}</p>
@@ -129,7 +124,7 @@ export function ProfileSidebar({
         ))}
       </div>
 
-      <div className="w-full flex flex-col items-center gap-2 border-t border-white/10 pt-4">
+      <div className="w-full flex flex-col items-center gap-5 mt-10">
         <div className="flex items-center justify-center gap-6 text-sm">
           <span className="flex items-center gap-2 text-white/85 min-w-0">
             <Phone size={16} className="shrink-0" /> {mockPhone}
@@ -140,47 +135,70 @@ export function ProfileSidebar({
           </span>
         </div>
 
+        {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
+        <a
+          href="#"
+          className="w-full text-center bg-green text-white font-semibold py-3 rounded-xl hover:bg-green-600 transition-colors"
+        >
+          Baixar Currículo
+        </a>
+
         {profile.portfolioUrl && (
           <a
             href={profile.portfolioUrl}
             target="_blank"
             rel="noreferrer"
-            className="text-sm text-white/85 hover:text-white underline"
+            className="text-sm text-white/85 hover:text-white"
           >
-            Ver Portifólio
+            Ver <span className="underline">Portifólio</span>
           </a>
         )}
-      </div>
 
-      <div className="w-full flex items-center justify-center gap-4 border-t border-white/10 pt-4">
-        {profile.linkedinUrl && (
-          <a href={profile.linkedinUrl} target="_blank" rel="noreferrer" className="text-white/85 hover:text-white">
-            <LinkedinIcon size={18} />
+        <div className="flex items-center justify-center gap-4">
+          {profile.linkedinUrl && (
+            <a
+              href={profile.linkedinUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-white/85 hover:text-white"
+            >
+              <LinkedinIcon size={18} />
+            </a>
+          )}
+          {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
+          <a
+            href={mockSocialLinks.twitter}
+            target="_blank"
+            rel="noreferrer"
+            className="text-white/85 hover:text-white"
+          >
+            <XIcon size={18} />
           </a>
-        )}
-        {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-        <a href={mockSocialLinks.twitter} target="_blank" rel="noreferrer" className="text-white/85 hover:text-white">
-          <XIcon size={18} />
-        </a>
-        <a
-          href={mockSocialLinks.facebook}
-          target="_blank"
-          rel="noreferrer"
-          className="text-white/85 hover:text-white"
-        >
-          <FacebookIcon size={18} />
-        </a>
-        <a
-          href={mockSocialLinks.instagram}
-          target="_blank"
-          rel="noreferrer"
-          className="text-white/85 hover:text-white"
-        >
-          <InstagramIcon size={18} />
-        </a>
-        <a href={mockSocialLinks.github} target="_blank" rel="noreferrer" className="text-white/85 hover:text-white">
-          <GithubIcon size={18} />
-        </a>
+          <a
+            href={mockSocialLinks.facebook}
+            target="_blank"
+            rel="noreferrer"
+            className="text-white/85 hover:text-white"
+          >
+            <FacebookIcon size={18} />
+          </a>
+          <a
+            href={mockSocialLinks.instagram}
+            target="_blank"
+            rel="noreferrer"
+            className="text-white/85 hover:text-white"
+          >
+            <InstagramIcon size={18} />
+          </a>
+          <a
+            href={mockSocialLinks.github}
+            target="_blank"
+            rel="noreferrer"
+            className="text-white/85 hover:text-white"
+          >
+            <GithubIcon size={18} />
+          </a>
+        </div>
       </div>
     </aside>
   );
