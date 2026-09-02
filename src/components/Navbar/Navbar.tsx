@@ -60,6 +60,11 @@ export function Navbar() {
     navigate("/auth/login");
   }
 
+  function handleNavigate(path: string) {
+    setProfileOpen(false);
+    navigate(path);
+  }
+
   return (
     <header
       className={`fixed top-3 left-0 right-0 z-50 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 border border-gray-200 bg-white/70 backdrop-blur-md rounded-3xl shadow-lg transition-transform duration-300 ease-in-out ${
@@ -114,7 +119,12 @@ export function Navbar() {
               <img src={kenia} alt="Foto de perfil" className="h-full w-full object-cover" />
             </button>
             {profileOpen && (
-              <ProfileMenu userName={userName ?? "Usuário"} avatarSrc={kenia} onLogout={handleLogout} />
+              <ProfileMenu
+                userName={userName ?? "Usuário"}
+                avatarSrc={kenia}
+                onLogout={handleLogout}
+                onNavigate={handleNavigate}
+              />
             )}
           </div>
           {/* Hamburger — mobile only */}
