@@ -125,7 +125,7 @@ export function ProfileSidebar({
       </div>
 
       <div className="w-full flex flex-col items-center gap-5 mt-10">
-        <div className="flex items-center justify-center gap-6 text-sm">
+        <div className="flex flex-col items-center gap-2 text-sm w-full">
           <span className="flex items-center gap-2 text-white/85 min-w-0">
             <Phone size={16} className="shrink-0" /> {mockPhone}
           </span>
