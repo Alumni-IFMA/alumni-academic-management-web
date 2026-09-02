@@ -72,10 +72,10 @@ export function Profile() {
 
   if (loading) {
     return (
-      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-14 pb-8">
+      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
         <div className="flex flex-col lg:flex-row gap-6">
-          <div className="w-full lg:w-96 h-[760px] rounded-2xl bg-gray-200 animate-pulse" />
-          <div className="flex-1 h-96 rounded-2xl bg-gray-200 animate-pulse" />
+          <div className="w-full lg:w-96 h-[800px] rounded-2xl bg-gray-200 animate-pulse" />
+          <div className="flex-1 h-96 lg:h-[800px] rounded-2xl bg-gray-200 animate-pulse" />
         </div>
       </main>
     );
@@ -83,14 +83,14 @@ export function Profile() {
 
   if (loadError || !profile) {
     return (
-      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-14 pb-8">
+      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
         <p className="text-center text-sm text-red-600">{loadError ?? "Não foi possível carregar este perfil."}</p>
       </main>
     );
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-14 pb-8">
+    <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
       <div className="flex flex-col lg:flex-row gap-6">
         <ProfileSidebar
           profile={profile}
@@ -100,7 +100,7 @@ export function Profile() {
           onConnect={() => connect(profile.id)}
         />
 
-        <div className="flex-1 flex flex-col gap-6">
+        <div className="flex-1 flex flex-col gap-6 lg:h-[800px]">
           {!isOwnProfile && ownProfile && (
             <ConnectionBanner
               own={ownProfile.academicProfiles}

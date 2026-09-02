@@ -20,8 +20,8 @@ export function ProfileTabs({
   const [activeTab, setActiveTab] = useState<TabKey>("academic");
 
   return (
-    <section className="rounded-2xl bg-white p-6 shadow-sm">
-      <div className="flex gap-2 border-b border-gray-100 mb-4">
+    <section className="rounded-2xl bg-white p-6 shadow-sm flex-1 min-h-0 flex flex-col">
+      <div className="flex gap-2 border-b border-gray-100 mb-4 shrink-0">
         {TABS.map((tab) => (
           <button
             key={tab.key}
@@ -38,11 +38,13 @@ export function ProfileTabs({
         ))}
       </div>
 
-      {activeTab === "academic" ? (
-        <AcademicTab academicProfiles={academicProfiles} />
-      ) : (
-        <ProfessionalTab currentPosition={currentPosition} />
-      )}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        {activeTab === "academic" ? (
+          <AcademicTab academicProfiles={academicProfiles} />
+        ) : (
+          <ProfessionalTab currentPosition={currentPosition} />
+        )}
+      </div>
     </section>
   );
 }

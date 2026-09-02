@@ -7,8 +7,8 @@ import type { ConnectStatus } from "../../../hooks/useConnection";
 import { mockPhone, mockSocialLinks, mockYearsOfExperience, mockProjects, mockResearches } from "../mockProfileExtras";
 import { MODALITY_LABEL } from "../labels";
 
-const CORNER_BUTTON_CLASS =
-  "absolute top-4 right-4 !bg-green !text-white hover:!bg-green-600 !px-4 !py-1.5 flex items-center gap-1.5";
+const FULL_WIDTH_ACTION_CLASS =
+  "w-full !rounded-xl !py-3 !text-base !bg-green hover:!bg-green-600 justify-center whitespace-normal";
 
 function LinkedinIcon({ size = 16, className }: { size?: number; className?: string }) {
   return (
@@ -73,8 +73,8 @@ export function ProfileSidebar({
   ];
 
   return (
-    <aside className="relative w-full lg:w-96 shrink-0 h-[760px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center justify-center">
-      {isOwnProfile ? (
+    <aside className="relative w-full lg:w-96 shrink-0 h-[800px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center justify-center">
+      {isOwnProfile && (
         <button
           type="button"
           onClick={onEdit}
@@ -83,8 +83,6 @@ export function ProfileSidebar({
         >
           <Pencil size={20} />
         </button>
-      ) : (
-        <ConnectButton status={connectStatus} onClick={onConnect} className={CORNER_BUTTON_CLASS} />
       )}
 
       <div className="flex flex-col items-center gap-1 w-full">
@@ -135,11 +133,12 @@ export function ProfileSidebar({
           </span>
         </div>
 
+        {!isOwnProfile && (
+          <ConnectButton status={connectStatus} onClick={onConnect} className={FULL_WIDTH_ACTION_CLASS} />
+        )}
+
         {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-        <a
-          href="#"
-          className="w-full text-center bg-green text-white font-semibold py-3 rounded-xl hover:bg-green-600 transition-colors"
-        >
+        <a href="#" className="text-sm text-white/85 hover:text-white underline">
           Baixar Currículo
         </a>
 
