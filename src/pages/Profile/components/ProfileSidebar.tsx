@@ -83,8 +83,8 @@ export function ProfileSidebar({
         <ConnectButton status={connectStatus} onClick={onConnect} className={CORNER_BUTTON_CLASS} />
       )}
 
-      <div className="flex flex-col items-center gap-2 w-full">
-        <img src={avatar} alt={profile.name} className="h-44 w-44 rounded-full object-cover bg-white/10" />
+      <div className="flex flex-col items-center gap-3 w-full">
+        <img src={avatar} alt={profile.name} className="h-40 w-40 rounded-full object-cover bg-white/10" />
 
         <div className="text-center w-full">
           <Typography variant="h3" className="!text-white truncate">
@@ -95,20 +95,20 @@ export function ProfileSidebar({
             <p className="text-sm text-white/70 truncate">Alumni IFMA | {mainAcademicProfile.campusName}</p>
           )}
         </div>
-      </div>
 
-      {mainAcademicProfile && (
-        <div className="text-center w-full">
-          <p className="text-sm text-white/85">
-            Turma de {mainAcademicProfile.conclusionYear} ({mainAcademicProfile.entryYear} -{" "}
-            {mainAcademicProfile.conclusionYear})
-          </p>
-          <p className="text-sm text-white/85 truncate">
-            {MODALITY_LABEL[mainAcademicProfile.modality] ?? mainAcademicProfile.modality} em{" "}
-            {mainAcademicProfile.courseName}
-          </p>
-        </div>
-      )}
+        {mainAcademicProfile && (
+          <div className="text-center w-full">
+            <p className="text-sm text-white/85">
+              Turma de {mainAcademicProfile.conclusionYear} ({mainAcademicProfile.entryYear} -{" "}
+              {mainAcademicProfile.conclusionYear})
+            </p>
+            <p className="text-sm text-white/85 truncate">
+              {MODALITY_LABEL[mainAcademicProfile.modality] ?? mainAcademicProfile.modality} em{" "}
+              {mainAcademicProfile.courseName}
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
       <div className="w-full flex flex-wrap gap-2 justify-center max-h-14 overflow-hidden">
