@@ -1,5 +1,5 @@
-import { Search } from "lucide-react";
-import type { ChangeEventHandler, KeyboardEvent } from "react";
+import { Search, X } from "lucide-react";
+import type { ChangeEvent, ChangeEventHandler, KeyboardEvent } from "react";
 
 export function SearchBar({
   placeholder = "Pesquise...",
@@ -22,6 +22,10 @@ export function SearchBar({
     }
   }
 
+  function handleClear() {
+    onChange({ target: { value: "" } } as ChangeEvent<HTMLInputElement>);
+  }
+
   return (
     <div
       className={`flex items-center bg-white rounded-3xl overflow-hidden w-full ${className} shadow-[0_-4px_10px_rgba(0,0,0,0.08),0_4px_10px_rgba(0,0,0,0.08)]`}
@@ -32,13 +36,23 @@ export function SearchBar({
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
         />
         <input
-          type="search"
+          type="text"
           placeholder={placeholder}
           value={value}
           onChange={onChange}
           onKeyDown={handleKeyDown}
-          className="w-full py-3 pl-11 pr-2 text-sm outline-none [&::-webkit-search-cancel-button]:mr-2"
+          className="w-full py-3 pl-11 pr-9 text-sm outline-none"
         />
+        {value && (
+          <button
+            type="button"
+            onClick={handleClear}
+            aria-label="Limpar busca"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-green hover:text-green-600"
+          >
+            <X size={16} />
+          </button>
+        )}
       </div>
 
       <button
