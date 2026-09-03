@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { ProfileMenu } from "./ProfileMenu";
 import profileService from "../../services/profileService";
+import networkAlumni from "../../services/networkAlumni";
 import { getAvatarForUser } from "../../pages/Network/avatarFallback";
 import sino from "../../assets/sino.png";
 import alumni from "../../assets/alumni-ifma.png";
@@ -24,7 +25,7 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [hasNotifications] = useState(false);
+  const [hasNotifications, setHasNotifications] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const lastScrollY = useRef(0);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -46,6 +47,21 @@ export function Navbar() {
   }, [userId]);
 
   const avatarSrc = avatarUrl || (userId != null ? getAvatarForUser(userId) : kenia);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    networkAlumni
+      .getPendingRequests()
+      .then((data) => {
+        if (!cancelled) setHasNotifications(data.length > 0);
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -120,7 +136,10 @@ export function Navbar() {
         {/* Actions */}
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex gap-2">
-            <button className="relative p-1 rounded-full hover:bg-gray-100">
+            <button
+              onClick={() => navigate("/notificacoes")}
+              className="relative p-1 rounded-full hover:bg-gray-100"
+            >
               <img src={sino} alt="Notificações" className="h-9 w-9" />
               {hasNotifications && (
                 <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />

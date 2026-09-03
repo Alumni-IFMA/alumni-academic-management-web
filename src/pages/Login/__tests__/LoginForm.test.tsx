@@ -102,4 +102,17 @@ describe("LoginForm", () => {
 
     expect(botao).toBeDisabled();
   });
+
+  it("alterna a visibilidade da senha ao clicar no ícone", async () => {
+    render(<LoginForm />, { wrapper: Wrapper });
+
+    const passwordInput = screen.getByPlaceholderText("Digite sua senha");
+    expect(passwordInput).toHaveAttribute("type", "password");
+
+    await userEvent.click(screen.getByRole("button", { name: "Mostrar senha" }));
+    expect(passwordInput).toHaveAttribute("type", "text");
+
+    await userEvent.click(screen.getByRole("button", { name: "Ocultar senha" }));
+    expect(passwordInput).toHaveAttribute("type", "password");
+  });
 });

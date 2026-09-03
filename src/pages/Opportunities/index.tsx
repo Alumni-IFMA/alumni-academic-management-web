@@ -11,6 +11,7 @@ import { SlidersHorizontal } from "lucide-react";
 import { getJobs, getJobById } from "../../services/jobsService";
 import { mapJob, type Job } from "./mapJob";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useSavedJobs } from "./hooks/useSavedJobs";
 
 const PAGE_SIZE = 10;
 const DEBOUNCE_MS = 400;
@@ -35,6 +36,8 @@ export function Opportunities() {
   const [remoteOnly, setRemoteOnly] = useState(false);
   const [sort, setSort] = useState("all");
   const [filterOpen, setFilterOpen] = useState(false);
+  const [view, setView] = useState<"all" | "saved">("all");
+  const { savedJobs, isSaved, toggleSave } = useSavedJobs();
 
   const debouncedKeyword = useDebouncedValue(keyword, DEBOUNCE_MS);
   const debouncedLocation = useDebouncedValue(location, DEBOUNCE_MS);
@@ -104,6 +107,7 @@ export function Opportunities() {
   }
 
   function handleListScroll(e: UIEvent<HTMLDivElement>) {
+    if (view === "saved") return;
     const el = e.currentTarget;
     if (el.scrollHeight - el.scrollTop - el.clientHeight < 100) {
       handleLoadMore();
@@ -127,6 +131,21 @@ export function Opportunities() {
 
   function handleSearch() {}
 
+  const displayedJobs =
+    view === "saved"
+      ? savedJobs.filter(
+          (job) =>
+            !keyword ||
+            job.title.toLowerCase().includes(keyword.toLowerCase()) ||
+            job.companyName.toLowerCase().includes(keyword.toLowerCase())
+        )
+      : jobs;
+
+  useEffect(() => {
+    setSelectedJob(displayedJobs[0] ?? null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view]);
+
   const filterCardProps = {
     location,
     onLocationChange: setLocation,
@@ -149,6 +168,25 @@ export function Opportunities() {
         <Typography variant="p">
           Explore e encontre uma vaga perfeita para você.
         </Typography>
+      </div>
+
+      <div className="mt-4 flex gap-2 px-4 sm:px-6 lg:px-8">
+        <button
+          onClick={() => setView("all")}
+          className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+            view === "all" ? "bg-dark-green text-white border-dark-green" : "border-gray-300 text-gray-600"
+          }`}
+        >
+          Todas
+        </button>
+        <button
+          onClick={() => setView("saved")}
+          className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+            view === "saved" ? "bg-dark-green text-white border-dark-green" : "border-gray-300 text-gray-600"
+          }`}
+        >
+          Salvas
+        </button>
       </div>
 
       <div className="mt-6 flex gap-4 items-center px-4 sm:px-6 lg:px-8">
@@ -224,18 +262,24 @@ export function Opportunities() {
 
           {!loading && loadError && <p className="text-red-500 text-sm">{loadError}</p>}
 
-          {!loading && !loadError && jobs.length === 0 && (
-            <p className="text-gray-500 text-sm">Nenhuma vaga encontrada com esses filtros.</p>
+          {!loading && !loadError && displayedJobs.length === 0 && (
+            <p className="text-gray-500 text-sm">
+              {view === "saved" ? "Nenhuma vaga salva." : "Nenhuma vaga encontrada com esses filtros."}
+            </p>
           )}
 
-          {!loading && !loadError && jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              job={job}
-              isSelected={selectedJob?.id === job.id}
-              onClick={() => handleSelectJob(job)}
-            />
-          ))}
+          {!loading &&
+            !loadError &&
+            displayedJobs.map((job) => (
+              <JobCard
+                key={job.id}
+                job={job}
+                isSelected={selectedJob?.id === job.id}
+                saved={isSaved(job.id)}
+                onClick={() => handleSelectJob(job)}
+                onToggleSave={() => toggleSave(job)}
+              />
+            ))}
 
           {!loading && !loadError && loadingMore && (
             <p className="text-center text-sm text-gray-400 py-2">Carregando mais vagas...</p>
@@ -243,12 +287,20 @@ export function Opportunities() {
         </div>
 
         {/* Detalhe da vaga */}
-        <JobDetail job={selectedJob} loading={selectedJobLoading} error={selectedJobError} />
+        <JobDetail
+          job={selectedJob}
+          loading={selectedJobLoading}
+          error={selectedJobError}
+          saved={selectedJob ? isSaved(selectedJob.id) : false}
+          onToggleSave={() => selectedJob && toggleSave(selectedJob)}
+        />
       </div>
       </div>
 
-      <footer className="relative z-10 py-6 px-8 text-center text-sm text-gray-500">
-        © 2026 Equipe alumni IFMA • Feito com carinho para a comunidade
+      <footer className="relative z-10 py-6 px-8 flex justify-center">
+        <span className="bg-page-bg/80 backdrop-blur-sm rounded-full px-4 py-1.5 text-center text-sm text-gray-500">
+          © 2026 Equipe alumni IFMA • Feito com carinho para a comunidade
+        </span>
       </footer>
     </div>
   );

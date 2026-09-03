@@ -30,3 +30,19 @@ export async function getJobById(id: number | string): Promise<JobRawDto> {
   const { data } = await api.get<JobRawDto>(`/jobs/${id}`);
   return data;
 }
+
+/** POST /jobs/{id}/save */
+export async function saveJob(id: number): Promise<void> {
+  await api.post(`/jobs/${id}/save`);
+}
+
+/** DELETE /jobs/{id}/save */
+export async function unsaveJob(id: number): Promise<void> {
+  await api.delete(`/jobs/${id}/save`);
+}
+
+/** GET /jobs/saved */
+export async function getSavedJobs(): Promise<JobRawDto[]> {
+  const { data } = await api.get<JobRawDto[]>("/jobs/saved");
+  return data;
+}

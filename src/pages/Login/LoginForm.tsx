@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "../../components/Button/Button";
 import { FormField } from "../../components/FormField/FormField";
 import { InputField } from "../../components/InputField/InputField";
@@ -9,6 +10,7 @@ import * as yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, Toaster } from "sonner";
 import { useAuth } from "../../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 const schema = yup.object({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
@@ -29,6 +31,7 @@ interface LoginFormValues {
 export function LoginForm() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -68,12 +71,22 @@ export function LoginForm() {
         </FormField>
         <FormField>
           <Label htmlFor="pass">Senha</Label>
-          <InputField
-           type="password" 
-           id="password"
-           placeholder="Digite sua senha"
-           {...register("password")} 
-          />
+          <div className="relative">
+            <InputField
+              type={showPassword ? "text" : "password"}
+              id="password"
+              placeholder="Digite sua senha"
+              {...register("password")}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-dark-green cursor-pointer"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
           {errors.password && (
             <span className="text-red-500 text-sm">{errors.password.message}</span>
           )}

@@ -15,11 +15,15 @@ export interface JobCardData {
 export function JobCard({
   job,
   isSelected = false,
+  saved = false,
   onClick,
+  onToggleSave,
 }: {
   job: JobCardData;
   isSelected?: boolean;
+  saved?: boolean;
   onClick?: () => void;
+  onToggleSave?: () => void;
 }) {
   return (
     <div
@@ -41,10 +45,14 @@ export function JobCard({
           <span className="text-sm font-medium text-gray-700">{job.companyName}</span>
         </div>
         <button
-          onClick={(e) => e.stopPropagation()}
-          className="text-gray-400 hover:text-dark-green"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleSave?.();
+          }}
+          aria-label={saved ? "Remover dos salvos" : "Salvar vaga"}
+          className={saved ? "text-dark-green" : "text-gray-400 hover:text-dark-green"}
         >
-          <Bookmark size={18} />
+          <Bookmark size={18} className={saved ? "fill-current" : ""} />
         </button>
       </div>
 

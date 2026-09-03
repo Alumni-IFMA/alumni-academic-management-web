@@ -1,47 +1,36 @@
 import { describe, it, expect, vi, beforeEach, type Mocked } from "vitest";
 import api from "../api";
-import { getLatestJobs, getJobs, getJobById } from "../jobsService";
+import { saveJob, unsaveJob, getSavedJobs } from "../jobsService";
 
 vi.mock("../api");
 const mockedApi = api as Mocked<typeof api>;
 
-describe("jobsService", () => {
+describe("jobsService saved jobs", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("calls GET /jobs?size=2&sort=createdAt,desc and returns data", async () => {
-    const mockJobs = [
-      { id: 1, title: "Dev Backend", companyName: "Mermãs Digitais", companyLogo: "/logo.png", location: "Imperatriz - MA", type: "Voluntário" },
-    ];
-    mockedApi.get.mockResolvedValue({ data: mockJobs });
+  it("saveJob calls POST /jobs/{id}/save", async () => {
+    mockedApi.post.mockResolvedValue({ data: {} });
 
-    const result = await getLatestJobs();
+    await saveJob(7);
 
-    expect(mockedApi.get).toHaveBeenCalledWith("/jobs", { params: { size: 2, sort: "createdAt,desc" } });
-    expect(result).toEqual(mockJobs);
+    expect(mockedApi.post).toHaveBeenCalledWith("/jobs/7/save");
   });
 
-  it("calls GET /jobs with the given filters and returns the page response", async () => {
-    const mockPage = {
-      content: [{ id: 1, title: "Dev" }],
-      totalPages: 3,
-      number: 0,
-      last: false,
-    };
-    mockedApi.get.mockResolvedValue({ data: mockPage });
+  it("unsaveJob calls DELETE /jobs/{id}/save", async () => {
+    mockedApi.delete.mockResolvedValue({ data: {} });
 
-    const result = await getJobs({ keyword: "java", page: 0, size: 10 });
+    await unsaveJob(7);
 
-    expect(mockedApi.get).toHaveBeenCalledWith("/jobs", { params: { keyword: "java", page: 0, size: 10 } });
-    expect(result).toEqual(mockPage);
+    expect(mockedApi.delete).toHaveBeenCalledWith("/jobs/7/save");
   });
 
-  it("calls GET /jobs/{id} and returns the job", async () => {
-    const mockJob = { id: 5, title: "Dev Backend" };
-    mockedApi.get.mockResolvedValue({ data: mockJob });
+  it("getSavedJobs calls GET /jobs/saved and returns the raw list", async () => {
+    const jobs = [{ id: 1, title: "Vaga salva", company: "Empresa" }];
+    mockedApi.get.mockResolvedValue({ data: jobs });
 
-    const result = await getJobById(5);
+    const result = await getSavedJobs();
 
-    expect(mockedApi.get).toHaveBeenCalledWith("/jobs/5");
-    expect(result).toEqual(mockJob);
+    expect(mockedApi.get).toHaveBeenCalledWith("/jobs/saved");
+    expect(result).toEqual(jobs);
   });
 });

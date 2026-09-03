@@ -14,12 +14,12 @@ export function Home() {
   }
 
   return (
-    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-0">
       <HeroSection userName={userName ?? "Usuário"} onSearch={handleSearch} />
       <ShortcutCards />
 
       {/* Bottom two-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-6 items-stretch">
         <div className="lg:col-span-2">
           <NewsSection />
         </div>

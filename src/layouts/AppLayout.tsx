@@ -31,8 +31,10 @@ export function AppLayout() {
       <main className="relative z-10 flex-1 pt-24">
         <Outlet />
       </main>
-      <footer className="relative z-10 pt-2 pb-6 px-8 text-center text-sm text-gray-500">
-        © 2026 Equipe alumni IFMA • Feito com carinho para a comunidade
+      <footer className="relative z-10 pt-2 pb-6 px-8 flex justify-center">
+        <span className="bg-page-bg/80 backdrop-blur-sm rounded-full px-4 py-1.5 text-center text-sm text-gray-500">
+          © 2026 Equipe alumni IFMA • Feito com carinho para a comunidade
+        </span>
       </footer>
     </div>
   );

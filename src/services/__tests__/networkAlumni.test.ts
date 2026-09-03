@@ -53,3 +53,55 @@ describe("networkAlumni.getSentRequests", () => {
     expect(result).toEqual(sent);
   });
 });
+
+describe("networkAlumni.getPendingRequests", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("calls GET /connections/pending and returns the raw list", async () => {
+    const pending = [{ id: 2, requester: dto, addressee: dto, status: "PENDING" as const }];
+    mockedApi.get.mockResolvedValue({ data: pending });
+
+    const result = await networkAlumni.getPendingRequests();
+
+    expect(mockedApi.get).toHaveBeenCalledWith("/connections/pending");
+    expect(result).toEqual(pending);
+  });
+});
+
+describe("networkAlumni.getAcceptedConnections", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("calls GET /connections and returns the raw list", async () => {
+    const accepted = [{ id: 3, requester: dto, addressee: dto, status: "ACCEPTED" as const }];
+    mockedApi.get.mockResolvedValue({ data: accepted });
+
+    const result = await networkAlumni.getAcceptedConnections();
+
+    expect(mockedApi.get).toHaveBeenCalledWith("/connections");
+    expect(result).toEqual(accepted);
+  });
+});
+
+describe("networkAlumni.acceptConnection", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("calls PATCH /connections/{id}/accept", async () => {
+    mockedApi.patch.mockResolvedValue({ data: {} });
+
+    await networkAlumni.acceptConnection(9);
+
+    expect(mockedApi.patch).toHaveBeenCalledWith("/connections/9/accept");
+  });
+});
+
+describe("networkAlumni.declineConnection", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("calls DELETE /connections/{id}", async () => {
+    mockedApi.delete.mockResolvedValue({ data: {} });
+
+    await networkAlumni.declineConnection(9);
+
+    expect(mockedApi.delete).toHaveBeenCalledWith("/connections/9");
+  });
+});

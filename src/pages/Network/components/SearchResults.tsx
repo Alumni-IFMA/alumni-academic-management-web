@@ -20,7 +20,7 @@ export function SearchResults({
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 bg-page-bg/80 backdrop-blur-sm rounded-2xl px-4 py-2">
         <h2 className="text-2xl font-bold text-dark-green">Resultados para &quot;{query}&quot;</h2>
         <button
           type="button"
