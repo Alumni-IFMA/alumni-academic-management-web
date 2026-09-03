@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useConnection } from "../../hooks/useConnection";
 import profileService, { type UserProfile } from "../../services/profileService";
@@ -11,6 +12,7 @@ import { ConnectionBanner } from "./components/ConnectionBanner";
 
 export function Profile() {
   const { id: idParam } = useParams();
+  const navigate = useNavigate();
   const { userId } = useAuth();
   const { connect, statusFor } = useConnection();
 
@@ -72,6 +74,7 @@ export function Profile() {
   if (loading) {
     return (
       <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+        <BackButton onClick={() => navigate(-1)} />
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-96 h-[800px] rounded-2xl bg-gray-200 animate-pulse" />
           <div className="flex-1 h-96 lg:h-[800px] rounded-2xl bg-gray-200 animate-pulse" />
@@ -83,6 +86,7 @@ export function Profile() {
   if (loadError || !profile) {
     return (
       <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+        <BackButton onClick={() => navigate(-1)} />
         <p className="text-center text-sm text-red-600">{loadError ?? "Não foi possível carregar este perfil."}</p>
       </main>
     );
@@ -90,6 +94,7 @@ export function Profile() {
 
   return (
     <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+      <BackButton onClick={() => navigate(-1)} />
       <div className="flex flex-col lg:flex-row gap-6">
         <ProfileSidebar
           profile={profile}
@@ -111,5 +116,17 @@ export function Profile() {
 
       {isOwnProfile && <EditProfileModal isOpen={editOpen} onClose={() => setEditOpen(false)} profile={profile} />}
     </main>
+  );
+}
+
+function BackButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Voltar"
+      className="mb-4 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+    >
+      <ArrowLeft size={22} className="text-dark-green" />
+    </button>
   );
 }

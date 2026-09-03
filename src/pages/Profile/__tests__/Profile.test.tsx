@@ -76,6 +76,7 @@ describe("Profile", () => {
     expect(await screen.findByText("Kenia Reis")).toBeInTheDocument();
     expect(screen.getByLabelText("Editar perfil")).toBeInTheDocument();
     expect(screen.queryByText(/Mesmo curso e campus/)).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Voltar")).toBeInTheDocument();
   });
 
   it("shows the other-profile variant with a connect button and the connection banner", async () => {
