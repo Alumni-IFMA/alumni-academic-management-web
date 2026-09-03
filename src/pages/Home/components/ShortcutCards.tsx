@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Users, MessageCircle, BookOpen, Download, type LucideIcon } from "lucide-react";
+import { Toaster } from "sonner";
+import { FeedbackModal } from "../../../components/FeedbackModal/FeedbackModal";
 
-type CardAction = { type: "navigate"; to: string } | { type: "external"; href: string };
+type CardAction = { type: "navigate"; to: string } | { type: "external"; href: string } | { type: "modal" };
 
 interface Card {
   icon: LucideIcon;
@@ -21,7 +24,7 @@ const CARDS: Card[] = [
     icon: MessageCircle,
     title: "Feedback",
     subtitle: "Avalie seu curso",
-    action: { type: "external", href: "https://forms.google.com" },
+    action: { type: "modal" },
   },
   {
     icon: BookOpen,
@@ -39,10 +42,13 @@ const CARDS: Card[] = [
 
 export function ShortcutCards() {
   const navigate = useNavigate();
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   function handleClick(action: CardAction) {
     if (action.type === "navigate") {
       navigate(action.to);
+    } else if (action.type === "modal") {
+      setFeedbackOpen(true);
     } else {
       window.open(action.href, "_blank", "noopener,noreferrer");
     }
@@ -50,6 +56,7 @@ export function ShortcutCards() {
 
   return (
     <section className="pb-4">
+      <Toaster position="top-center" richColors />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {CARDS.map(({ icon: Icon, title, subtitle, action }) => (
           <button
@@ -67,6 +74,8 @@ export function ShortcutCards() {
           </button>
         ))}
       </div>
+
+      <FeedbackModal isOpen={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
     </section>
   );
 }
