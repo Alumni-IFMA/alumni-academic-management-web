@@ -154,7 +154,7 @@ export function ProfileSidebar({
             <button
               type="button"
               onClick={() => setDisconnectOpen(true)}
-              className={`${FULL_WIDTH_ACTION_CLASS} !bg-transparent border-2 border-white/70 hover:!bg-white/10`}
+              className={`${FULL_WIDTH_ACTION_CLASS} flex items-center !bg-transparent border-2 border-white/70 hover:!bg-white/10`}
             >
               Desfazer conexão
             </button>
