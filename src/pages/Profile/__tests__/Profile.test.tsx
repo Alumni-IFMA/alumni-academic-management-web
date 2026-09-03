@@ -10,7 +10,7 @@ vi.mock("../../../services/profileService");
 const mockedProfileService = profileService as Mocked<typeof profileService>;
 
 vi.mock("../../../hooks/useConnection", () => ({
-  useConnection: () => ({ connect: vi.fn(), statusFor: () => "idle" as const }),
+  useConnection: () => ({ connect: vi.fn(), disconnect: vi.fn(), statusFor: () => "idle" as const }),
 }));
 
 const fakeAuth = { isAuthenticated: true, userName: "Kenia", userId: 1, login: vi.fn(), logout: vi.fn() };
@@ -75,7 +75,8 @@ describe("Profile", () => {
 
     expect(await screen.findByText("Kenia Reis")).toBeInTheDocument();
     expect(screen.getByLabelText("Editar perfil")).toBeInTheDocument();
-    expect(screen.queryByText(/conexões em comum/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Mesmo curso e campus/)).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Voltar")).toBeInTheDocument();
   });
 
   it("shows the other-profile variant with a connect button and the connection banner", async () => {
@@ -86,7 +87,7 @@ describe("Profile", () => {
 
     expect(await screen.findByText("João Silva")).toBeInTheDocument();
     expect(screen.getByText("Conectar")).toBeInTheDocument();
-    expect(await screen.findByText(/conexões em comum/)).toBeInTheDocument();
+    expect(await screen.findByText(/Mesmo curso e campus/)).toBeInTheDocument();
   });
 
   it("shows a loading skeleton while the profile is being fetched", () => {

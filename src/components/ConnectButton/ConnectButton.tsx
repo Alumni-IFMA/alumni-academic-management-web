@@ -5,6 +5,7 @@ const LABELS: Record<ConnectStatus, string> = {
   idle: "Conectar",
   pending: "Enviando...",
   sent: "Solicitado",
+  connected: "Conectado",
   error: "Tentar de novo",
 };
 
@@ -17,7 +18,7 @@ export function ConnectButton({
   onClick: () => void;
   className?: string;
 }) {
-  const disabled = status === "pending" || status === "sent";
+  const disabled = status === "pending" || status === "sent" || status === "connected";
 
   return (
     <Button

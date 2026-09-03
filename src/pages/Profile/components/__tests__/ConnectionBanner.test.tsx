@@ -18,32 +18,41 @@ function academicProfile(overrides: Partial<AcademicProfileDto> = {}): AcademicP
 
 describe("ConnectionBanner", () => {
   it("shows the same course/campus badge when own and other profiles match", () => {
-    render(<ConnectionBanner own={[academicProfile()]} other={[academicProfile()]} mutualConnectionsCount={5} />);
+    render(<ConnectionBanner own={[academicProfile()]} other={[academicProfile()]} />);
 
     expect(screen.getByText(/Mesmo curso e campus/)).toBeInTheDocument();
   });
 
   it("hides the badge when course or campus differ", () => {
     render(
-      <ConnectionBanner
-        own={[academicProfile()]}
-        other={[academicProfile({ courseName: "Engenharia Civil" })]}
-        mutualConnectionsCount={5}
-      />
+      <ConnectionBanner own={[academicProfile()]} other={[academicProfile({ courseName: "Engenharia Civil" })]} />
     );
 
     expect(screen.queryByText(/Mesmo curso e campus/)).not.toBeInTheDocument();
   });
 
   it("hides the badge when either profile has no academic data", () => {
-    render(<ConnectionBanner own={[]} other={[]} mutualConnectionsCount={5} />);
+    render(<ConnectionBanner own={[]} other={[]} />);
 
     expect(screen.queryByText(/Mesmo curso e campus/)).not.toBeInTheDocument();
   });
 
-  it("always shows the mock mutual connections count", () => {
-    render(<ConnectionBanner own={[]} other={[]} mutualConnectionsCount={5} />);
+  it("matches across all academic profiles, not just the first one on each side", () => {
+    // own's second profile matches other's first profile — a same-index-only
+    // comparison would miss this.
+    render(
+      <ConnectionBanner
+        own={[academicProfile({ id: 1, courseName: "Redes de Computadores" }), academicProfile({ id: 2 })]}
+        other={[academicProfile({ id: 3 })]}
+      />
+    );
 
-    expect(screen.getByText("5 conexões em comum")).toBeInTheDocument();
+    expect(screen.getByText(/Mesmo curso e campus/)).toBeInTheDocument();
+  });
+
+  it("renders nothing (not even an empty banner) when there is no match", () => {
+    const { container } = render(<ConnectionBanner own={[]} other={[]} />);
+
+    expect(container).toBeEmptyDOMElement();
   });
 });

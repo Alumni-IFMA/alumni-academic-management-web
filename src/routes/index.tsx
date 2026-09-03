@@ -55,15 +55,8 @@ function AppRoutes() {
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/opportunities" element={<Opportunities />} />
       </Route>
-      <Route
-        path="/opportunities"
-        element={
-          <PrivateRoute>
-            <Opportunities />
-          </PrivateRoute>
-        }
-      />
       <Route path="*" element={<Navigate to="/home" replace />} />
       <Route
         path="/admin"

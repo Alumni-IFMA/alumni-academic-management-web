@@ -26,7 +26,14 @@ export function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [hasNotifications, setHasNotifications] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(() => {
+    if (userId == null) return null;
+    try {
+      return localStorage.getItem(`avatarUrl:${userId}`);
+    } catch {
+      return null;
+    }
+  });
   const lastScrollY = useRef(0);
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +44,17 @@ export function Navbar() {
     profileService
       .getProfile(userId)
       .then((profile) => {
-        if (!cancelled) setAvatarUrl(profile.avatarUrl);
+        if (cancelled) return;
+        setAvatarUrl(profile.avatarUrl);
+        try {
+          if (profile.avatarUrl) {
+            localStorage.setItem(`avatarUrl:${userId}`, profile.avatarUrl);
+          } else {
+            localStorage.removeItem(`avatarUrl:${userId}`);
+          }
+        } catch {
+          // localStorage indisponível (modo privado, etc.) — segue sem cache
+        }
       })
       .catch(() => {});
 

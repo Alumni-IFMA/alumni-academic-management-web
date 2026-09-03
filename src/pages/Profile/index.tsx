@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useConnection } from "../../hooks/useConnection";
 import profileService, { type UserProfile } from "../../services/profileService";
@@ -8,12 +9,12 @@ import { AboutSection } from "./components/AboutSection";
 import { ProfileTabs } from "./components/ProfileTabs";
 import { EditProfileModal } from "./components/EditProfileModal";
 import { ConnectionBanner } from "./components/ConnectionBanner";
-import { mockMutualConnectionsCount } from "./mockProfileExtras";
 
 export function Profile() {
   const { id: idParam } = useParams();
+  const navigate = useNavigate();
   const { userId } = useAuth();
-  const { connect, statusFor } = useConnection();
+  const { connect, disconnect, statusFor } = useConnection();
 
   const [ownProfile, setOwnProfile] = useState<UserProfile | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -72,7 +73,8 @@ export function Profile() {
 
   if (loading) {
     return (
-      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+      <main className="relative max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+        <BackButton onClick={() => navigate(-1)} />
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-96 h-[800px] rounded-2xl bg-gray-200 animate-pulse" />
           <div className="flex-1 h-96 lg:h-[800px] rounded-2xl bg-gray-200 animate-pulse" />
@@ -83,7 +85,8 @@ export function Profile() {
 
   if (loadError || !profile) {
     return (
-      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+      <main className="relative max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+        <BackButton onClick={() => navigate(-1)} />
         <p className="text-center text-sm text-red-600">{loadError ?? "Não foi possível carregar este perfil."}</p>
       </main>
     );
@@ -96,17 +99,15 @@ export function Profile() {
           profile={profile}
           isOwnProfile={isOwnProfile}
           onEdit={() => setEditOpen(true)}
+          onBack={() => navigate(-1)}
           connectStatus={statusFor(profile.id)}
           onConnect={() => connect(profile.id)}
+          onDisconnect={() => disconnect(profile.id)}
         />
 
         <div className="flex-1 flex flex-col gap-6 lg:h-[800px]">
           {!isOwnProfile && ownProfile && (
-            <ConnectionBanner
-              own={ownProfile.academicProfiles}
-              other={profile.academicProfiles}
-              mutualConnectionsCount={mockMutualConnectionsCount}
-            />
+            <ConnectionBanner own={ownProfile.academicProfiles} other={profile.academicProfiles} />
           )}
 
           <AboutSection bio={profile.bio} />
@@ -116,5 +117,17 @@ export function Profile() {
 
       {isOwnProfile && <EditProfileModal isOpen={editOpen} onClose={() => setEditOpen(false)} profile={profile} />}
     </main>
+  );
+}
+
+function BackButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Voltar"
+      className="absolute top-4 left-2 sm:left-4 lg:left-6 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors cursor-pointer shadow-sm"
+    >
+      <ArrowLeft size={22} className="text-dark-green" />
+    </button>
   );
 }

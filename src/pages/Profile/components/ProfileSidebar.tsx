@@ -1,6 +1,8 @@
-import { Pencil, Phone, Mail } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Pencil, Phone, Mail } from "lucide-react";
 import { Typography } from "../../../components/Typography/Typography";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
+import { DeleteModal } from "../../../components/DeleteModal/DeleteModal";
 import { getAvatarForUser } from "../../Network/avatarFallback";
 import type { UserProfile } from "../../../services/profileService";
 import type { ConnectStatus } from "../../../hooks/useConnection";
@@ -54,17 +56,22 @@ export function ProfileSidebar({
   profile,
   isOwnProfile,
   onEdit,
+  onBack,
   connectStatus,
   onConnect,
+  onDisconnect,
 }: {
   profile: UserProfile;
   isOwnProfile: boolean;
   onEdit: () => void;
+  onBack: () => void;
   connectStatus: ConnectStatus;
   onConnect: () => void;
+  onDisconnect: () => void;
 }) {
   const avatar = profile.avatarUrl || getAvatarForUser(profile.id);
   const mainAcademicProfile = profile.academicProfiles[0];
+  const [disconnectOpen, setDisconnectOpen] = useState(false);
 
   const stats = [
     { value: mockYearsOfExperience, label: "Anos de Experiência" },
@@ -74,6 +81,15 @@ export function ProfileSidebar({
 
   return (
     <aside className="relative w-full lg:w-96 shrink-0 h-[800px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center justify-center">
+      <button
+        type="button"
+        onClick={onBack}
+        aria-label="Voltar"
+        className="absolute top-4 left-4 text-white/90 hover:text-white cursor-pointer"
+      >
+        <ArrowLeft size={20} />
+      </button>
+
       {isOwnProfile && (
         <button
           type="button"
@@ -133,9 +149,18 @@ export function ProfileSidebar({
           </span>
         </div>
 
-        {!isOwnProfile && (
-          <ConnectButton status={connectStatus} onClick={onConnect} className={FULL_WIDTH_ACTION_CLASS} />
-        )}
+        {!isOwnProfile &&
+          (connectStatus === "connected" ? (
+            <button
+              type="button"
+              onClick={() => setDisconnectOpen(true)}
+              className={`${FULL_WIDTH_ACTION_CLASS} flex items-center !bg-transparent border-2 border-white/70 hover:!bg-white/10`}
+            >
+              Desfazer conexão
+            </button>
+          ) : (
+            <ConnectButton status={connectStatus} onClick={onConnect} className={FULL_WIDTH_ACTION_CLASS} />
+          ))}
 
         {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
         <a href="#" className="text-sm text-white/85 hover:text-white underline">
@@ -199,6 +224,18 @@ export function ProfileSidebar({
           </a>
         </div>
       </div>
+
+      <DeleteModal
+        isOpen={disconnectOpen}
+        onClose={() => setDisconnectOpen(false)}
+        onConfirm={() => {
+          onDisconnect();
+          setDisconnectOpen(false);
+        }}
+        title="Desfazer conexão"
+        message={`Tem certeza que deseja desfazer a conexão com ${profile.name}?`}
+        confirmLabel="Desfazer"
+      />
     </aside>
   );
 }

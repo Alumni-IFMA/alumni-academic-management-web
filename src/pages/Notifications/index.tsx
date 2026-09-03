@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import networkAlumni from "../../services/networkAlumni";
 import { mapUser, type NetworkUser } from "../../services/userService";
 import { getAvatarForUser } from "../Network/avatarFallback";
@@ -9,6 +11,7 @@ interface PendingRequest {
 }
 
 export function Notifications() {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState<PendingRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -57,7 +60,16 @@ export function Notifications() {
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
-      <h1 className="text-3xl font-bold text-dark-green mb-6">Notificações</h1>
+      <div className="flex items-center gap-2 mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          aria-label="Voltar"
+          className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors cursor-pointer -ml-2"
+        >
+          <ArrowLeft size={22} className="text-dark-green" />
+        </button>
+        <h1 className="text-3xl font-bold text-dark-green">Notificações</h1>
+      </div>
 
       {loading && <p className="text-sm text-gray-400">Carregando notificações...</p>}
       {!loading && loadError && <p className="text-sm text-red-600">{loadError}</p>}

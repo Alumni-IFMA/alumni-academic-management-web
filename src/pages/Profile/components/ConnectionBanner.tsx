@@ -1,31 +1,25 @@
 import type { AcademicProfileDto } from "../../../services/userService";
 
-export function ConnectionBanner({
-  own,
-  other,
-  mutualConnectionsCount,
-}: {
-  own: AcademicProfileDto[];
-  other: AcademicProfileDto[];
-  mutualConnectionsCount: number;
-}) {
-  const ownProfile = own[0];
-  const otherProfile = other[0];
-  const sameCourseAndCampus =
-    !!ownProfile &&
-    !!otherProfile &&
-    ownProfile.campusName === otherProfile.campusName &&
-    ownProfile.courseName === otherProfile.courseName;
+function findSharedProfile(own: AcademicProfileDto[], other: AcademicProfileDto[]): AcademicProfileDto | null {
+  for (const ownProfile of own) {
+    const match = other.find(
+      (otherProfile) =>
+        otherProfile.campusName === ownProfile.campusName && otherProfile.courseName === ownProfile.courseName
+    );
+    if (match) return match;
+  }
+  return null;
+}
+
+export function ConnectionBanner({ own, other }: { own: AcademicProfileDto[]; other: AcademicProfileDto[] }) {
+  const shared = findSharedProfile(own, other);
+  if (!shared) return null;
 
   return (
-    <div className="rounded-xl bg-green-50 border border-green-100 px-4 py-3 flex flex-col gap-1 text-sm text-dark-green">
-      {sameCourseAndCampus && (
-        <span className="font-medium">
-          Mesmo curso e campus: {otherProfile!.courseName} · {otherProfile!.campusName}
-        </span>
-      )}
-      {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
-      <span className="text-dark-green/80">{mutualConnectionsCount} conexões em comum</span>
+    <div className="rounded-xl bg-green-50 border border-green-100 px-4 py-3 text-sm text-dark-green">
+      <span className="font-medium">
+        Mesmo curso e campus: {shared.courseName} · {shared.campusName}
+      </span>
     </div>
   );
 }

@@ -39,5 +39,3 @@ export const mockTcc = {
   year: 2023,
   fileUrl: "#",
 };
-
-export const mockMutualConnectionsCount = 5;
