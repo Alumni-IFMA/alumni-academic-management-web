@@ -45,6 +45,11 @@ export function HighlightsCarousel({
   }
 
   function handlePointerDown(e: ReactPointerEvent<HTMLDivElement>) {
+    // Don't hijack pointer capture when the press starts on a button/link inside a
+    // card — setPointerCapture on the scroll container reroutes the eventual pointerup
+    // (and the click it would otherwise trigger) away from that child element entirely.
+    if ((e.target as HTMLElement).closest("button, a")) return;
+
     const el = scrollRef.current;
     if (!el) return;
     dragState.current = { startX: e.clientX, startScrollLeft: el.scrollLeft, dragging: true };
