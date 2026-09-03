@@ -37,7 +37,7 @@ export function SearchBar({
           value={value}
           onChange={onChange}
           onKeyDown={handleKeyDown}
-          className="w-full py-3 pl-11 text-sm outline-none"
+          className="w-full py-3 pl-11 pr-2 text-sm outline-none [&::-webkit-search-cancel-button]:mr-2"
         />
       </div>
 
