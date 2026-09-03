@@ -62,6 +62,7 @@ function renderPage() {
 describe("Opportunities page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedJobsService.getSavedJobs.mockResolvedValue([]);
   });
 
   it("loads jobs on mount with no filters", async () => {
@@ -225,5 +226,39 @@ describe("Opportunities page", () => {
     await waitFor(() => {
       expect(screen.getByText("Não foi possível carregar os detalhes da vaga.")).toBeInTheDocument();
     });
+  });
+
+  it("switches to the saved-jobs view and filters it by keyword", async () => {
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto, job2Dto]));
+    mockedJobsService.getSavedJobs.mockResolvedValue([job2Dto]);
+
+    renderPage();
+    await waitFor(() => expect(screen.getAllByText("Desenvolvedor Java").length).toBeGreaterThan(0));
+
+    await userEvent.click(screen.getByRole("button", { name: "Salvas" }));
+
+    await waitFor(() => {
+      expect(screen.getAllByText("Designer UX").length).toBeGreaterThan(0);
+      expect(screen.queryByText("Desenvolvedor Java")).not.toBeInTheDocument();
+    });
+
+    await userEvent.type(screen.getByPlaceholderText("Procure por oportunidades"), "zzz");
+
+    await waitFor(() => {
+      expect(screen.queryByText("Designer UX")).not.toBeInTheDocument();
+    });
+  });
+
+  it("toggles a job's saved state from the list", async () => {
+    mockedJobsService.getJobs.mockResolvedValue(makePage([job1Dto]));
+    mockedJobsService.getSavedJobs.mockResolvedValue([]);
+    mockedJobsService.saveJob.mockResolvedValue(undefined);
+
+    renderPage();
+    await waitFor(() => expect(screen.getAllByText("Desenvolvedor Java").length).toBeGreaterThan(0));
+
+    await userEvent.click(screen.getByRole("button", { name: "Salvar vaga" }));
+
+    await waitFor(() => expect(mockedJobsService.saveJob).toHaveBeenCalledWith(1));
   });
 });
