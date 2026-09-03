@@ -68,6 +68,20 @@ describe("networkAlumni.getPendingRequests", () => {
   });
 });
 
+describe("networkAlumni.getAcceptedConnections", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("calls GET /connections and returns the raw list", async () => {
+    const accepted = [{ id: 3, requester: dto, addressee: dto, status: "ACCEPTED" as const }];
+    mockedApi.get.mockResolvedValue({ data: accepted });
+
+    const result = await networkAlumni.getAcceptedConnections();
+
+    expect(mockedApi.get).toHaveBeenCalledWith("/connections");
+    expect(result).toEqual(accepted);
+  });
+});
+
 describe("networkAlumni.acceptConnection", () => {
   beforeEach(() => vi.clearAllMocks());
 

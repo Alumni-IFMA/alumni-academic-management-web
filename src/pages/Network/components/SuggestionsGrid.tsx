@@ -26,7 +26,13 @@ export function SuggestionsGrid({
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {users.map((user) => (
-          <SuggestionCard key={user.id} user={user} status={statusFor(user.id)} onConnect={onConnect} />
+          <SuggestionCard
+            key={user.id}
+            user={user}
+            status={statusFor(user.id)}
+            onConnect={onConnect}
+            showConnect={!user.connected}
+          />
         ))}
 
         {loading &&

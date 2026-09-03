@@ -4,17 +4,22 @@ import { describe, it, expect, vi, beforeEach, type Mocked } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import RedeAlumni from "../RedeAlumni";
 import networkAlumni from "../../../services/networkAlumni";
+import { AuthContext } from "../../../context/AuthContext";
 
 vi.mock("../../../services/networkAlumni");
 const mockedNetworkAlumni = networkAlumni as Mocked<typeof networkAlumni>;
 
 const users = Array.from({ length: 9 }, (_, i) => ({ id: i + 1, name: `Alumni ${i + 1}` }));
 
+const fakeAuth = { isAuthenticated: true, userName: "Kenia", userId: 1, login: vi.fn(), logout: vi.fn() };
+
 function renderPage() {
   return render(
-    <MemoryRouter>
-      <RedeAlumni />
-    </MemoryRouter>
+    <AuthContext.Provider value={fakeAuth}>
+      <MemoryRouter>
+        <RedeAlumni />
+      </MemoryRouter>
+    </AuthContext.Provider>
   );
 }
 
@@ -23,6 +28,7 @@ describe("RedeAlumni", () => {
     vi.clearAllMocks();
     mockedNetworkAlumni.getSuggestions.mockResolvedValue(users);
     mockedNetworkAlumni.getSentRequests.mockResolvedValue([]);
+    mockedNetworkAlumni.getAcceptedConnections.mockResolvedValue([]);
   });
 
   it("splits the first 8 suggestions into Destaques and the rest into the grid", async () => {

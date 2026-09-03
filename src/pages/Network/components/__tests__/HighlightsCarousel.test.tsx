@@ -26,6 +26,17 @@ describe("HighlightsCarousel", () => {
     expect(screen.queryByText("João")).not.toBeInTheDocument();
   });
 
+  it("hides the connect button for already-connected users", () => {
+    const connectedUsers = [{ id: 2, name: "Ana", connected: true }];
+    render(
+      <MemoryRouter>
+        <HighlightsCarousel users={connectedUsers} loading={false} error={null} statusFor={() => "idle"} onConnect={vi.fn()} />
+      </MemoryRouter>
+    );
+    expect(screen.getByText("Ana")).toBeInTheDocument();
+    expect(screen.queryByText("Conectar")).not.toBeInTheDocument();
+  });
+
   it("shows the error message when present", () => {
     render(
       <MemoryRouter>

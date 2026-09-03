@@ -1,19 +1,34 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, type Mocked } from "vitest";
+import type { ReactNode } from "react";
 import networkAlumni from "../../../../services/networkAlumni";
+import { AuthContext } from "../../../../context/AuthContext";
 import { useSuggestions } from "../useSuggestions";
 
 vi.mock("../../../../services/networkAlumni");
 const mockedNetworkAlumni = networkAlumni as Mocked<typeof networkAlumni>;
 
+const fakeAuth = { isAuthenticated: true, userName: "Eu", userId: 42, login: vi.fn(), logout: vi.fn() };
+
+function wrapper({ children }: { children: ReactNode }) {
+  return <AuthContext.Provider value={fakeAuth}>{children}</AuthContext.Provider>;
+}
+
+function renderSuggestions() {
+  return renderHook(() => useSuggestions(), { wrapper });
+}
+
 describe("useSuggestions", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockedNetworkAlumni.getSentRequests.mockResolvedValue([]);
+    mockedNetworkAlumni.getAcceptedConnections.mockResolvedValue([]);
+  });
 
   it("loads suggestions on mount", async () => {
     mockedNetworkAlumni.getSuggestions.mockResolvedValue([{ id: 1, name: "João" }]);
-    mockedNetworkAlumni.getSentRequests.mockResolvedValue([]);
 
-    const { result } = renderHook(() => useSuggestions());
+    const { result } = renderSuggestions();
 
     expect(result.current.loading).toBe(true);
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -24,7 +39,7 @@ describe("useSuggestions", () => {
   it("sets an error message when the request fails", async () => {
     mockedNetworkAlumni.getSuggestions.mockRejectedValue(new Error("network error"));
 
-    const { result } = renderHook(() => useSuggestions());
+    const { result } = renderSuggestions();
 
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.users).toEqual([]);
@@ -45,7 +60,7 @@ describe("useSuggestions", () => {
       },
     ]);
 
-    const { result } = renderHook(() => useSuggestions());
+    const { result } = renderSuggestions();
 
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.users.map((u) => u.name)).toEqual(["João", "Maria"]);
@@ -62,9 +77,45 @@ describe("useSuggestions", () => {
       },
     ]);
 
-    const { result } = renderHook(() => useSuggestions());
+    const { result } = renderSuggestions();
 
     await waitFor(() => expect(result.current.loading).toBe(false));
     expect(result.current.users).toHaveLength(1);
+  });
+
+  it("keeps accepted connections visible, marked as already connected", async () => {
+    mockedNetworkAlumni.getSuggestions.mockResolvedValue([{ id: 1, name: "João" }]);
+    mockedNetworkAlumni.getAcceptedConnections.mockResolvedValue([
+      {
+        id: 50,
+        requester: { id: 42, name: "Eu", email: "eu@example.com", status: "ACTIVE", role: "ALUMNI" },
+        addressee: { id: 3, name: "Pedro", email: "pedro@example.com", status: "ACTIVE", role: "ALUMNI" },
+        status: "ACCEPTED",
+      },
+    ]);
+
+    const { result } = renderSuggestions();
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    const pedro = result.current.users.find((u) => u.name === "Pedro");
+    expect(pedro?.connected).toBe(true);
+  });
+
+  it("resolves the other participant regardless of which side sent the original request", async () => {
+    mockedNetworkAlumni.getSuggestions.mockResolvedValue([]);
+    mockedNetworkAlumni.getAcceptedConnections.mockResolvedValue([
+      {
+        id: 51,
+        // this time I'm the addressee, not the requester
+        requester: { id: 7, name: "Ana", email: "ana@example.com", status: "ACTIVE", role: "ALUMNI" },
+        addressee: { id: 42, name: "Eu", email: "eu@example.com", status: "ACTIVE", role: "ALUMNI" },
+        status: "ACCEPTED",
+      },
+    ]);
+
+    const { result } = renderSuggestions();
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.users.map((u) => u.name)).toEqual(["Ana"]);
   });
 });

@@ -26,7 +26,7 @@ export function HighlightCard({
           {user.subtitle && <p className="text-xs text-white/85">{user.subtitle}</p>}
         </div>
         <div className="flex items-center gap-2">
-          <ConnectButton status={status} onClick={() => onConnect(user.id)} />
+          {!user.connected && <ConnectButton status={status} onClick={() => onConnect(user.id)} />}
           <Link
             to={`/perfil/${user.id}`}
             className="rounded-full bg-white/90 px-4 py-1.5 text-sm font-medium text-dark-green hover:bg-white whitespace-nowrap"
