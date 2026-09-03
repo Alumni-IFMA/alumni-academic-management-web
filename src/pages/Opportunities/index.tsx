@@ -287,7 +287,13 @@ export function Opportunities() {
         </div>
 
         {/* Detalhe da vaga */}
-        <JobDetail job={selectedJob} loading={selectedJobLoading} error={selectedJobError} />
+        <JobDetail
+          job={selectedJob}
+          loading={selectedJobLoading}
+          error={selectedJobError}
+          saved={selectedJob ? isSaved(selectedJob.id) : false}
+          onToggleSave={() => selectedJob && toggleSave(selectedJob)}
+        />
       </div>
       </div>
 

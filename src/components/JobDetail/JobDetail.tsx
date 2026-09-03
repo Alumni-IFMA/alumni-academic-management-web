@@ -17,10 +17,14 @@ export function JobDetail({
   job,
   loading = false,
   error = null,
+  saved = false,
+  onToggleSave,
 }: {
   job: JobDetailData | null;
   loading?: boolean;
   error?: string | null;
+  saved?: boolean;
+  onToggleSave?: () => void;
 }) {
   if (loading) {
     return (
@@ -97,8 +101,15 @@ export function JobDetail({
         <button className="whitespace-nowrap bg-dark-green text-white text-sm font-semibold px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
           Candidatar-se
         </button>
-        <button className="flex items-center gap-2 border border-dark-green text-dark-green text-sm font-semibold px-5 py-2 rounded-full hover:bg-gray-50 transition-colors">
-          <Bookmark size={14} /> Salvar
+        <button
+          onClick={onToggleSave}
+          className={`flex items-center gap-2 border text-sm font-semibold px-5 py-2 rounded-full transition-colors ${
+            saved
+              ? "border-dark-green bg-dark-green text-white"
+              : "border-dark-green text-dark-green hover:bg-gray-50"
+          }`}
+        >
+          <Bookmark size={14} className={saved ? "fill-current" : ""} /> {saved ? "Salvo" : "Salvar"}
         </button>
       </div>
 

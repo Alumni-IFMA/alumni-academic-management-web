@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi } from "vitest";
 import { ShortcutCards } from "../ShortcutCards";
-import * as supportService from "../../../../services/supportService";
 
 vi.mock("../../../../services/supportService");
 

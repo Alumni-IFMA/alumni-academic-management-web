@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { describe, it, expect, vi } from "vitest";
 import { JobDetail } from "../JobDetail";
 
 const job = {
@@ -44,5 +45,20 @@ describe("JobDetail", () => {
     render(<JobDetail job={job} loading />);
     expect(screen.getByText("Carregando detalhes...")).toBeInTheDocument();
     expect(screen.queryByText("Dev Backend")).not.toBeInTheDocument();
+  });
+
+  it("calls onToggleSave when the Salvar button is clicked", async () => {
+    const onToggleSave = vi.fn();
+    render(<JobDetail job={job} onToggleSave={onToggleSave} />);
+
+    await userEvent.click(screen.getByRole("button", { name: "Salvar" }));
+
+    expect(onToggleSave).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows 'Salvo' when the job is saved", () => {
+    render(<JobDetail job={job} saved onToggleSave={vi.fn()} />);
+
+    expect(screen.getByRole("button", { name: "Salvo" })).toBeInTheDocument();
   });
 });
