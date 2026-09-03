@@ -61,7 +61,7 @@ export function Navbar() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
