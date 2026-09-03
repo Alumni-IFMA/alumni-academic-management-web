@@ -69,9 +69,6 @@ export function JobDetail({
           <button className="text-gray-400 hover:text-dark-green">
             <Share2 size={18} />
           </button>
-          <button className="text-gray-400 hover:text-dark-green">
-            <Bookmark size={18} />
-          </button>
         </div>
       </div>
 
