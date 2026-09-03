@@ -14,7 +14,7 @@ export function Profile() {
   const { id: idParam } = useParams();
   const navigate = useNavigate();
   const { userId } = useAuth();
-  const { connect, statusFor } = useConnection();
+  const { connect, disconnect, statusFor } = useConnection();
 
   const [ownProfile, setOwnProfile] = useState<UserProfile | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -102,6 +102,7 @@ export function Profile() {
           onEdit={() => setEditOpen(true)}
           connectStatus={statusFor(profile.id)}
           onConnect={() => connect(profile.id)}
+          onDisconnect={() => disconnect(profile.id)}
         />
 
         <div className="flex-1 flex flex-col gap-6 lg:h-[800px]">

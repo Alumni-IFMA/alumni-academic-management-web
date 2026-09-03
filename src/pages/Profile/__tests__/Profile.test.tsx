@@ -10,7 +10,7 @@ vi.mock("../../../services/profileService");
 const mockedProfileService = profileService as Mocked<typeof profileService>;
 
 vi.mock("../../../hooks/useConnection", () => ({
-  useConnection: () => ({ connect: vi.fn(), statusFor: () => "idle" as const }),
+  useConnection: () => ({ connect: vi.fn(), disconnect: vi.fn(), statusFor: () => "idle" as const }),
 }));
 
 const fakeAuth = { isAuthenticated: true, userName: "Kenia", userId: 1, login: vi.fn(), logout: vi.fn() };

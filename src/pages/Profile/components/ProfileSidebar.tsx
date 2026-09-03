@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Pencil, Phone, Mail } from "lucide-react";
 import { Typography } from "../../../components/Typography/Typography";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
+import { DeleteModal } from "../../../components/DeleteModal/DeleteModal";
 import { getAvatarForUser } from "../../Network/avatarFallback";
 import type { UserProfile } from "../../../services/profileService";
 import type { ConnectStatus } from "../../../hooks/useConnection";
@@ -56,15 +58,18 @@ export function ProfileSidebar({
   onEdit,
   connectStatus,
   onConnect,
+  onDisconnect,
 }: {
   profile: UserProfile;
   isOwnProfile: boolean;
   onEdit: () => void;
   connectStatus: ConnectStatus;
   onConnect: () => void;
+  onDisconnect: () => void;
 }) {
   const avatar = profile.avatarUrl || getAvatarForUser(profile.id);
   const mainAcademicProfile = profile.academicProfiles[0];
+  const [disconnectOpen, setDisconnectOpen] = useState(false);
 
   const stats = [
     { value: mockYearsOfExperience, label: "Anos de Experiência" },
@@ -133,9 +138,18 @@ export function ProfileSidebar({
           </span>
         </div>
 
-        {!isOwnProfile && (
-          <ConnectButton status={connectStatus} onClick={onConnect} className={FULL_WIDTH_ACTION_CLASS} />
-        )}
+        {!isOwnProfile &&
+          (connectStatus === "connected" ? (
+            <button
+              type="button"
+              onClick={() => setDisconnectOpen(true)}
+              className="text-sm text-white/85 hover:text-white underline cursor-pointer"
+            >
+              Desfazer conexão
+            </button>
+          ) : (
+            <ConnectButton status={connectStatus} onClick={onConnect} className={FULL_WIDTH_ACTION_CLASS} />
+          ))}
 
         {/* mock — aguardando backend, ver docs/superpowers/specs/2026-08-30-user-profile-page-design.md */}
         <a href="#" className="text-sm text-white/85 hover:text-white underline">
@@ -199,6 +213,18 @@ export function ProfileSidebar({
           </a>
         </div>
       </div>
+
+      <DeleteModal
+        isOpen={disconnectOpen}
+        onClose={() => setDisconnectOpen(false)}
+        onConfirm={() => {
+          onDisconnect();
+          setDisconnectOpen(false);
+        }}
+        title="Desfazer conexão"
+        message={`Tem certeza que deseja desfazer a conexão com ${profile.name}?`}
+        confirmLabel="Desfazer"
+      />
     </aside>
   );
 }
