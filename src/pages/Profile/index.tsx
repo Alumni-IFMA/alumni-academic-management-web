@@ -73,7 +73,7 @@ export function Profile() {
 
   if (loading) {
     return (
-      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+      <main className="relative max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
         <BackButton onClick={() => navigate(-1)} />
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-96 h-[800px] rounded-2xl bg-gray-200 animate-pulse" />
@@ -85,7 +85,7 @@ export function Profile() {
 
   if (loadError || !profile) {
     return (
-      <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
+      <main className="relative max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
         <BackButton onClick={() => navigate(-1)} />
         <p className="text-center text-sm text-red-600">{loadError ?? "Não foi possível carregar este perfil."}</p>
       </main>
@@ -94,12 +94,12 @@ export function Profile() {
 
   return (
     <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 pt-8 pb-0">
-      <BackButton onClick={() => navigate(-1)} />
       <div className="flex flex-col lg:flex-row gap-6">
         <ProfileSidebar
           profile={profile}
           isOwnProfile={isOwnProfile}
           onEdit={() => setEditOpen(true)}
+          onBack={() => navigate(-1)}
           connectStatus={statusFor(profile.id)}
           onConnect={() => connect(profile.id)}
           onDisconnect={() => disconnect(profile.id)}
@@ -125,7 +125,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
     <button
       onClick={onClick}
       aria-label="Voltar"
-      className="mb-4 flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+      className="absolute top-4 left-2 sm:left-4 lg:left-6 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors cursor-pointer shadow-sm"
     >
       <ArrowLeft size={22} className="text-dark-green" />
     </button>

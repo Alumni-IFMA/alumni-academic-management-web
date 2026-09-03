@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pencil, Phone, Mail } from "lucide-react";
+import { ArrowLeft, Pencil, Phone, Mail } from "lucide-react";
 import { Typography } from "../../../components/Typography/Typography";
 import { ConnectButton } from "../../../components/ConnectButton/ConnectButton";
 import { DeleteModal } from "../../../components/DeleteModal/DeleteModal";
@@ -56,6 +56,7 @@ export function ProfileSidebar({
   profile,
   isOwnProfile,
   onEdit,
+  onBack,
   connectStatus,
   onConnect,
   onDisconnect,
@@ -63,6 +64,7 @@ export function ProfileSidebar({
   profile: UserProfile;
   isOwnProfile: boolean;
   onEdit: () => void;
+  onBack: () => void;
   connectStatus: ConnectStatus;
   onConnect: () => void;
   onDisconnect: () => void;
@@ -79,6 +81,15 @@ export function ProfileSidebar({
 
   return (
     <aside className="relative w-full lg:w-96 shrink-0 h-[800px] overflow-hidden rounded-2xl bg-dark-green text-white p-6 flex flex-col items-center justify-center">
+      <button
+        type="button"
+        onClick={onBack}
+        aria-label="Voltar"
+        className="absolute top-4 left-4 text-white/90 hover:text-white cursor-pointer"
+      >
+        <ArrowLeft size={20} />
+      </button>
+
       {isOwnProfile && (
         <button
           type="button"
@@ -143,7 +154,7 @@ export function ProfileSidebar({
             <button
               type="button"
               onClick={() => setDisconnectOpen(true)}
-              className="text-sm text-white/85 hover:text-white underline cursor-pointer"
+              className={`${FULL_WIDTH_ACTION_CLASS} !bg-transparent border-2 border-white/70 hover:!bg-white/10`}
             >
               Desfazer conexão
             </button>
