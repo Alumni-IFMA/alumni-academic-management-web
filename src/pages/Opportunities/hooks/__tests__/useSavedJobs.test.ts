@@ -6,7 +6,7 @@ import { useSavedJobs } from "../useSavedJobs";
 vi.mock("../../../../services/jobsService");
 const mockedJobsService = jobsService as Mocked<typeof jobsService>;
 
-const jobDto = { id: 1, title: "Vaga A", company: "Empresa A", requirements: [], benefits: [] };
+const jobDto = { id: 1, title: "Vaga A", company: "Empresa A", location: "Remoto", requirements: [], benefits: [] };
 
 describe("useSavedJobs", () => {
   beforeEach(() => vi.clearAllMocks());
