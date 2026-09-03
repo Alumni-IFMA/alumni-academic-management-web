@@ -1,12 +1,10 @@
 import { useEffect, useMemo, useState, type UIEvent } from "react";
 import { Dropdown } from "../../components/Dropdown/Dropdown";
-import { Navbar } from "../../components/Navbar/Navbar";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { Typography } from "../../components/Typography/Typography";
 import { FilterCard } from "../../components/FilterCard/FilterCard";
 import { JobCard } from "../../components/JobCard/JobCard";
 import { JobDetail } from "../../components/JobDetail/JobDetail";
-import { OpportunitiesRibbon } from "./components/OpportunitiesRibbon";
 import { SlidersHorizontal } from "lucide-react";
 import { getJobs, getJobById } from "../../services/jobsService";
 import { mapJob, type Job } from "./mapJob";
@@ -158,12 +156,8 @@ export function Opportunities() {
   };
 
   return (
-     <div className="relative overflow-hidden font-inter">
-      <OpportunitiesRibbon />
-      <Navbar />
-
-      <div className="relative z-10 max-w-7xl mx-auto">
-      <div className="pt-[152px] px-4 sm:px-6 lg:px-8">
+     <div className="relative max-w-7xl mx-auto">
+      <div className="pt-14 px-4 sm:px-6 lg:px-8">
         <Typography variant="h1" className="!text-4xl md:!text-5xl !font-bold !leading-none">Encontre oportunidades</Typography>
         <Typography variant="p">
           Explore e encontre uma vaga perfeita para você.
@@ -295,13 +289,6 @@ export function Opportunities() {
           onToggleSave={() => selectedJob && toggleSave(selectedJob)}
         />
       </div>
-      </div>
-
-      <footer className="relative z-10 py-6 px-8 flex justify-center">
-        <span className="bg-page-bg/80 backdrop-blur-sm rounded-full px-4 py-1.5 text-center text-sm text-gray-500">
-          © 2026 Equipe alumni IFMA • Feito com carinho para a comunidade
-        </span>
-      </footer>
     </div>
   );
 }

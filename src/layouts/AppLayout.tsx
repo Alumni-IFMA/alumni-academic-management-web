@@ -5,6 +5,7 @@ import { DiplomaRibbon } from "../pages/Diploma/components/DiplomaRibbon";
 import { NetworkRibbon } from "../pages/Network/components/NetworkRibbon";
 import { NewsRibbon } from "../pages/News/components/NewsRibbon";
 import { ContactRibbon } from "../pages/Contact/components/ContactRibbon";
+import { OpportunitiesRibbon } from "../pages/Opportunities/components/OpportunitiesRibbon";
 
 const RIBBONS: Record<string, () => JSX.Element> = {
   "/home": DecorativeRibbon,
@@ -12,6 +13,7 @@ const RIBBONS: Record<string, () => JSX.Element> = {
   "/rede": NetworkRibbon,
   "/news": NewsRibbon,
   "/contact": ContactRibbon,
+  "/opportunities": OpportunitiesRibbon,
 };
 
 function findRibbon(pathname: string) {
