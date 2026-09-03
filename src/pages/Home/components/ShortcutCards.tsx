@@ -49,7 +49,7 @@ export function ShortcutCards() {
   }
 
   return (
-    <section className="pb-8">
+    <section className="pb-4">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {CARDS.map(({ icon: Icon, title, subtitle, action }) => (
           <button
