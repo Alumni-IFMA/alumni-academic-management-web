@@ -8,7 +8,6 @@ import { AboutSection } from "./components/AboutSection";
 import { ProfileTabs } from "./components/ProfileTabs";
 import { EditProfileModal } from "./components/EditProfileModal";
 import { ConnectionBanner } from "./components/ConnectionBanner";
-import { mockMutualConnectionsCount } from "./mockProfileExtras";
 
 export function Profile() {
   const { id: idParam } = useParams();
@@ -102,11 +101,7 @@ export function Profile() {
 
         <div className="flex-1 flex flex-col gap-6 lg:h-[800px]">
           {!isOwnProfile && ownProfile && (
-            <ConnectionBanner
-              own={ownProfile.academicProfiles}
-              other={profile.academicProfiles}
-              mutualConnectionsCount={mockMutualConnectionsCount}
-            />
+            <ConnectionBanner own={ownProfile.academicProfiles} other={profile.academicProfiles} />
           )}
 
           <AboutSection bio={profile.bio} />

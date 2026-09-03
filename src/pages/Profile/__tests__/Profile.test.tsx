@@ -75,7 +75,7 @@ describe("Profile", () => {
 
     expect(await screen.findByText("Kenia Reis")).toBeInTheDocument();
     expect(screen.getByLabelText("Editar perfil")).toBeInTheDocument();
-    expect(screen.queryByText(/conexões em comum/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Mesmo curso e campus/)).not.toBeInTheDocument();
   });
 
   it("shows the other-profile variant with a connect button and the connection banner", async () => {
@@ -86,7 +86,7 @@ describe("Profile", () => {
 
     expect(await screen.findByText("João Silva")).toBeInTheDocument();
     expect(screen.getByText("Conectar")).toBeInTheDocument();
-    expect(await screen.findByText(/conexões em comum/)).toBeInTheDocument();
+    expect(await screen.findByText(/Mesmo curso e campus/)).toBeInTheDocument();
   });
 
   it("shows a loading skeleton while the profile is being fetched", () => {
