@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import type { NetworkUser } from "../../../services/userService";
 import type { ConnectStatus } from "../../../hooks/useConnection";
 import { SuggestionCard } from "./SuggestionCard";
@@ -25,8 +26,9 @@ export function SearchResults({
         <button
           type="button"
           onClick={onClear}
-          className="text-sm font-medium text-dark-green underline-offset-2 hover:underline"
+          className="flex items-center gap-1.5 rounded-full bg-dark-green text-white text-sm font-semibold px-4 py-2 hover:bg-green transition-colors shadow-sm cursor-pointer"
         >
+          <X size={16} />
           Limpar busca
         </button>
       </div>
