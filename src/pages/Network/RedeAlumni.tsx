@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { SearchFilterBar } from "./components/SearchFilterBar";
 import { HighlightsCarousel } from "./components/HighlightsCarousel";
@@ -14,13 +15,16 @@ export default function RedeAlumni() {
   const activeSearch = searchParams.get("q");
   const { users, loading, error } = useSuggestions();
   const { connect, statusFor } = useConnection();
+  const [resetKey, setResetKey] = useState(0);
 
   function handleSearch(query: string) {
     if (query) setSearchParams({ q: query });
+    else setSearchParams({});
   }
 
   function handleClear() {
     setSearchParams({});
+    setResetKey((key) => key + 1);
   }
 
   return (
@@ -34,7 +38,7 @@ export default function RedeAlumni() {
             Descubra pessoas, histórias e oportunidades. Encontre colegas por área de atuação e curso.
           </Typography>
         </header>
-        <SearchFilterBar key={activeSearch ?? "empty"} onSearch={handleSearch} />
+        <SearchFilterBar key={resetKey} onSearch={handleSearch} />
         {activeSearch ? (
           <SearchResults
             query={activeSearch}
